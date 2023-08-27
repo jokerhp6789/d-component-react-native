@@ -19,6 +19,7 @@ import imageStyle from './image/_image';
 import shadowStyle from './theme/_shadow';
 import {Colors} from '..';
 import {getColorValue} from './modifier';
+import gapStyle from './layout/_gap';
 
 const {dark, light} = Colors;
 
@@ -77,6 +78,7 @@ export const getStyleWithTheme = (
 
 const style = StyleSheet.create({
     ...flexStyle,
+    ...gapStyle,
     ...marginPadding,
     ...backgroundStyle,
     ...borderStyle,

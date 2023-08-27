@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ScrollView from '../../component/view/ScrollView';
 import View from '../../component/view/View';
 import Text from '../../component/text/Text';
 import {map} from 'lodash';
+import {Switch} from 'react-native';
 
 export interface ITestStyleProps {
     [key: string]: any;
 }
 
 const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
+    const [useSystemTheme, setUseSystemTheme] = useState(true);
     return (
         <ScrollView className="w-100">
             <View className="w-100 justify-content-center align-center">
@@ -29,6 +31,19 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                         style={{backgroundColor: 'red', height: 10}}
                     />
                 ))}
+            </View>
+            <View style={{}} className="bg-green flex-row my-3 gap-col-20">
+                {map(new Array(10).fill(0), item => (
+                    <View
+                        className="flex-1"
+                        style={{backgroundColor: 'red', height: 10}}
+                    />
+                ))}
+            </View>
+            <View className="flex-center-y gap-20">
+                <Text>Prefer dark mode</Text>
+                <Switch value={useSystemTheme} />
+                <Text>Use system theme</Text>
             </View>
         </ScrollView>
     );
