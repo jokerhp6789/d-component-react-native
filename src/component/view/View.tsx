@@ -1,7 +1,7 @@
 import React from 'react';
 import {View as ViewRN, ViewProps} from 'react-native';
 import {ThemeProps} from '../../interface/iTheme';
-import {getListStyleProps} from '../../style/style';
+import {getStyleWithTheme} from '../../style/style';
 
 export interface IViewProps extends ViewProps, ThemeProps {
     className?: string;
@@ -15,12 +15,10 @@ const View: React.FC<IViewProps> = ({
     useLightColor,
     ...rest
 }) => {
-    const listStyle = getListStyleProps(
-        rest,
-        style,
+    const listStyle = getStyleWithTheme(rest, style, {
         colorDarkMode,
         useLightColor,
-    );
+    });
     return (
         <ViewRN {...rest} style={listStyle}>
             {children}

@@ -1,7 +1,7 @@
 import React from "react";
 import { SafeAreaView as SafeAreaViewRN, ViewProps } from "react-native";
 import { ThemeProps } from "../../interface/iTheme";
-import { getListStyleProps } from "../../style/style";
+import { getStyleWithTheme } from "../../style/style";
 
 export interface ISafeAreaViewProps extends ViewProps, ThemeProps {
   className?: string;
@@ -15,7 +15,7 @@ const SafeAreaView: React.FC<ISafeAreaViewProps> = ({
   colorDarkMode,
   ...rest
 }) => {
-  const listStyle = getListStyleProps(
+  const listStyle = getStyleWithTheme(
     rest,
     style,
     colorDarkMode,

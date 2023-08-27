@@ -1,37 +1,33 @@
-import React from "react";
+import React from 'react';
 import {
-  TouchableOpacity as TouchableOpacityRN,
-  StyleProp,
-  ViewStyle,
-  TouchableOpacityProps,
-} from "react-native";
-import { getListStyleProps, getStyleProps } from "../../style/style";
-import { ThemeProps } from "../../interface/iTheme";
+    TouchableOpacityProps,
+    TouchableOpacity as TouchableOpacityRN,
+} from 'react-native';
+import {ThemeProps} from '../../interface/iTheme';
+import {getStyleWithTheme} from '../../style/style';
 
 export interface ITouchableOpacityProps
-  extends TouchableOpacityProps,
-    ThemeProps {
-  className?: string;
-  children?: any;
+    extends TouchableOpacityProps,
+        ThemeProps {
+    className?: string;
+    children?: any;
 }
 
 export interface ITouchableOpacityMethod {}
 
 const TouchableOpacity: React.ForwardRefRenderFunction<
-  ITouchableOpacityMethod,
-  ITouchableOpacityProps
-> = ({ children, style, useLightColor, colorDarkMode, ...rest }, ref) => {
-  const listStyle = getListStyleProps(
-    rest,
-    style,
-    colorDarkMode,
-    useLightColor
-  );
-  return (
-    <TouchableOpacityRN {...rest} style={listStyle}>
-      {children}
-    </TouchableOpacityRN>
-  );
+    ITouchableOpacityMethod,
+    ITouchableOpacityProps
+> = ({children, style, useLightColor, colorDarkMode, ...rest}, ref) => {
+    const listStyle = getStyleWithTheme(rest, style, {
+        colorDarkMode,
+        useLightColor,
+    });
+    return (
+        <TouchableOpacityRN {...rest} style={listStyle}>
+            {children}
+        </TouchableOpacityRN>
+    );
 };
 
 export default React.forwardRef(TouchableOpacity);
