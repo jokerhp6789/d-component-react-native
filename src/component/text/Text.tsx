@@ -1,21 +1,22 @@
 /** @format */
 
-import { find } from "lodash";
-import React, { useContext, useMemo } from "react";
+import {find} from 'lodash';
+import React, {useContext, useMemo} from 'react';
 import {
     Text as RNText,
     TextProps,
     TextStyle,
     useColorScheme,
-} from "react-native";
+} from 'react-native';
 import StyleStateContext, {
     IStyleStateContext,
-} from "../../context/StyleContext";
-import Colors from "../../style/color/_color";
-import { ColorKeyType } from "../../style/constant/AppColors";
-import Fonts from "../../style/font/_font";
-import { getColorValue } from "../../style/modifier";
-import { getStyleProps } from "../../style/style";
+} from '../../context/StyleContext';
+import Colors from '../../style/color/_color';
+import {ColorKeyType} from '../../style/constant/AppColors';
+import Fonts from '../../style/font/_font';
+import {getColorValue} from '../../style/modifier';
+import {getStyleProps} from '../../style/style';
+import Configs from '../../style/config/_config';
 
 export interface ITextProps extends TextProps {
     className?: string;
@@ -30,12 +31,14 @@ const Text: React.FC<ITextProps> = ({
     style,
     ...rest
 }) => {
-    const { locale, useFontToLocale } =
+    const {locale, useFontToLocale} =
         useContext<IStyleStateContext>(StyleStateContext) || {};
+    const {generalConfig} = Configs;
+    const {autoSwitchColor} = generalConfig || {};
     const transStyle = getStyleProps(rest);
-    const isDarkMode = useColorScheme() === "dark";
-    const { light } = Colors;
-    const { fontClass, locale: loadFontLocale } = Fonts;
+    const isDarkMode = useColorScheme() === 'dark';
+    const {light} = Colors;
+    const {fontClass, locale: loadFontLocale} = Fonts;
     const localeFont: string | null = useMemo(() => {
         let res = null;
         if (locale && useFontToLocale) {
@@ -51,20 +54,20 @@ const Text: React.FC<ITextProps> = ({
 
     const defaultStyle: TextStyle = {
         ...fontClass.h4,
-        color: isDarkMode ? light : undefined,
+        color: isDarkMode && autoSwitchColor ? light : undefined,
     };
 
     const listStyle = [defaultStyle, transStyle, style];
     if (color) {
         const colorValue = getColorValue(color);
-        listStyle.push({ color: colorValue });
+        listStyle.push({color: colorValue});
     }
     if (isDarkMode && colorDarkMode) {
         const color = getColorValue(colorDarkMode);
-        listStyle.push({ color });
+        listStyle.push({color});
     }
     if (localeFont) {
-        listStyle.push({ fontFamily: localeFont });
+        listStyle.push({fontFamily: localeFont});
     }
     return (
         <RNText {...rest} style={listStyle}>

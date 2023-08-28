@@ -27,7 +27,6 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
             <View className="w-100 justify-content-center align-center">
                 <View
                     className="width-50 height-50  border-dashed border-primary my-3"
-                    colorDarkMode="red"
                 />
                 <Text className="h5 label font-weight-bold">
                     width-50 height-50 border-dashed border-primary my-3

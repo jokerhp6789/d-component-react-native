@@ -106,17 +106,20 @@ export const getStyleWithTheme = (
     const autoSwitchColor =
         typeof autoSwitchColorProps === 'boolean'
             ? autoSwitchColorProps
-            : autoSwitchColorConfig;
-
-    const backgroundColor = useLightColor ? light : undefined;
+            : !!autoSwitchColorConfig;
+    const backgroundColor =
+        isDarkMode && autoSwitchColor
+            ? colorDarkModeConfig || dark
+            : useLightColor
+            ? light
+            : 'transparent';
     const listStyle: ViewStyle[] = [{backgroundColor}, tranStyle as any];
     if (styleProps) {
         listStyle.push(styleProps);
     }
-    if (isDarkMode && colorDarkMode && autoSwitchColor) {
+    if (isDarkMode && colorDarkMode) {
         const backgroundColor = getColorValue(colorDarkMode || dark);
         listStyle.push({backgroundColor});
-
     }
     return listStyle;
 };

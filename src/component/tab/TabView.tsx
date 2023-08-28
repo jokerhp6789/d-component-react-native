@@ -30,6 +30,7 @@ import AwesomeList, {IAwesomeListProps} from '../list/awesomeList/AwesomeList';
 import Text from '../text/Text';
 import View from '../view/View';
 import TabBarComponent from './TabBarComponent';
+import Configs from '../../style/config/_config';
 
 export interface ITabViewRoute extends Route {
     label?: string;
@@ -92,6 +93,8 @@ export interface ITabViewProps
     colorActiveLabelTextDarkMode?: ColorKeyType;
     colorLabelTextDarkMode?: ColorKeyType;
     colorIndicatorDarkMode?: ColorKeyType;
+    backgroundColor?: ColorKeyType;
+    backgroundColorDarkMode?: ColorKeyType;
 
     awesomeListProps?: Partial<IAwesomeListProps<any>>;
     getLabel?: (item?: ITabViewRoute) => string | Element;
@@ -145,6 +148,8 @@ function TabView(
         colorLabelTextDarkMode,
         colorIndicator,
         colorIndicatorDarkMode,
+        backgroundColor,
+        backgroundColorDarkMode,
         textLabelStyle = {},
         activeLabelStyle,
         labelStyle,
@@ -157,13 +162,23 @@ function TabView(
 
     ref: React.ForwardedRef<ITabViewMethod>,
 ) {
+    const {generalConfig} = Configs;
+    const {colorDarkMode, autoSwitchColor} = generalConfig || {};
     const [index, setIndex] = useState(initialIndex);
     const [routes] = useState(dataSource);
     const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
     const tranStyle = getStyleProps(rest);
     const isDarkMode = useColorScheme() === 'dark';
     const showLabelBgColor = variant !== 'standard';
-    const containerBg = {backgroundColor: isDarkMode ? 'black' : 'white'};
+    const containerBg = {
+        backgroundColor: isDarkMode
+            ? backgroundColorDarkMode
+                ? backgroundColorDarkMode
+                : autoSwitchColor
+                ? colorDarkMode || Colors.dark
+                : 'undefined'
+            : backgroundColor,
+    };
 
     useImperativeHandle(ref, () => ({
         refreshList: () => {
@@ -199,6 +214,7 @@ function TabView(
             'bg-dark': isDarkMode,
         });
         const tabClass = ClassNames({'width-auto': scrollEnabled});
+
         const getIndicatorColor = () => {
             if (!showLabelBgColor) {
                 return isDarkMode

@@ -21,6 +21,7 @@ const View: React.FC<IViewProps> = ({
         useLightColor,
         isDarkMode,
     });
+
     return (
         <ViewRN {...rest} style={listStyle}>
             {children}

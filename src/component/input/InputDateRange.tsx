@@ -1,32 +1,33 @@
-import ClassNames from "classnames";
+import ClassNames from 'classnames';
 import React, {
     ElementRef,
     forwardRef,
     useImperativeHandle,
     useRef,
-} from "react";
-import { useColorScheme, ViewStyle } from "react-native";
-import { ColorKeyType } from "../../style/constant/AppColors";
-import { getThemeColor } from "../../style/modifier";
-import TimeUtils from "../../utils/TimeUtils";
-import Icon from "../icon/Icon";
-import Text from "../text/Text";
-import View from "../view/View";
+} from 'react';
+import {useColorScheme, ViewStyle} from 'react-native';
+import {ColorKeyType} from '../../style/constant/AppColors';
+import {getThemeColor} from '../../style/modifier';
+import TimeUtils from '../../utils/TimeUtils';
+import Icon from '../icon/Icon';
+import Text from '../text/Text';
+import View from '../view/View';
 import InputDate, {
     getDateModalTypeFromMode,
     ICustomInputProps,
     IInputDateProps,
-} from "./InputDate";
-import { InputErrorView } from "./InputText";
+} from './InputDate';
+import {InputErrorView} from './InputText';
+import Configs from '../../style/config/_config';
 
 export interface IRangeDateCustomInputProps extends ICustomInputProps {
-    side?: "start" | "end";
+    side?: 'start' | 'end';
 }
 
 export interface IInputDateRangeProps
-    extends Omit<IInputDateProps, "value" | "onChange"> {
+    extends Omit<IInputDateProps, 'value' | 'onChange'> {
     value?: any[];
-    onChange?: (props: IInputDateRangeProps["value"]) => any;
+    onChange?: (props: IInputDateRangeProps['value']) => any;
     startText?: string;
     endText?: string;
     classNameContent?: string;
@@ -48,37 +49,40 @@ const InputDateRange: React.ForwardRefRenderFunction<
         classNameError,
         classNameContent,
         error,
-        variant = "outline",
+        variant: variantProps,
         label,
         value,
         onChange,
-        startText = "Start",
-        endText = "End",
+        startText = 'Start',
+        endText = 'End',
         style,
         styleContent,
-        colorDarkMode = "transparent",
-        colorDarkModeContent = "transparent",
+        colorDarkMode = 'transparent',
+        colorDarkModeContent = 'transparent',
         customInput,
         mode,
         ...rest
     },
-    ref
+    ref,
 ) => {
+    const {inputConfig} = Configs;
+    const {variant: variantConfig} = inputConfig || {};
+    const variant = variantProps || variantConfig || 'outline';
     const colorScheme = useColorScheme();
     const hasBorder =
-        variant === "outline" || variant === "pill" || variant === "rounded";
+        variant === 'outline' || variant === 'pill' || variant === 'rounded';
     const labelClass = ClassNames(
         `h4`,
-        { "mb-1": hasBorder },
-        `${classNameLabel}`
+        {'mb-1': hasBorder},
+        `${classNameLabel}`,
     );
 
     const errorClass = ClassNames(
-        "mt-1",
+        'mt-1',
         {
-            "px-2": variant === "pill",
+            'px-2': variant === 'pill',
         },
-        classNameError
+        classNameError,
     );
 
     const endRef = useRef<ElementRef<typeof InputDate>>(null);
@@ -111,8 +115,7 @@ const InputDateRange: React.ForwardRefRenderFunction<
             <View
                 className={`flex-center-y ${classNameContent}`}
                 style={styleContent}
-                colorDarkMode={colorDarkModeContent}
-            >
+                colorDarkMode={colorDarkModeContent}>
                 <InputDate
                     variant={variant}
                     className="flex-1"
@@ -121,17 +124,17 @@ const InputDateRange: React.ForwardRefRenderFunction<
                     mode={mode}
                     {...rest}
                     customInput={
-                        typeof customInput === "function"
-                            ? (props) => {
+                        typeof customInput === 'function'
+                            ? props => {
                                   return customInput({
                                       ...props,
-                                      side: "start",
+                                      side: 'start',
                                   });
                               }
                             : customInput
                     }
                     showIcon={false}
-                    onChange={(v) => handleChangeStartTime(v)}
+                    onChange={v => handleChangeStartTime(v)}
                     maximumDate={value?.[1]}
                     value={value?.[0]}
                 />
@@ -140,8 +143,8 @@ const InputDateRange: React.ForwardRefRenderFunction<
                     className="mx-2"
                     color={
                         value?.length === 0
-                            ? "gray"
-                            : getThemeColor({ colorScheme })
+                            ? 'gray'
+                            : getThemeColor({colorScheme})
                     }
                 />
                 <InputDate
@@ -152,14 +155,14 @@ const InputDateRange: React.ForwardRefRenderFunction<
                     ref={endRef}
                     {...rest}
                     customInput={
-                        typeof customInput === "function"
-                            ? (props) => {
-                                  return customInput({ ...props, side: "end" });
+                        typeof customInput === 'function'
+                            ? props => {
+                                  return customInput({...props, side: 'end'});
                               }
                             : customInput
                     }
                     showIcon={false}
-                    onChange={(v) => handleChangeEndTime(v)}
+                    onChange={v => handleChangeEndTime(v)}
                     value={value?.[1]}
                     mode={mode}
                     minimumDate={value?.[0]}

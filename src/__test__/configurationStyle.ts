@@ -27,4 +27,5 @@ Fonts.loadFonts({
 Configs.loadConfigs({
     inputConfig: {variant: 'rounded'},
     buttonConfig: {shape: 'rounded', variant: 'outline'},
+    generalConfig: {autoSwitchColor: true},
 });

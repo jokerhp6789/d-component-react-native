@@ -65,6 +65,17 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
                 offsetSpaceKeyboard={50}
             />
             <InputDate
+                label="Date Input Default"
+                className="my-2"
+                mode="month"
+                format="MM/YYYY"
+                placeholder="Date Input Select Month Year"
+                onChange={v => {
+                    setDate(v);
+                }}
+                value={date}
+            />
+            <InputDate
                 label="Date Input Select Month Year"
                 variant="outline"
                 className="my-2"
