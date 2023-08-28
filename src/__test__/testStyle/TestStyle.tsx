@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {Appearance, useColorScheme} from 'react-native';
 import ScrollView from '../../component/view/ScrollView';
 import View from '../../component/view/View';
 import Text from '../../component/text/Text';
@@ -10,7 +11,17 @@ export interface ITestStyleProps {
 }
 
 const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
+    const appScheme = useColorScheme();
     const [useSystemTheme, setUseSystemTheme] = useState(true);
+
+    useEffect(() => {
+        if (!useSystemTheme) {
+            Appearance.setColorScheme('dark');
+        } else {
+            Appearance.setColorScheme(undefined);
+        }
+    }, [useSystemTheme]);
+
     return (
         <ScrollView className="w-100">
             <View className="w-100 justify-content-center align-center">
@@ -42,7 +53,12 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
             </View>
             <View className="flex-center-y gap-20">
                 <Text>Prefer dark mode</Text>
-                <Switch value={useSystemTheme} />
+                <Switch
+                    value={useSystemTheme}
+                    onChange={() => {
+                        setUseSystemTheme(!useSystemTheme);
+                    }}
+                />
                 <Text>Use system theme</Text>
             </View>
         </ScrollView>

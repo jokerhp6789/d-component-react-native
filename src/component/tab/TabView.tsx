@@ -34,7 +34,7 @@ import TabBarComponent from './TabBarComponent';
 export interface ITabViewRoute extends Route {
     label?: string;
     render?: (props?: any) => any;
-    component?: Element;
+    component?: React.ReactNode;
 }
 
 export interface IRenderTabViewProps<T> extends SceneRendererProps {

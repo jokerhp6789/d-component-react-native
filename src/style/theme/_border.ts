@@ -87,9 +87,9 @@ const borderStyle = StyleSheet.create({
   "rounded-pill": {
     borderRadius: 999,
   },
-  ...borderColorClass,
   ...borderWidthClass,
   ...borderRadiusClass,
+  ...borderColorClass,
 });
 
 export default borderStyle;

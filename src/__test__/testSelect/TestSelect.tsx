@@ -14,7 +14,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({ id }) => {
 
   return (
     <ScrollView className="py-0 w-100">
-      <View className="flex-1 bg-green h-100 w-100">
+      <View className="flex-1 bg- h-100 w-100">
         <Select
           showSearch
           searchOffline

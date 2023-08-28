@@ -1,6 +1,7 @@
-import { ColorKeyType } from "../style/constant/AppColors";
+import {ColorKeyType} from '../style/constant/AppColors';
 
 export interface ThemeProps {
-  colorDarkMode?: ColorKeyType;
-  useLightColor?: boolean;
+    colorDarkMode?: ColorKeyType;
+    useLightColor?: boolean;
+    autoSwitchColor?: boolean;
 }

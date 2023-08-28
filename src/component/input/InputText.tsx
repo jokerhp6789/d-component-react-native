@@ -1,8 +1,8 @@
 /** @format */
 
-import ClassNames from "classnames";
-import { isEmpty } from "lodash";
-import React, { useMemo, useState } from "react";
+import ClassNames from 'classnames';
+import {isEmpty} from 'lodash';
+import React, {useMemo, useState} from 'react';
 import {
     Platform,
     StyleProp,
@@ -11,21 +11,28 @@ import {
     TextStyle,
     useColorScheme,
     ViewStyle,
-} from "react-native";
-import useKeyBoard from "../../hooks/useKeyboard";
-import { ThemeProps } from "../../interface/iTheme";
-import Colors from "../../style/color/_color";
-import { ColorKeyType } from "../../style/constant/AppColors";
-import { getThemeColor } from "../../style/modifier";
-import Sizes from "../../style/size/_size";
-import { getStyleProps } from "../../style/style";
-import Icon from "../icon/Icon";
-import Text from "../text/Text";
-import View from "../view/View";
+} from 'react-native';
+import useKeyBoard from '../../hooks/useKeyboard';
+import {ThemeProps} from '../../interface/iTheme';
+import Colors from '../../style/color/_color';
+import Configs from '../../style/config/_config';
+import {ColorKeyType} from '../../style/constant/AppColors';
+import {getThemeColor} from '../../style/modifier';
+import Sizes from '../../style/size/_size';
+import {getStyleProps} from '../../style/style';
+import Icon from '../icon/Icon';
+import Text from '../text/Text';
+import View from '../view/View';
 
-const { light } = Colors;
+export type InputVariantType =
+    | 'standard'
+    | 'outline'
+    | 'rounded'
+    | 'pill'
+    | 'trans';
+
 export interface IInputTextProps extends TextInputProps, ThemeProps {
-    variant?: "standard" | "outline" | "rounded" | "pill" | "trans";
+    variant?: InputVariantType;
     label?: any;
     error?: any;
     height?: number;
@@ -61,13 +68,13 @@ export const InputErrorView: React.FC<IInputErrorViewProps> = ({
     error,
     className,
     classNameText,
-    iconName = "info",
+    iconName = 'info',
     iconSize = 12,
 }) => {
-    const errorClass = ClassNames("flex-center-y", className);
-    const textClass = ClassNames("text-error h5 ml-1", classNameText);
+    const errorClass = ClassNames('flex-center-y', className);
+    const textClass = ClassNames('text-error h5 ml-1', classNameText);
 
-    if (isEmpty(error) && typeof error !== "string") {
+    if (isEmpty(error) && typeof error !== 'string') {
         return null;
     }
 
@@ -84,12 +91,12 @@ const InputText: React.ForwardRefRenderFunction<
     IInputTextProps
 > = (
     {
-        variant = "standard",
+        variant: variantProps,
         error,
         label,
         height = Sizes.inputHeight,
-        color = "grey",
-        colorFocus = Colors?.inputColorFocus ?? "primary",
+        color = 'grey',
+        colorFocus = Colors?.inputColorFocus ?? 'primary',
         colorDark = Colors?.inputColorDark,
         className,
         classNameInput,
@@ -110,55 +117,61 @@ const InputText: React.ForwardRefRenderFunction<
         offsetSpaceKeyboard,
         ...rest
     },
-    ref
+    ref,
 ) => {
+    const {light} = Colors;
+    const {inputConfig} = Configs;
+    const {variant: variantConfig} = inputConfig || {};
     const colorScheme = useColorScheme();
-    const isDarkMode = colorScheme === "dark";
+    const isDarkMode = colorScheme === 'dark';
     const [focusing, setFocusing] = useState(false);
+    const variant: InputVariantType =
+        variantProps || variantConfig || 'standard';
+
     const hasBorder =
-        variant === "outline" || variant === "pill" || variant === "rounded";
+        variant === 'outline' || variant === 'pill' || variant === 'rounded';
 
     const containerClass = ClassNames(`w-100`, `${className}`);
     const labelClass = ClassNames(
         `h4`,
         {
-            "mb-1": hasBorder,
-            "font-weight-bold": focusing,
+            'mb-1': hasBorder,
+            'font-weight-bold': focusing,
         },
-        `${classNameLabel}`
+        `${classNameLabel}`,
     );
     const wrapperClass = ClassNames(
-        "flex-center-y justify-content-center",
+        'flex-center-y justify-content-center',
         {
             border: hasBorder,
             [`border-${color}`]: hasBorder,
-            "border-bottom-1": variant === "standard",
-            "rounded-pill": variant === "pill",
-            "rounded-1": variant === "rounded",
+            'border-bottom-1': variant === 'standard',
+            'rounded-pill': variant === 'pill',
+            'rounded-1': variant === 'rounded',
             [`border-${colorFocus}`]: focusing,
             [`border-${colorDark}`]: focusing && isDarkMode && !!colorDark,
-            "border-error": !!error,
-            "px-1": variant === "pill",
+            'border-error': !!error,
+            'px-1': variant === 'pill',
         },
-        classNameWrapper
+        classNameWrapper,
     );
     const inputClass = ClassNames(
-        "flex-1 h4",
+        'flex-1 h4',
         {
-            "py-2": Platform.OS === "android",
-            "px-2": variant !== "standard" && variant !== "trans",
+            'py-2': Platform.OS === 'android',
+            'px-2': variant !== 'standard' && variant !== 'trans',
         },
-        classNameInput
+        classNameInput,
     );
     const errorClass = ClassNames(
-        "mt-1",
+        'mt-1',
         {
-            "px-2": variant === "pill",
+            'px-2': variant === 'pill',
         },
-        classNameError
+        classNameError,
     );
 
-    const { isKeyboardShow, heightKeyboard } = useKeyBoard(false);
+    const {isKeyboardShow, heightKeyboard} = useKeyBoard(false);
     const bottomPadding = useMemo(() => {
         if (!useKeyboardAvoidingView || !focusing) {
             return undefined;
@@ -169,7 +182,7 @@ const InputText: React.ForwardRefRenderFunction<
         if (offsetSpaceKeyboard) {
             return offsetSpaceKeyboard;
         }
-        return Platform.OS === "ios" ? heightKeyboard - 50 : heightKeyboard;
+        return Platform.OS === 'ios' ? heightKeyboard - 50 : heightKeyboard;
     }, [heightKeyboard, isKeyboardShow, focusing]);
 
     const content = (
@@ -183,23 +196,22 @@ const InputText: React.ForwardRefRenderFunction<
                 style,
             ]}
             colorDarkMode={colorDarkMode}
-            useLightColor={useLightColor}
-        >
+            useLightColor={useLightColor}>
             {label && <Text className={labelClass}>{label}</Text>}
             <View className={wrapperClass}>
                 <TextInput
                     className={inputClass}
-                    onFocus={(e) => {
+                    onFocus={e => {
                         onFocus && onFocus(e);
                         setFocusing(true);
                     }}
-                    onBlur={(e) => {
+                    onBlur={e => {
                         onBlur && onBlur(e);
                         setFocusing(false);
                     }}
                     {...rest}
                     style={[
-                        { height, color: isDarkMode ? light : undefined },
+                        {height, color: isDarkMode ? light : undefined},
                         styleInput,
                     ]}
                 />
@@ -210,7 +222,7 @@ const InputText: React.ForwardRefRenderFunction<
                             // eslint-disable-next-line no-nested-ternary
                             focusing
                                 ? error
-                                    ? "error"
+                                    ? 'error'
                                     : getThemeColor({
                                           colorScheme,
                                           colorLightMode: colorFocus,
@@ -218,7 +230,7 @@ const InputText: React.ForwardRefRenderFunction<
                                               colorDark || colorFocus,
                                       })
                                 : error
-                                ? "error"
+                                ? 'error'
                                 : color
                         }
                         type="material"
@@ -228,7 +240,7 @@ const InputText: React.ForwardRefRenderFunction<
                     />
                 )}
             </View>
-            {!isEmpty(error) && typeof error === "string" && (
+            {!isEmpty(error) && typeof error === 'string' && (
                 <InputErrorView error={error} className={errorClass} />
             )}
         </View>

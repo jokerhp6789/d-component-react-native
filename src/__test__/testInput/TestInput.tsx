@@ -1,22 +1,22 @@
 /** @format */
 
-import React, { ElementRef, useRef, useState } from "react";
-import DatePicker from "react-native-date-picker";
-import CheckBox from "../../component/checkbox/CheckBox";
-import InputDate from "../../component/input/InputDate";
-import InputDateRange from "../../component/input/InputDateRange";
-import InputSearch from "../../component/input/InputSearch";
-import InputText from "../../component/input/InputText";
-import Text from "../../component/text/Text";
-import ScrollView from "../../component/view/ScrollView";
-import TouchableOpacity from "../../component/view/TouchableOpacity";
-import View from "../../component/view/View";
+import React, {ElementRef, useRef, useState} from 'react';
+import DatePicker from 'react-native-date-picker';
+import CheckBox from '../../component/checkbox/CheckBox';
+import InputDate from '../../component/input/InputDate';
+import InputDateRange from '../../component/input/InputDateRange';
+import InputSearch from '../../component/input/InputSearch';
+import InputText from '../../component/input/InputText';
+import Text from '../../component/text/Text';
+import ScrollView from '../../component/view/ScrollView';
+import TouchableOpacity from '../../component/view/TouchableOpacity';
+import View from '../../component/view/View';
 
 export interface ITestInputProps {
     [key: string]: any;
 }
 
-const TestInput: React.FC<ITestInputProps> = ({ id }) => {
+const TestInput: React.FC<ITestInputProps> = ({id}) => {
     const dateRef = useRef<ElementRef<typeof DatePicker>>(null);
     const [openDateModal, setOpenDateModal] = useState(false);
     const [date, setDate] = useState<any>();
@@ -25,6 +25,16 @@ const TestInput: React.FC<ITestInputProps> = ({ id }) => {
     return (
         <ScrollView className="my-4 w-100">
             {/* <CheckBox /> */}
+            <InputText
+                className="my-2"
+                label="Input Default"
+                color="red"
+                colorDark="yellow"
+                onPressIcon={() => {}}
+                placeholder="Input Standard"
+                // error="Error Test Input"
+            />
+
             <InputText
                 variant="standard"
                 className="my-2"
@@ -61,7 +71,7 @@ const TestInput: React.FC<ITestInputProps> = ({ id }) => {
                 mode="month"
                 format="MM/YYYY"
                 placeholder="Date Input Select Month Year"
-                onChange={(v) => {
+                onChange={v => {
                     setDate(v);
                 }}
                 value={date}
@@ -72,7 +82,7 @@ const TestInput: React.FC<ITestInputProps> = ({ id }) => {
                 className="my-2"
                 mode="date"
                 placeholder="Date Input Outline"
-                onChange={(v) => {
+                onChange={v => {
                     setDate(v);
                 }}
                 disabled
@@ -83,7 +93,7 @@ const TestInput: React.FC<ITestInputProps> = ({ id }) => {
                 variant="standard"
                 className="my-2"
                 mode="datetime"
-                onChange={(v) => {
+                onChange={v => {
                     setDate(v);
                 }}
                 value={date}
@@ -96,7 +106,7 @@ const TestInput: React.FC<ITestInputProps> = ({ id }) => {
                 className="my-2"
                 mode="datetime"
                 placeholder="Date Input Rounded"
-                onChange={(v) => {
+                onChange={v => {
                     setDate(v);
                 }}
                 value={date}
@@ -107,7 +117,7 @@ const TestInput: React.FC<ITestInputProps> = ({ id }) => {
                 className="my-2"
                 mode="date"
                 placeholder="Date Input Pill"
-                onChange={(v) => {
+                onChange={v => {
                     setDate(v);
                 }}
                 value={date}
@@ -134,7 +144,7 @@ const TestInput: React.FC<ITestInputProps> = ({ id }) => {
                 className="my-2 align-self-start"
                 mode="datetime"
                 placeholder="Date Input Pill"
-                onChange={(v) => {
+                onChange={v => {
                     setDate(v);
                 }}
                 value={date}
