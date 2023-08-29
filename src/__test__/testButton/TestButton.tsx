@@ -35,9 +35,9 @@ const TestButton: React.FC<ITestButtonProps> = ({id}) => {
                 loading={loading}
                 onPress={() => {
                     setLoading(true);
-                    setInterval(() => setLoading(false), 1500);
+                    setTimeout(() => setLoading(false), 3000);
                 }}>
-                Button Large
+                Button Loading
             </Button>
             <Button
                 size="medium"

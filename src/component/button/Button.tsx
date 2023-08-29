@@ -281,7 +281,7 @@ const Button: React.FC<IButtonProps> = ({
         <TouchableOpacity
             className={wrapperClass}
             style={buttonStyle}
-            disabled={disabled}
+            disabled={disabled || loading}
             colorDarkMode={buttonDarkModeBg}
             activeOpacity={activeOpacity || 0.5}
             {...rest}>

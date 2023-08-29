@@ -273,3 +273,4 @@ export {default as StyleContext} from './context/StyleContext';
 
 export type {IGetThemeColorProps} from './style/modifier';
 export {getColorValue} from './style/modifier';
+export {styleTransformer as styles} from './style/style';
