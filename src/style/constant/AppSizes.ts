@@ -16,9 +16,9 @@ const DefaultSize = {
   inputHeight: 30,
   buttonHeight: 30,
 
-  paddingXXXLarge: 26,
-  paddingXXLarge: 24,
-  paddingXLarge: 22,
+  paddingXXXLarge: 32,
+  paddingXXLarge: 28,
+  paddingXLarge: 24,
   paddingLarge: 20,
   padding: 18,
   paddingMedium: 16,
