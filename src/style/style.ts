@@ -7,6 +7,7 @@ import {
     FlexStyle,
     ImageStyle,
     useColorScheme,
+    StyleProp,
 } from 'react-native';
 import flexStyle from './layout/_flex';
 import marginPadding from './layout/_padding-margin';
@@ -58,23 +59,55 @@ export const getSpecialStyle = (className: string) => {
     return null;
 };
 
-export const styleTransformer = (classStr: string) => {
-    const classArr = split(classStr, ' ');
+export const styleTransformer = (
+    primaryStyle: string | {[key: string]: any},
+    secondaryStyle?: string | {[key: string]: any},
+) => {
     const styleProps: ViewStyle[] | TextStyle[] | ImageStyle[] | FlexStyle[] =
         [];
-    if (!isEmpty(classArr)) {
-        try {
-            forEach(classArr, (name: any) => {
-                if (style?.[name as keyof typeof style]) {
-                    styleProps.push(style[name as keyof typeof style]);
+    if (typeof primaryStyle === 'string') {
+        const classArr = split(primaryStyle, ' ');
+        if (!isEmpty(classArr)) {
+            try {
+                forEach(classArr, (name: any) => {
+                    if (style?.[name as keyof typeof style]) {
+                        styleProps.push(style[name as keyof typeof style]);
+                    } else {
+                        const specialStyle = getSpecialStyle(name);
+                        if (!!specialStyle) {
+                            styleProps.push(specialStyle);
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('GET STYLE PROPS ERROR', {error});
+            }
+        }
+    } else if (primaryStyle) {
+        Object.keys(primaryStyle).forEach(key => {
+            if (!!primaryStyle?.[key]) {
+                const conditionalStyle = styleTransformer(key);
+                if (conditionalStyle && conditionalStyle?.length) {
+                    styleProps.push(...(conditionalStyle as any));
                 }
-                const specialStyle = getSpecialStyle(name);
-                if (!!specialStyle) {
-                    styleProps.push(specialStyle);
+            }
+        });
+    }
+    if (secondaryStyle) {
+        if (typeof secondaryStyle === 'string') {
+            const conditionalStyle = styleTransformer(secondaryStyle);
+            if (conditionalStyle && conditionalStyle?.length) {
+                styleProps.push(...(conditionalStyle as any));
+            }
+        } else {
+            Object.keys(secondaryStyle).forEach(key => {
+                if (!!secondaryStyle?.[key]) {
+                    const conditionalStyle = styleTransformer(key);
+                    if (conditionalStyle && conditionalStyle?.length) {
+                        styleProps.push(...(conditionalStyle as any));
+                    }
                 }
             });
-        } catch (error) {
-            console.error('GET STYLE PROPS ERROR', {error});
         }
     }
     return styleProps;
