@@ -203,6 +203,7 @@ export {default as Fonts} from './style/font/_font';
 export {default as AppSizes} from './style/constant/AppSizes';
 export {default as AppColors} from './style/constant/AppColors';
 export {default as AppFonts} from './style/constant/AppFonts';
+export {default as AppStyleConfig} from './style/constant/AppStyleConfig';
 export type {ColorKeyType} from './style/constant/AppColors';
 export {isDark} from './style/color/_color';
 
