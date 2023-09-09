@@ -25,10 +25,10 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
     return (
         <ScrollView className="w-100">
             <View className="w-100 justify-content-center align-center">
-                <View
-                    className="width-50 height-50  border-dashed border-primary my-3"
-                />
-                <Text className="h5 label font-weight-bold">
+                <View className="width-50 height-50  border-dashed border-primary my-3" />
+                <Text
+                    className="h5 label font-weight-bold"
+                    style={{fontWeight: '800'}}>
                     width-50 height-50 border-dashed border-primary my-3
                     width-50 height-50 border-dashed border-primary my-3
                     width-50 height-50 border-dashed border-primary my-3

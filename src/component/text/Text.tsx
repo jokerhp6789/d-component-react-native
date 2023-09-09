@@ -1,12 +1,14 @@
 /** @format */
 
-import {find} from 'lodash';
+import {find, split} from 'lodash';
 import React, {useContext, useMemo} from 'react';
 import {
     Text as RNText,
     TextProps,
     TextStyle,
     useColorScheme,
+    StyleSheet,
+    Platform,
 } from 'react-native';
 import StyleStateContext, {
     IStyleStateContext,
@@ -39,24 +41,10 @@ const Text: React.FC<ITextProps> = ({
     const isDarkMode = useColorScheme() === 'dark';
     const {light} = Colors;
     const {fontClass, locale: loadFontLocale} = Fonts;
-    const localeFont: string | null = useMemo(() => {
-        let res = null;
-        if (locale && useFontToLocale) {
-            const foundFontLocale = find(loadFontLocale, (v, k) => {
-                return k === locale;
-            });
-            if (foundFontLocale) {
-                res = foundFontLocale;
-            }
-        }
-        return res;
-    }, [locale, useFontToLocale]);
-
     const defaultStyle: TextStyle = {
         ...fontClass.h4,
         color: isDarkMode && autoSwitchColor ? light : undefined,
     };
-
     const listStyle = [defaultStyle, transStyle, style];
     if (color) {
         const colorValue = getColorValue(color);
@@ -66,11 +54,43 @@ const Text: React.FC<ITextProps> = ({
         const color = getColorValue(colorDarkMode);
         listStyle.push({color});
     }
+    const flattenStyle = StyleSheet.flatten<TextStyle>(listStyle);
+    const hasBoldStyle =
+        split(rest?.['className'], ' ').includes('font-weight-bold') ||
+        ['500', '600', '700', '800', '900', 'bold'].includes(
+            flattenStyle?.fontWeight as any,
+        );
+    const localeFont: string | null = useMemo(() => {
+        let res = null;
+        if (locale && useFontToLocale) {
+            const foundFontLocale = find(loadFontLocale, (v, k) => {
+                return k === locale;
+            });
+            if (foundFontLocale) {
+                if (typeof foundFontLocale === 'string') {
+                    res = foundFontLocale;
+                } else {
+                    if (foundFontLocale?.[Platform.OS]) {
+                        res = hasBoldStyle
+                            ? foundFontLocale?.[Platform.OS]?.bold
+                            : foundFontLocale?.[Platform.OS]?.normal;
+                    } else {
+                        res = hasBoldStyle
+                            ? foundFontLocale?.bold
+                            : foundFontLocale?.normal;
+                    }
+                }
+            }
+        }
+        return res;
+    }, [locale, useFontToLocale, hasBoldStyle]);
     if (localeFont) {
         listStyle.push({fontFamily: localeFont});
     }
+    const finalStyle = StyleSheet.flatten(listStyle);
+
     return (
-        <RNText {...rest} style={listStyle}>
+        <RNText {...rest} style={finalStyle}>
             {children}
         </RNText>
     );

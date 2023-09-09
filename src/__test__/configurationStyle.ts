@@ -4,6 +4,7 @@ import Colors from '../style/color/_color';
 import Sizes from '../style/size/_size';
 import Fonts from '../style/font/_font';
 import Configs from '../style/config/_config';
+import {Platform} from 'react-native';
 
 Colors.loadColors({
     primary: 'red',
@@ -13,14 +14,45 @@ Colors.loadColors({
 //@ts-ignore
 // Sizes.loadSizes({ buttonHeight: 20 });
 Fonts.loadFonts({
-    iosFont: 'Prompt-Regular',
+    ios: {
+        normal: 'Prompt-Regular',
+        bold: 'Prompt-Bold',
+    },
+    android: {
+        normal: 'Prompt-Regular',
+        bold: 'Prompt-Bold',
+    },
     baseFontSize: 12,
     label: {
         fontWeight: '500',
     },
     locale: {
-        en: 'Poppins-Regular',
-        th: 'Prompt-Regular',
+        en: {
+            ios: {
+                normal: 'Prompt-Regular',
+                bold: 'Prompt-Bold',
+            },
+            android: {
+                normal: 'Prompt-Regular',
+                bold: 'Prompt-Bold',
+            },
+            // default value
+            normal: 'Prompt-Regular',
+            bold: 'Prompt-Bold',
+        },
+        th: {
+            ios: {
+                normal: 'Prompt-Regular',
+                bold: 'Prompt-Bold',
+            },
+            android: {
+                normal: 'Prompt-Regular',
+                bold: 'Prompt-Bold',
+            },
+            // default value
+            normal: 'Prompt-Regular',
+            bold: 'Prompt-Bold',
+        },
     } as any,
 });
 
