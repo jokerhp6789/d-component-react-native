@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import {forEach, split, isEmpty} from 'lodash';
+import {forEach, split, isEmpty, each} from 'lodash';
 import {
     StyleSheet,
     ViewStyle,
@@ -61,7 +61,7 @@ export const getSpecialStyle = (className: string) => {
 
 export const styleTransformer = (
     primaryStyle: string | {[key: string]: any},
-    secondaryStyle?: string | {[key: string]: any},
+    ...otherStyle: any
 ) => {
     const styleProps: ViewStyle[] | TextStyle[] | ImageStyle[] | FlexStyle[] =
         [];
@@ -93,23 +93,28 @@ export const styleTransformer = (
             }
         });
     }
-    if (secondaryStyle) {
-        if (typeof secondaryStyle === 'string') {
-            const conditionalStyle = styleTransformer(secondaryStyle);
-            if (conditionalStyle && conditionalStyle?.length) {
-                styleProps.push(...(conditionalStyle as any));
-            }
-        } else {
-            Object.keys(secondaryStyle).forEach(key => {
-                if (!!secondaryStyle?.[key]) {
-                    const conditionalStyle = styleTransformer(key);
+    if (otherStyle && otherStyle?.length) {
+        for (const secondaryStyle of otherStyle) {
+            if (secondaryStyle) {
+                if (typeof secondaryStyle === 'string') {
+                    const conditionalStyle = styleTransformer(secondaryStyle);
                     if (conditionalStyle && conditionalStyle?.length) {
                         styleProps.push(...(conditionalStyle as any));
                     }
+                } else {
+                    Object.keys(secondaryStyle).forEach(key => {
+                        if (!!secondaryStyle?.[key]) {
+                            const conditionalStyle = styleTransformer(key);
+                            if (conditionalStyle && conditionalStyle?.length) {
+                                styleProps.push(...(conditionalStyle as any));
+                            }
+                        }
+                    });
                 }
-            });
+            }
         }
     }
+
     return styleProps;
 };
 

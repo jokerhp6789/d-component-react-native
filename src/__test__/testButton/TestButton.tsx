@@ -3,6 +3,7 @@ import Button from '../../component/button/Button';
 import Text from '../../component/text/Text';
 import ScrollView from '../../component/view/ScrollView';
 import TouchableOpacity from '../../component/view/TouchableOpacity';
+import {styleTransformer} from '../../style/style';
 
 export interface ITestButtonProps {
     [key: string]: any;
@@ -13,7 +14,18 @@ const TestButton: React.FC<ITestButtonProps> = ({id}) => {
 
     return (
         <ScrollView className="w-100">
-            <Button size="xx-large" className="my-2" colorDarkMode="red">
+            <Button
+                size="xx-large"
+                className="my-2"
+                colorDarkMode="red"
+                style={styleTransformer(
+                    'bg-yellow',
+                    {
+                        'border-4 border-red': true,
+                    },
+                    {'bg-pink': true},
+                    'w-50',
+                )}>
                 Button XX Large
             </Button>
             <Button
