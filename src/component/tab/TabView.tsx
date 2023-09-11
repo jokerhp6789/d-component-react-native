@@ -44,10 +44,7 @@ export interface IRenderTabViewProps<T> extends SceneRendererProps {
 }
 
 export interface ITabViewProps
-    extends Omit<
-        TabViewProps<any>,
-        'renderScene' | 'onIndexChange' | 'navigationState'
-    > {
+    extends Omit<TabViewProps<any>, 'onIndexChange' | 'navigationState'> {
     key?: any;
     variant?: 'standard' | 'pilled' | 'rounded' | 'box';
     initialIndex?: number;
@@ -352,10 +349,7 @@ function TabView(
 
     return (
         <RNTabView
-            {...rest}
-            key={key}
-            renderTabBar={renderTabBar}
-            navigationState={{index, routes}}
+            //@ts-ignore
             renderScene={
                 isSeparate
                     ? ({route, jumpTo, layout, position}) =>
@@ -369,6 +363,11 @@ function TabView(
                           })
                     : renderScene
             }
+            initialLayout={{width: Dimensions.get('window').width}}
+            {...rest}
+            key={key}
+            renderTabBar={renderTabBar}
+            navigationState={{index, routes}}
             onIndexChange={index => {
                 setIndex(index);
                 onChangeIndex && onChangeIndex(index);
@@ -379,7 +378,6 @@ function TabView(
                 tranStyle,
                 style,
             ]}
-            initialLayout={{width: Dimensions.get('window').width}}
         />
     );
 }
