@@ -24,7 +24,7 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
 
     return (
         <ScrollView className="w-100">
-            <View className="w-100 justify-content-center align-center">
+            <View className="justify-content-center align-center bg-[rgba(12,12,12,0.3)] max-w-[220] p-[30]">
                 <View className="width-50 height-50  border-dashed border-primary my-3" />
                 <Text
                     className="h5 label font-weight-bold"
@@ -34,7 +34,7 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                     width-50 height-50 border-dashed border-primary my-3
                 </Text>
             </View>
-            <View style={{gap: 10}} className="bg-green flex-row my-3">
+            <View style={{gap: 10}} className="bg-green flex-row my-3 max-h-10">
                 {map(new Array(10).fill(0), item => (
                     <View
                         className="flex-1"
@@ -42,7 +42,7 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                     />
                 ))}
             </View>
-            <View style={{}} className="bg-green flex-row my-3 gap-col-20">
+            <View style={{}} className="bg-green my-3 gy-3 max-w-30">
                 {map(new Array(10).fill(0), item => (
                     <View
                         className="flex-1"
@@ -50,7 +50,7 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                     />
                 ))}
             </View>
-            <View className="flex-center-y gap-20">
+            <View className="flex-center-y g-[20]">
                 <Text>Prefer dark mode</Text>
                 <Switch
                     value={useSystemTheme}

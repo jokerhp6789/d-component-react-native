@@ -38,11 +38,19 @@ const WIDTH_HEIGHT_PERCENTAGE_VALUE = {
     100: '100%',
 };
 
+const maxWidthPercentageClass = generateStyleValue(
+    {['max-w']: 'maxWidth'},
+    WIDTH_HEIGHT_PERCENTAGE_VALUE,
+);
 const widthPercentageClass = generateStyleValue(
     {w: 'width'},
     WIDTH_HEIGHT_PERCENTAGE_VALUE,
 );
 
+const maxHeightPercentageClass = generateStyleValue(
+    {['max-h']: 'maxHeight'},
+    WIDTH_HEIGHT_PERCENTAGE_VALUE,
+);
 const heightPercentageClass = generateStyleValue(
     {h: 'height'},
     WIDTH_HEIGHT_PERCENTAGE_VALUE,
@@ -77,6 +85,8 @@ const widthHeightStyle = StyleSheet.create({
     ...heightClass,
     ...widthPercentageClass,
     ...heightPercentageClass,
+    ...maxWidthPercentageClass,
+    ...maxHeightPercentageClass,
 });
 
 export default widthHeightStyle;

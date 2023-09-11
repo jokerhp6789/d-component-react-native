@@ -1,32 +1,18 @@
-const gapClass: any = {};
-const gapRowClass: any = {};
-const gapRowClassX: any = {};
-const gapColClass: any = {};
-const gapColClassY: any = {};
-for (let i = 0; i <= 200; i += 1) {
-    gapClass[`gap-${i}`] = {
-        gap: i,
-    };
-    gapRowClass[`gap-row-${i}`] = {
-        rowGap: i,
-    };
-    gapRowClassX[`gap-x-${i}`] = {
-        rowGap: i,
-    };
-    gapColClass[`gap-col-${i}`] = {
-        columnGap: i,
-    };
-    gapColClassY[`gap-y-${i}`] = {
-        columnGap: i,
-    };
-}
+import {generateStyleValue} from '../modifier';
+import {MARGIN_PADDING_VALUES} from './_padding-margin';
+
+export const GAP_VARIATIONS = {
+    g: 'gap',
+    gy: 'rowGap',
+    ['gap-row']: 'rowGap',
+    gx: 'columnGap',
+    ['gap-col']: 'columnGap',
+};
+
+const gapClass = generateStyleValue(GAP_VARIATIONS, MARGIN_PADDING_VALUES);
 
 const gapStyle = {
     ...gapClass,
-    ...gapRowClass,
-    ...gapRowClassX,
-    ...gapColClass,
-    ...gapColClassY,
 };
 
 export default gapStyle;

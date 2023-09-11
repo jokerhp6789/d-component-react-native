@@ -44,7 +44,10 @@ export interface IRenderTabViewProps<T> extends SceneRendererProps {
 }
 
 export interface ITabViewProps
-    extends Omit<TabViewProps<any>, 'onIndexChange' | 'navigationState'> {
+    extends Omit<
+        Partial<TabViewProps<any>>,
+        'onIndexChange' | 'navigationState'
+    > {
     key?: any;
     variant?: 'standard' | 'pilled' | 'rounded' | 'box';
     initialIndex?: number;

@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import {forEach, split, isEmpty, each} from 'lodash';
+import {forEach, split, isEmpty, each, replace} from 'lodash';
 import {
     StyleSheet,
     ViewStyle,
@@ -25,7 +25,12 @@ import Configs from './config/_config';
 import {ThemeProps} from '../interface/iTheme';
 
 const {dark, light} = Colors;
-const SPECIAL_STYLE_PATTERN = /^(bg|text|border)-#[0-9A-Fa-f]{6}$/;
+const SPECIAL_STYLE_COLOR_PATTERN =
+    /^(bg|text|border)-(\[#[0-9A-Fa-f]{6}\]|(?!#)\[rgba\((?:\d{1,3},\s*){3}(?:1|0\.\d{1,2})\)\])$/;
+const SPECIAL_WIDTH_HEIGHT_PATTERN = /^(max-)?[wh]-\[\d+(\.\d+)?%?\]$/;
+const SPECIAL_PADDING_MARGIN_PATTERN =
+    /^(p(x|y|l|t|r|b)?|g(x|y)?|m(x|y|l|t|r|b)?)-\[\d+\]$/;
+const PERCENTAGE_PATTERN = /^\d+(\.\d+)?%$/;
 
 export const getStyleProps = (props: any, key?: string) => {
     const keyProps = key || 'className';
@@ -34,10 +39,18 @@ export const getStyleProps = (props: any, key?: string) => {
 };
 
 export const getSpecialStyle = (className: string) => {
-    if (SPECIAL_STYLE_PATTERN.test(className)) {
+    function getValue(valueToGet?: string) {
+        let res: any = valueToGet;
+        if (valueToGet && typeof valueToGet === 'string') {
+            res = replace(res, '[', '');
+            res = replace(res, ']', '');
+        }
+        return res;
+    }
+    if (SPECIAL_STYLE_COLOR_PATTERN.test(className)) {
         const stringArr = split(className, '-');
         const key = stringArr?.[0];
-        const value = stringArr?.[1];
+        const value: any = getValue(stringArr?.[1]);
         let styleKey: any = null;
         switch (key) {
             case 'bg':
@@ -52,8 +65,118 @@ export const getSpecialStyle = (className: string) => {
             default:
                 break;
         }
-        if (styleKey) {
+        if (styleKey && value) {
             return {[styleKey]: value};
+        }
+    }
+    if (SPECIAL_WIDTH_HEIGHT_PATTERN.test(className)) {
+        const stringArr = split(className, '-');
+        let value = null;
+        let styleKey: any = null;
+        if (stringArr?.length === 3) {
+            const key = `${stringArr?.[0]}-${stringArr?.[1]}`;
+            value = getValue(stringArr?.[2]);
+            switch (key) {
+                case 'max-w':
+                    styleKey = 'maxWidth';
+                    break;
+                case 'max-h':
+                    styleKey = 'maxHeight';
+                    break;
+                default:
+                    break;
+            }
+        } else if (stringArr?.length === 2) {
+            const key = stringArr?.[0];
+            value = getValue(stringArr?.[1]);
+            switch (key) {
+                case 'w':
+                    styleKey = 'width';
+                    break;
+                case 'h':
+                    styleKey = 'height';
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (styleKey && value) {
+            if (!PERCENTAGE_PATTERN.test(value) && !isNaN(parseFloat(value))) {
+                value = parseFloat(value);
+            }
+            return {[styleKey]: value};
+        }
+    }
+    if (SPECIAL_PADDING_MARGIN_PATTERN.test(className)) {
+        const stringArr = split(className, '-');
+        let value = null;
+        let styleKey: any = null;
+        if (stringArr?.length === 2) {
+            const key = stringArr?.[0];
+            value = getValue(stringArr?.[1]);
+            switch (key) {
+                case 'g':
+                    styleKey = 'gap';
+                    break;
+                case 'gy':
+                    styleKey = 'rowGap';
+                    break;
+                case 'gx':
+                    styleKey = 'columnGap';
+                    break;
+                case 'p':
+                    styleKey = 'padding';
+                    break;
+                case 'pl':
+                    styleKey = 'paddingLeft';
+                    break;
+                case 'pt':
+                    styleKey = 'paddingTop';
+                    break;
+                case 'pr':
+                    styleKey = 'paddingRight';
+                    break;
+                case 'pb':
+                    styleKey = 'paddingBottom';
+                    break;
+                case 'px':
+                    styleKey = 'paddingHorizontal';
+                    break;
+                case 'py':
+                    styleKey = 'paddingVertical';
+                    break;
+                case 'm':
+                    styleKey = 'margin';
+                    break;
+                case 'ml':
+                    styleKey = 'marginLeft';
+                    break;
+                case 'mt':
+                    styleKey = 'marginTop';
+                    break;
+                case 'mr':
+                    styleKey = 'marginRight';
+                    break;
+                case 'mb':
+                    styleKey = 'marginBottom';
+                    break;
+                case 'mx':
+                    styleKey = 'marginHorizontal';
+                    break;
+                case 'my':
+                    styleKey = 'marginVertical';
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (styleKey && value) {
+            if (!isNaN(parseFloat(value))) {
+                value = parseFloat(value);
+            }
+            if (typeof value === 'number') {
+                return {[styleKey]: value};
+            }
         }
     }
     return null;
@@ -66,21 +189,28 @@ export const styleTransformer = (
     const styleProps: ViewStyle[] | TextStyle[] | ImageStyle[] | FlexStyle[] =
         [];
     if (typeof primaryStyle === 'string') {
-        const classArr = split(primaryStyle, ' ');
-        if (!isEmpty(classArr)) {
-            try {
-                forEach(classArr, (name: any) => {
-                    if (style?.[name as keyof typeof style]) {
-                        styleProps.push(style[name as keyof typeof style]);
-                    } else {
-                        const specialStyle = getSpecialStyle(name);
-                        if (!!specialStyle) {
-                            styleProps.push(specialStyle);
+        if (primaryStyle?.length > 1) {
+            const classArr = split(primaryStyle, ' ');
+            if (!isEmpty(classArr)) {
+                try {
+                    forEach(classArr, (name: any) => {
+                        if (style?.[name as keyof typeof style]) {
+                            styleProps.push(style[name as keyof typeof style]);
+                        } else if (
+                            !!name &&
+                            typeof name === 'string' &&
+                            name?.length > 3 &&
+                            name !== 'undefined'
+                        ) {
+                            const specialStyle = getSpecialStyle(name);
+                            if (!!specialStyle) {
+                                styleProps.push(specialStyle);
+                            }
                         }
-                    }
-                });
-            } catch (error) {
-                console.error('GET STYLE PROPS ERROR', {error});
+                    });
+                } catch (error) {
+                    console.error('GET STYLE PROPS ERROR', {error});
+                }
             }
         }
     } else if (primaryStyle) {
@@ -114,7 +244,6 @@ export const styleTransformer = (
             }
         }
     }
-
     return styleProps;
 };
 
