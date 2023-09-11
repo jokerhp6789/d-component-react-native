@@ -30,6 +30,7 @@ const SPECIAL_STYLE_COLOR_PATTERN =
 const SPECIAL_WIDTH_HEIGHT_PATTERN = /^(max-)?[wh]-\[\d+(\.\d+)?%?\]$/;
 const SPECIAL_PADDING_MARGIN_PATTERN =
     /^(p(x|y|l|t|r|b)?|g(x|y)?|m(x|y|l|t|r|b)?)-\[\d+\]$/;
+const SPECIAL_POSITION_PATTERN = /^[rtlbz]-\[\d+\]$/;
 const PERCENTAGE_PATTERN = /^\d+(\.\d+)?%$/;
 
 export const getStyleProps = (props: any, key?: string) => {
@@ -165,6 +166,42 @@ export const getSpecialStyle = (className: string) => {
                     break;
                 case 'my':
                     styleKey = 'marginVertical';
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (styleKey && value) {
+            if (!isNaN(parseFloat(value))) {
+                value = parseFloat(value);
+            }
+            if (typeof value === 'number') {
+                return {[styleKey]: value};
+            }
+        }
+    }
+    if (SPECIAL_POSITION_PATTERN.test(className)) {
+        const stringArr = split(className, '-');
+        let value = null;
+        let styleKey: any = null;
+        if (stringArr?.length === 2) {
+            const key = stringArr?.[0];
+            value = getValue(stringArr?.[1]);
+            switch (key) {
+                case 'z':
+                    styleKey = 'zIndex';
+                    break;
+                case 't':
+                    styleKey = 'top';
+                    break;
+                case 'b':
+                    styleKey = 'bottom';
+                    break;
+                case 'l':
+                    styleKey = 'left';
+                    break;
+                case 'r':
+                    styleKey = 'right';
                     break;
                 default:
                     break;
