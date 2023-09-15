@@ -22,49 +22,47 @@ export class FontClass {
         const {normal: androidFont, bold: androidBoldFont} =
             (android as any) || {};
         const baseSize = baseFontSize || this.baseFontSize;
-        _.forEach(fonts, (value, key) => {
-            this.fontClass = {
-                h0: {
-                    fontSize: baseSize * 2,
-                    // lineHeight: base.fontSize * 2 * 1.1,
-                    ...this.getFont({iosFont, androidFont} as any),
-                },
-                h1: {
-                    fontSize: baseSize * 1.8,
-                    // lineHeight: base.fontSize * 1.8 * 1.2,
-                    ...this.getFont({iosFont, androidFont} as any),
-                },
-                h2: {
-                    fontSize: baseSize * 1.6,
-                    // lineHeight: base.fontSize * 1.6 * 1.3,
-                    ...this.getFont({iosFont, androidFont} as any),
-                },
-                h3: {
-                    fontSize: baseSize * 1.4,
-                    // lineHeight: base.fontSize * 1.4 * 1.4,
-                    ...this.getFont({iosFont, androidFont} as any),
-                },
-                h4: {
-                    fontSize: baseSize * 1.2,
-                    // lineHeight: base.fontSize * 1.2 * 1.5,
-                    ...this.getFont({iosFont, androidFont} as any),
-                },
-                h5: {
-                    fontSize: baseSize,
-                    // lineHeight: base.fontSize * 2 * 1.1,
-                    ...this.getFont({iosFont, androidFont} as any),
-                },
-                text: {
-                    fontSize: baseSize,
-                    // lineHeight: base.fontSize * 2 * 1.1,
-                    ...this.getFont({iosFont, androidFont} as any),
-                },
-                'font-weight-bold': {
-                    ...this.getBoldFont({iosBoldFont, androidBoldFont} as any),
-                },
-                ...rest,
-            };
-        });
+        this.fontClass = {
+            h0: {
+                fontSize: baseSize + 10,
+                // lineHeight: base.fontSize * 2 * 1.1,
+                ...this.getFont({iosFont, androidFont} as any),
+            },
+            h1: {
+                fontSize: baseSize + 8,
+                // lineHeight: base.fontSize * 1.8 * 1.2,
+                ...this.getFont({iosFont, androidFont} as any),
+            },
+            h2: {
+                fontSize: baseSize + 6,
+                // lineHeight: base.fontSize * 1.6 * 1.3,
+                ...this.getFont({iosFont, androidFont} as any),
+            },
+            h3: {
+                fontSize: baseSize + 4,
+                // lineHeight: base.fontSize * 1.4 * 1.4,
+                ...this.getFont({iosFont, androidFont} as any),
+            },
+            h4: {
+                fontSize: baseSize + 2,
+                // lineHeight: base.fontSize * 1.2 * 1.5,
+                ...this.getFont({iosFont, androidFont} as any),
+            },
+            h5: {
+                fontSize: baseSize,
+                // lineHeight: base.fontSize * 2 * 1.1,
+                ...this.getFont({iosFont, androidFont} as any),
+            },
+            text: {
+                fontSize: baseSize,
+                // lineHeight: base.fontSize * 2 * 1.1,
+                ...this.getFont({iosFont, androidFont} as any),
+            },
+            'font-weight-bold': {
+                ...this.getBoldFont({iosBoldFont, androidBoldFont} as any),
+            },
+            ...rest,
+        };
         this.locale = locale;
     }
 
@@ -98,32 +96,32 @@ export class FontClass {
 
     fontClass: any = {
         h0: {
-            fontSize: this.baseFontSize * 2,
+            fontSize: this.baseFontSize + 10,
             // lineHeight: base.fontSize * 2 * 1.1,
             ...this.getFont({}),
         },
         h1: {
-            fontSize: this.baseFontSize * 1.8,
+            fontSize: this.baseFontSize + 8,
             // lineHeight: base.fontSize * 1.8 * 1.2,
             ...this.getFont({}),
         },
         h2: {
-            fontSize: this.baseFontSize * 1.6,
+            fontSize: this.baseFontSize + 6,
             // lineHeight: base.fontSize * 1.6 * 1.3,
             ...this.getFont({}),
         },
         h3: {
-            fontSize: this.baseFontSize * 1.4,
+            fontSize: this.baseFontSize + 4,
             // lineHeight: base.fontSize * 1.4 * 1.4,
             ...this.getFont({}),
         },
         h4: {
-            fontSize: this.baseFontSize * 1.2,
+            fontSize: this.baseFontSize + 2,
             // lineHeight: base.fontSize * 1.2 * 1.5,
             ...this.getFont({}),
         },
         h5: {
-            fontSize: this.baseFonxtSize,
+            fontSize: this.baseFontSize,
             ...this.getFont({}),
         },
         text: {

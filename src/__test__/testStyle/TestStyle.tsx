@@ -60,7 +60,7 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                 />
                 <Text>Use system theme</Text>
             </View>
-            <View className="flex-center-y g-[20] absolute bg-red b-[200] l-[25] z-[0]">
+            <View className="flex-center-y g-[20]  bg-red b-[200] l-[25] z-[0]">
                 <Text>Prefer dark mode</Text>
                 <Switch
                     value={useSystemTheme}
@@ -70,6 +70,16 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                 />
                 <Text>Use system theme</Text>
             </View>
+            <View className="mt-3">
+                <Text>Text Style</Text>
+                <Text className="h0 mt-3 font-weight-bold">Text Style h0</Text>
+                <Text className="h1 mt-3">Text Style h1</Text>
+                <Text className="h2 mt-3">Text Style h2</Text>
+                <Text className="h3 mt-3">Text Style h3</Text>
+                <Text className="h4 mt-3">Text Style h4</Text>
+                <Text className="h5 mt-3">Text Style h5</Text>
+            </View>
+            <View className="h-[200]" />
         </ScrollView>
     );
 };
