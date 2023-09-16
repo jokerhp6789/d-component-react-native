@@ -10,8 +10,6 @@ export default StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        minHeight: 100,
-        minWidth: 100,
     },
     pagingContainer: {
         justifyContent: 'center',
