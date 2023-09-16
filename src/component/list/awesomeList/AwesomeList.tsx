@@ -10,6 +10,7 @@ import {
     ViewStyle,
     FlatListProps,
     SectionListProps,
+    StyleProp,
 } from 'react-native';
 import {ThemeProps} from '../../../interface/iTheme';
 import Text from '../../text/Text';
@@ -38,12 +39,11 @@ export interface IAwesomeListProps<T>
             'data' | 'getItemLayout' | 'viewabilityConfig'
         >,
         ThemeProps {
-    containerStyle?: ViewStyle;
-    listStyle?: ViewStyle;
-    emptyViewStyle?: ViewStyle;
+    containerStyle?: StyleProp<ViewStyle>;
+    listStyle?: StyleProp<ViewStyle>;
+    emptyViewStyle?: StyleProp<ViewStyle>;
     source: (props: IPaginationProps) => any;
     keyExtractor?: (props: any, index: number) => any;
-    type?: string;
     renderSeparator?: () => SectionListProps<T>['ItemSeparatorComponent'];
     transformer?: (res: any) => any;
     isPaging?: boolean;
@@ -64,6 +64,8 @@ export interface IAwesomeListProps<T>
     data?: any;
 
     hideFooterInEmptyErrorMode?: boolean;
+    hideFooterInEmptyMode?: boolean;
+    hideFooterInErrorMode?: boolean;
 }
 
 class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
@@ -99,6 +101,8 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         renderProgress: null,
         numColumns: 1,
         pageSize: DEFAULT_PAGE_SIZE,
+
+        hideFooterInEmptyErrorMode: true,
     };
 
     DEFAULT_PAGING_DATA: {pageIndex: number; pageSize: any};
@@ -417,6 +421,8 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
             colorDarkMode,
             useLightColor,
             renderFooterComponent,
+            hideFooterInEmptyMode,
+            hideFooterInErrorMode,
             hideFooterInEmptyErrorMode,
             ...rest
         } = this.props;
@@ -426,7 +432,7 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         return (
             <View
                 className={className}
-                style={style}
+                style={[{minHeight: 100}, style]}
                 colorDarkMode={colorDarkMode}
                 useLightColor={useLightColor}>
                 {this.isSectionsList() ? (
@@ -451,6 +457,7 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
                     />
                 ) : (
                     <FlatList
+                        style={listStyle}
                         data={this.state.data}
                         renderItem={renderItem as any}
                         keyExtractor={(item, index) =>
@@ -463,6 +470,18 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
                         onRefresh={() => this.onRefresh()}
                         onEndReached={() => this.onEndReached()}
                         ListFooterComponent={() => {
+                            if (
+                                hideFooterInEmptyMode &&
+                                emptyMode === AwesomeListMode.EMPTY
+                            ) {
+                                return null;
+                            }
+                            if (
+                                hideFooterInErrorMode &&
+                                emptyMode === AwesomeListMode.ERROR
+                            ) {
+                                return null;
+                            }
                             if (
                                 hideFooterInEmptyErrorMode &&
                                 (emptyMode === AwesomeListMode.ERROR ||
@@ -496,12 +515,12 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
                 )}
                 <EmptyView
                     style={emptyViewStyle}
-                    mode={this.state.emptyMode}
+                    mode={emptyMode}
                     retry={() => this.onRetry()}
                     renderEmptyView={renderEmptyView}
                     emptyText={emptyText}
-                    renderErrorView={renderErrorView && renderErrorView}
-                    renderProgress={renderProgress && renderProgress}
+                    renderErrorView={renderErrorView}
+                    renderProgress={renderProgress}
                     filterEmptyText={filterEmptyText}
                 />
             </View>
