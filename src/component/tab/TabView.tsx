@@ -10,6 +10,7 @@ import React, {
 import {
     Dimensions,
     Platform,
+    StyleProp,
     StyleSheet,
     TextStyle,
     useColorScheme,
@@ -79,12 +80,12 @@ export interface ITabViewProps
     classNameLabel?: string;
     classNameTabBarWrapper?: string; //=> class name for view component wrap outside of tab-bar when renderTabBarSideView is active
     // Style
-    tabBarStyle?: ViewStyle;
-    tabBarWrapperStyle?: ViewStyle; // => style for view component wrap outside of tab-bar when renderTabBarSideView is active
-    listStyle?: ViewStyle;
-    tabStyle?: ViewStyle;
-    activeLabelStyle?: ViewStyle;
-    labelStyle?: ViewStyle;
+    tabBarStyle?: StyleProp<ViewStyle>;
+    tabBarWrapperStyle?: StyleProp<ViewStyle>; // => style for view component wrap outside of tab-bar when renderTabBarSideView is active
+    listStyle?: StyleProp<ViewStyle>;
+    tabStyle?: StyleProp<ViewStyle>;
+    activeLabelStyle?: StyleProp<ViewStyle>;
+    labelStyle?: StyleProp<ViewStyle>;
     textLabelStyle?: TextStyle;
     //Color
     colorActiveLabelText?: ColorKeyType;

@@ -39,7 +39,6 @@ export interface IAwesomeListProps<T>
             'data' | 'getItemLayout' | 'viewabilityConfig'
         >,
         ThemeProps {
-    containerStyle?: StyleProp<ViewStyle>;
     listStyle?: StyleProp<ViewStyle>;
     emptyViewStyle?: StyleProp<ViewStyle>;
     source: (props: IPaginationProps) => any;
@@ -85,7 +84,6 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
             return response;
         },
 
-        containerStyle: AwesomeListStyle.containerListStyle,
         listStyle: AwesomeListStyle.listStyle,
 
         isPaging: false,
@@ -398,7 +396,6 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
 
     render() {
         const {
-            containerStyle = {},
             listStyle,
             style,
             emptyViewStyle,
@@ -432,7 +429,11 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         return (
             <View
                 className={className}
-                style={[{minHeight: 100}, style]}
+                style={[
+                    AwesomeListStyle.containerStyle,
+                    {minHeight: 100, minWidth: 100},
+                    style,
+                ]}
                 colorDarkMode={colorDarkMode}
                 useLightColor={useLightColor}>
                 {this.isSectionsList() ? (

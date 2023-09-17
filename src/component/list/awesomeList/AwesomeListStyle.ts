@@ -33,11 +33,10 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    containerListStyle: {
+    containerStyle: {
         flex: 1,
         width: '100%',
         height: '100%',
-        backgroundColor: 'white',
     },
     listStyle: {
         flex: 1,
