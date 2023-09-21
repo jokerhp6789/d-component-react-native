@@ -20,7 +20,7 @@ import {ColorKeyType} from '../../style/constant/AppColors';
 import {getThemeColor} from '../../style/modifier';
 import Sizes from '../../style/size/_size';
 import {getStyleProps} from '../../style/style';
-import Icon from '../icon/Icon';
+import Icon, {IIconProps} from '../icon/Icon';
 import Text from '../text/Text';
 import View from '../view/View';
 
@@ -44,14 +44,18 @@ export interface IInputTextProps extends TextInputProps, ThemeProps {
     classNameWrapper?: string;
     classNameInput?: string;
     classNameIcon?: string;
+    classNamePrefixIcon?: string;
     classNameError?: string;
     iconName?: string;
+    prefixIcon?: string;
     iconSize?: number;
     style?: ViewStyle;
     styleInput?: StyleProp<TextStyle>;
     onPressIcon?: (props?: any) => any;
     useKeyboardAvoidingView?: boolean;
     offsetSpaceKeyboard?: number;
+    iconProps?: Partial<IIconProps>;
+    prefixIconProps?: Partial<IIconProps>;
 }
 
 export interface IInputTextMethod {}
@@ -101,12 +105,14 @@ const InputText: React.ForwardRefRenderFunction<
         className,
         classNameInput,
         classNameIcon,
+        classNamePrefixIcon,
         classNameWrapper,
         classNameLabel,
         classNameError,
         style,
         styleInput,
         iconName,
+        prefixIcon,
         iconSize = 20,
         onBlur,
         onFocus,
@@ -115,6 +121,8 @@ const InputText: React.ForwardRefRenderFunction<
         useLightColor = true,
         useKeyboardAvoidingView,
         offsetSpaceKeyboard,
+        iconProps = {},
+        prefixIconProps = {},
         ...rest
     },
     ref,
@@ -199,6 +207,31 @@ const InputText: React.ForwardRefRenderFunction<
             useLightColor={useLightColor}>
             {label && <Text className={labelClass}>{label}</Text>}
             <View className={wrapperClass}>
+                {prefixIcon && (
+                    <Icon
+                        name={prefixIcon}
+                        color={
+                            // eslint-disable-next-line no-nested-ternary
+                            focusing
+                                ? error
+                                    ? 'error'
+                                    : getThemeColor({
+                                          colorScheme,
+                                          colorLightMode: colorFocus,
+                                          colorDarkMode:
+                                              colorDark || colorFocus,
+                                      })
+                                : error
+                                ? 'error'
+                                : color
+                        }
+                        type="material"
+                        size={iconSize}
+                        className={`ml-1 ${classNamePrefixIcon}`}
+                        onPress={onPressIcon}
+                        {...prefixIconProps}
+                    />
+                )}
                 <TextInput
                     className={inputClass}
                     onFocus={e => {
@@ -235,8 +268,9 @@ const InputText: React.ForwardRefRenderFunction<
                         }
                         type="material"
                         size={iconSize}
-                        classNameWrapper={`mr-1 ${classNameIcon}`}
+                        className={`mr-1 ${classNameIcon}`}
                         onPress={onPressIcon}
+                        {...iconProps}
                     />
                 )}
             </View>

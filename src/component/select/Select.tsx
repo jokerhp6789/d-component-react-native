@@ -358,7 +358,6 @@ const Select: React.FC<ISelectProps> = ({
                     transformer={res => getResultFromSearch(dataSource)}
                     renderItem={renderSelectItem}
                     keyExtractor={keyExtractor}
-                    className="px-3"
                     ListFooterComponent={<View style={{height: 200}} />}
                     showsVerticalScrollIndicator={false}
                     {...listProps}
@@ -382,7 +381,6 @@ const Select: React.FC<ISelectProps> = ({
                 }}
                 renderItem={renderSelectItem}
                 keyExtractor={keyExtractor}
-                className="px-3"
                 ListFooterComponent={<View style={{height: 200}} />}
                 showsVerticalScrollIndicator={false}
                 {...listProps}
@@ -420,32 +418,11 @@ const Select: React.FC<ISelectProps> = ({
                 classNameHeader="border-bottom"
                 className="px-0"
                 swipeable={false}>
-                <View className="h-100 position-relative">
-                    {!(quickSelect && !multiple) && (
-                        <Button
-                            shape="square"
-                            color="primary"
-                            variant="standard"
-                            className="position-absolute bottom-0 w-100 left-0 right-0"
-                            style={{zIndex: 10}}
-                            height={buttonSelectHeight}
-                            onPress={() => handlePressSelect()}
-                            styleLabel={
-                                Platform.OS === 'android'
-                                    ? {
-                                          height: 100,
-                                          paddingVertical: 20,
-                                      }
-                                    : undefined
-                            }
-                            {...buttonSelectProps}>
-                            {selectText}
-                        </Button>
-                    )}
+                <View className="h-100 position-relative px-3">
                     {showSearch && (
                         <InputSearch
                             useLightColor
-                            className="w-100 mt-2 px-3"
+                            className="w-100 my-2"
                             variant="outline"
                             {...inputSearchProps}
                             onChangeText={handleChangeTextSearch}
@@ -453,6 +430,27 @@ const Select: React.FC<ISelectProps> = ({
                     )}
                     {renderList()}
                 </View>
+                {!(quickSelect && !multiple) && (
+                    <Button
+                        shape="square"
+                        color="primary"
+                        variant="standard"
+                        className="position-absolute bottom-0 w-100 left-0 right-0"
+                        style={{zIndex: 10}}
+                        height={buttonSelectHeight}
+                        onPress={() => handlePressSelect()}
+                        styleLabel={
+                            Platform.OS === 'android'
+                                ? {
+                                      height: 100,
+                                      paddingVertical: 20,
+                                  }
+                                : undefined
+                        }
+                        {...buttonSelectProps}>
+                        {selectText}
+                    </Button>
+                )}
             </Modal>
         </View>
     );

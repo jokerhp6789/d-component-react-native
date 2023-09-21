@@ -11,6 +11,7 @@ import {
     FlatListProps,
     SectionListProps,
     StyleProp,
+    RefreshControl,
 } from 'react-native';
 import {ThemeProps} from '../../../interface/iTheme';
 import Text from '../../text/Text';
@@ -438,7 +439,7 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
                 useLightColor={useLightColor}>
                 {this.isSectionsList() ? (
                     <SectionList
-                        style={listStyle}
+                        style={[{flex: 1}, listStyle]}
                         renderItem={renderItem}
                         keyExtractor={(item, index) =>
                             keyExtractor && keyExtractor(item, index)
@@ -458,7 +459,7 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
                     />
                 ) : (
                     <FlatList
-                        style={listStyle}
+                        style={[{flex: 1}, listStyle]}
                         data={this.state.data}
                         renderItem={renderItem as any}
                         keyExtractor={(item, index) =>
