@@ -283,7 +283,7 @@ const Button: React.FC<IButtonProps> = ({
             style={buttonStyle}
             disabled={disabled || loading}
             colorDarkMode={buttonDarkModeBg}
-            activeOpacity={activeOpacity || 0.5}
+            activeOpacity={activeOpacity || 0.85}
             {...rest}>
             {!loading && prefixView}
             {mainView}

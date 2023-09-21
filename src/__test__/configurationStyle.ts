@@ -12,7 +12,7 @@ Colors.loadColors({
     inputColorDark: 'yellow',
 });
 //@ts-ignore
-// Sizes.loadSizes({ buttonHeight: 20 });
+Sizes.loadSizes({buttonHeight: 40, inputHeight: 40});
 Fonts.loadFonts({
     ios: {
         normal: 'Prompt-Regular',

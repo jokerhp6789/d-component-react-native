@@ -4,7 +4,7 @@ import _, {filter, some} from 'lodash';
 import React, {ElementRef, useEffect, useMemo, useRef, useState} from 'react';
 import {Platform, ViewStyle} from 'react-native';
 import Sizes from '../../style/size/_size';
-import Button from '../button/Button';
+import Button, {IButtonProps} from '../button/Button';
 import CheckBox from '../checkbox/CheckBox';
 import Icon from '../icon/Icon';
 import InputSearch, {IInputSearchProps} from '../input/InputSearch';
@@ -74,16 +74,16 @@ export interface ISelectProps
     disabled?: boolean;
     // input search props.
     showSearch?: boolean;
-    inputSearchProps?: IInputSearchProps;
     searchOffline?: boolean;
     keySearchOffline?: Array<string>;
 
+    dataSource?: Array<any>;
+    valueType?: 'object' | 'string';
+
+    inputSearchProps?: IInputSearchProps;
     listProps?: IAwesomeListProps<any>;
     chipProps?: IChipProps;
-
-    dataSource?: Array<any>;
-
-    valueType?: 'object' | 'string';
+    buttonSelectProps?: IButtonProps;
 }
 
 const Select: React.FC<ISelectProps> = ({
@@ -122,6 +122,7 @@ const Select: React.FC<ISelectProps> = ({
     keySearchOffline = ['name'],
     listProps = {},
     chipProps = {},
+    buttonSelectProps = {},
     dataSource = [],
     valueType = 'object',
 }) => {
@@ -422,6 +423,9 @@ const Select: React.FC<ISelectProps> = ({
                 <View className="h-100 position-relative">
                     {!(quickSelect && !multiple) && (
                         <Button
+                            shape="square"
+                            color="primary"
+                            variant="standard"
                             className="position-absolute bottom-0 w-100 left-0 right-0"
                             style={{zIndex: 10}}
                             height={buttonSelectHeight}
@@ -433,7 +437,8 @@ const Select: React.FC<ISelectProps> = ({
                                           paddingVertical: 20,
                                       }
                                     : undefined
-                            }>
+                            }
+                            {...buttonSelectProps}>
                             {selectText}
                         </Button>
                     )}
