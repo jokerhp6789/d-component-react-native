@@ -1,24 +1,23 @@
 import ClassNames from 'classnames';
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {StyleProp, useColorScheme, ViewStyle} from 'react-native';
 import {ThemeProps} from '../../interface/iTheme';
 import {isDark} from '../../style/color/_color';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getColorValue} from '../../style/modifier';
-import Button from '../button/Button';
-import Icon from '../icon/Icon';
+import Button, {IButtonProps} from '../button/Button';
+import Icon, {IIconProps} from '../icon/Icon';
 import InputSearch, {IInputSearchProps} from '../input/InputSearch';
 import Text from '../text/Text';
-import TouchableOpacity from '../view/TouchableOpacity';
 import View from '../view/View';
 
 export interface IHeaderProps extends ThemeProps {
     title?: string;
     onLeftPress?: (props?: any) => any;
     onRightPress?: (props?: any) => any;
-    customLeft?: ((props?: any) => Element) | Element;
-    customRight?: ((props?: any) => Element) | Element;
-    customTitle?: ((props?: any) => Element) | Element;
+    customLeft?: ((props?: any) => ReactNode) | ReactNode;
+    customRight?: ((props?: any) => ReactNode) | ReactNode;
+    customTitle?: ((props?: any) => ReactNode) | ReactNode;
     leftIcon?: string;
     leftText?: string;
     rightIcon?: string;
@@ -30,12 +29,18 @@ export interface IHeaderProps extends ThemeProps {
     classNameRight?: string;
     classNameLeft?: string;
     showSearch?: boolean;
+    autoCenterCustomTitle?: boolean;
     size?: 'medium' | 'large' | 'small';
     style?: StyleProp<ViewStyle>;
     // input search props
     textSearch?: IInputSearchProps['value'];
     onChangeTextSearch?: IInputSearchProps['onChangeText'];
     inputSearchProps?: IInputSearchProps;
+
+    buttonLeftProps?: Partial<IButtonProps>;
+    iconLeftProps?: Partial<IIconProps>;
+    buttonRightProps?: Partial<IButtonProps>;
+    iconRightProps?: Partial<IIconProps>;
 }
 
 const Header: React.FC<IHeaderProps> = ({
@@ -57,11 +62,16 @@ const Header: React.FC<IHeaderProps> = ({
     classNameLeft,
     classNameRight,
     showSearch,
+    autoCenterCustomTitle,
     colorDarkMode,
     style,
     textSearch,
     onChangeTextSearch,
     inputSearchProps = {},
+    buttonLeftProps = {},
+    iconLeftProps = {},
+    buttonRightProps = {},
+    iconRightProps = {},
 }) => {
     const isDarkMode = useColorScheme() === 'dark';
     const bgColor = isDarkMode
@@ -85,6 +95,7 @@ const Header: React.FC<IHeaderProps> = ({
             h4: size === 'medium',
             h3: size === 'large',
         },
+        classNameTitle,
     );
 
     const leftClass = ClassNames('px-0', classNameLeft);
@@ -127,15 +138,17 @@ const Header: React.FC<IHeaderProps> = ({
                     color={getTextColor()}
                     onPress={onLeftPress}
                     label={leftText}
+                    {...buttonLeftProps}
                 />
             );
         }
         return (
             <Icon
-                name={leftIcon}
                 color={getTextColor()}
                 className={leftClass}
                 onPress={onLeftPress}
+                {...iconLeftProps}
+                name={leftIcon}
             />
         );
     };
@@ -152,6 +165,10 @@ const Header: React.FC<IHeaderProps> = ({
             );
         }
 
+        if (customTitle && !autoCenterCustomTitle) {
+            return null;
+        }
+
         return <View className="flex-1" colorDarkMode="transparent" />;
     };
 
@@ -162,18 +179,35 @@ const Header: React.FC<IHeaderProps> = ({
         if (customTitle) {
             let content = customTitle;
             if (typeof customTitle === 'function') {
-                content = customTitle();
+                content = customTitle() as any;
             }
-            return typeof content === 'string' ? (
-                <Text className={titleClass}>{content}</Text>
-            ) : (
-                <View className={titleClass} colorDarkMode="transparent">
-                    {content}
-                </View>
-            );
+            if (autoCenterCustomTitle) {
+                return typeof content === 'string' ? (
+                    <Text
+                        style={{zIndex: 0, pointerEvents: 'none'}}
+                        className={titleClass}>
+                        {content}
+                    </Text>
+                ) : (
+                    <View
+                        style={{zIndex: 0, pointerEvents: 'none'}}
+                        className={titleClass}
+                        colorDarkMode="transparent">
+                        {content}
+                    </View>
+                );
+            }
+
+            return content;
         }
         if (title) {
-            return <Text className={titleClass}>{title}</Text>;
+            return (
+                <Text
+                    style={{zIndex: 0, pointerEvents: 'none'}}
+                    className={titleClass}>
+                    {title}
+                </Text>
+            );
         }
     };
 
@@ -193,15 +227,17 @@ const Header: React.FC<IHeaderProps> = ({
                     color={getTextColor()}
                     onPress={onRightPress}
                     label={rightText}
+                    {...buttonRightProps}
                 />
             );
         }
         return (
             <Icon
-                name={rightIcon}
                 color={getTextColor()}
                 className={rightClass}
                 onPress={onRightPress}
+                {...iconRightProps}
+                name={rightIcon}
             />
         );
     };

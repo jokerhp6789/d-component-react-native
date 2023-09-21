@@ -43,7 +43,9 @@ export interface IButtonProps
     colorBorderDisable?: ColorKeyType;
     colorBorderDisableDarkMode?: ColorKeyType;
     colorText?: ColorKeyType;
-    colorTexDarkMode?: ColorKeyType;
+    colorTextDarkMode?: ColorKeyType;
+    colorTextDisable?: ColorKeyType;
+    colorTextDisableDarkMode?: ColorKeyType;
     iconName?: string;
     suffixIconName?: string;
     iconSize?: number;
@@ -66,7 +68,9 @@ const Button: React.FC<IButtonProps> = ({
     color: colorProps,
     colorDarkMode,
     colorText,
-    colorTexDarkMode,
+    colorTextDarkMode,
+    colorTextDisable,
+    colorTextDisableDarkMode,
     colorBorderDisable: colorBorderDisableProps,
     colorBorderDisableDarkMode: colorBorderDisableDarkModeProps,
     variant: variantProps,
@@ -221,10 +225,10 @@ const Button: React.FC<IButtonProps> = ({
 
     if (typeof content === 'string') {
         let textColor = colorText;
-        let textColorDM = colorTexDarkMode;
+        let textColorDM = colorTextDarkMode;
         if (disabled) {
-            textColor = 'grayDark';
-            textColorDM = 'light';
+            textColor = colorTextDisable || 'grayDark';
+            textColorDM = colorTextDisableDarkMode || 'light';
         }
         mainView = (
             <Text
