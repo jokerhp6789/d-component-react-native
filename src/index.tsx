@@ -150,11 +150,7 @@ export {default as CheckBox} from './component/checkbox/CheckBox';
 // Calendar
 // ---------------------------------------- */
 
-export type {
-    ICalendarProps,
-    IDateObject,
-    LocaleConfig,
-} from './component/calendar/Calendar';
+export type {ICalendarProps, LocaleConfig} from './component/calendar/Calendar';
 export {default as Calendar} from './component/calendar/Calendar';
 
 export type {IModalCalendarProps} from './component/calendar/ModalCalendar';
