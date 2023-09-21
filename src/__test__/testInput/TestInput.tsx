@@ -54,6 +54,25 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
                 placeholder="Input Rounded"
                 onPressIcon={() => {}}
             />
+
+            <InputText
+                variant="trans"
+                className="my-2"
+                label="Input Trans"
+                color="red"
+                placeholder="Input Trans"
+                onPressIcon={() => {}}
+            />
+
+            <InputText
+                variant="pill"
+                className="my-2"
+                label="Input Pill"
+                color="red"
+                placeholder="Input Pill"
+                onPressIcon={() => {}}
+            />
+
             <InputSearch
                 variant="pill"
                 className="my-2"

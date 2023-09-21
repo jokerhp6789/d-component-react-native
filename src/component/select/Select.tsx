@@ -143,10 +143,9 @@ const Select: React.FC<ISelectProps> = ({
         },
         `${classNameLabel}`,
     );
-    const contentClass = ClassNames('flex-center-y pr-1', {
+    const contentClass = ClassNames('flex-center-y pr-1 pl-2', {
         'border-bottom': variant === 'standard',
         'pl-1 py-1': multiple,
-        'pl-2': variant !== 'standard',
         border: hasBorder,
         'rounded-1': variant === 'rounded',
     });

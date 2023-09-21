@@ -1,4 +1,4 @@
-import {IButtonProps} from '../..';
+import {IButtonProps, IModalProps} from '../..';
 import {IInputTextProps} from '../../component/input/InputText';
 import {ThemeProps} from '../../interface/iTheme';
 
@@ -18,6 +18,7 @@ export interface IDefaultStyleConfig {
         | 'colorBorderDisableDarkMode'
         | 'color'
     >;
+    modalConfig?: Pick<IModalProps, 'theme'>;
     generalConfig?: IGeneralStyleConfig;
 }
 

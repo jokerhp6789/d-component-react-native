@@ -136,9 +136,8 @@ const InputDate: React.ForwardRefRenderFunction<
         },
         classNameText,
     );
-    const contentClass = ClassNames('flex-center-y', {
+    const contentClass = ClassNames('flex-center-y px-2', {
         border: hasBorder,
-        'px-2': variant !== 'standard',
         'border-bottom-1': variant === 'standard',
         'rounded-pill': variant === 'pill',
         'rounded-1': variant === 'rounded',

@@ -9,18 +9,20 @@
  */
 
 import React, {useState} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Badge from '../component/items/Badge';
 import Modal from '../component/modal/Modal';
 import TabView, {ITabViewProps} from '../component/tab/TabView';
 import Text from '../component/text/Text';
-import SafeAreaView from '../component/view/SafeAreaView';
+// import SafeAreaView from '../component/view/SafeAreaView';
 import View from '../component/view/View';
 import StyleStateContext from '../context/StyleContext';
 import './configurationStyle';
 import DATA_SOURCE from './Source';
 import TestModal from './testModal/TestModal';
+import {AppColors} from '..';
 
 interface ITestData {
     id: string;
@@ -71,10 +73,17 @@ const App = () => {
     return (
         <StyleStateContext.Provider
             value={{locale: 'th', useFontToLocale: true}}>
-            <SafeAreaView className="bg-white flex-1 h-full">
-                <StatusBar
+            <SafeAreaView
+                style={{
+                    flex: 1,
+                    backgroundColor: isDarkMode
+                        ? AppColors.dark
+                        : AppColors.light,
+                }}
+                edges={['bottom', 'top']}>
+                {/* <StatusBar
                     barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                />
+                /> */}
                 {renderMainView()}
                 {/* <TestModal onPress={() => setOpenModal(true)} /> */}
                 <Modal
