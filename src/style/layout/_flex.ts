@@ -74,10 +74,16 @@ const flexStyle = StyleSheet.create({
     'align-items-center': {
         alignItems: 'center',
     },
+    'items-center': {
+        alignItems: 'center',
+    },
     'align-end': {
         alignItems: 'flex-end',
     },
     'align-items-end': {
+        alignItems: 'flex-end',
+    },
+    'items-end': {
         alignItems: 'flex-end',
     },
     'align-start': {
@@ -86,10 +92,16 @@ const flexStyle = StyleSheet.create({
     'align-items-start': {
         alignItems: 'flex-start',
     },
+    'items-start': {
+        alignItems: 'flex-start',
+    },
     'align-base': {
         alignItems: 'baseline',
     },
     'align-items-base': {
+        alignItems: 'baseline',
+    },
+    'items-base': {
         alignItems: 'baseline',
     },
     'align-stretch': {
@@ -98,6 +110,10 @@ const flexStyle = StyleSheet.create({
     'align-items-stretch': {
         alignItems: 'stretch',
     },
+    'items-stretch': {
+        alignItems: 'stretch',
+    },
+    // align-self
     'align-self-center': {
         alignSelf: 'center',
     },
