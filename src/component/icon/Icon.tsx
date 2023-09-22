@@ -1,43 +1,43 @@
-import React, { useMemo } from "react";
-import { useColorScheme } from "react-native";
-import IconMaterialIcons from "react-native-vector-icons/MaterialIcons";
-import IconMaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import IconSimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
-import IconZocial from "react-native-vector-icons/Zocial";
-import IconFontAwesome from "react-native-vector-icons/FontAwesome";
-import IconOcticons from "react-native-vector-icons/Octicons";
-import IconIonicons from "react-native-vector-icons/Ionicons";
-import IconFoundation from "react-native-vector-icons/Foundation";
-import IconEvilIcons from "react-native-vector-icons/EvilIcons";
-import IconEntypo from "react-native-vector-icons/Entypo";
-import IconAntDesign from "react-native-vector-icons/AntDesign";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { ThemeProps } from "../../interface/iTheme";
-import { ColorKeyType } from "../../style/constant/AppColors";
-import { getColorValue } from "../../style/modifier";
-import Sizes from "../../style/size/_size";
-import { getStyleProps } from "../../style/style";
-import TouchableOpacity from "../view/TouchableOpacity";
-import { IconProps } from "react-native-vector-icons/Icon";
+import React, {useMemo} from 'react';
+import {useColorScheme} from 'react-native';
+import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import IconZocial from 'react-native-vector-icons/Zocial';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
+import IconOcticons from 'react-native-vector-icons/Octicons';
+import IconIonicons from 'react-native-vector-icons/Ionicons';
+import IconFoundation from 'react-native-vector-icons/Foundation';
+import IconEvilIcons from 'react-native-vector-icons/EvilIcons';
+import IconEntypo from 'react-native-vector-icons/Entypo';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {ThemeProps} from '../../interface/iTheme';
+import {ColorKeyType} from '../../style/constant/AppColors';
+import {getColorValue} from '../../style/modifier';
+import Sizes from '../../style/size/_size';
+import {getStyleProps} from '../../style/style';
+import TouchableOpacity from '../view/TouchableOpacity';
+import {IconProps} from 'react-native-vector-icons/Icon';
 
 export declare type IconType =
-    | "material"
-    | "material-community"
-    | "simple-line-icon"
-    | "zocial"
-    | "font-awesome"
-    | "octicon"
-    | "ionicon"
-    | "foundation"
-    | "evilicon"
-    | "entypo"
-    | "antdesign"
-    | "font-awesome-5"
-    | "font-awesome-5-pro";
+    | 'material'
+    | 'material-community'
+    | 'simple-line-icon'
+    | 'zocial'
+    | 'font-awesome'
+    | 'octicon'
+    | 'ionicon'
+    | 'foundation'
+    | 'evilicon'
+    | 'entypo'
+    | 'antdesign'
+    | 'font-awesome-5'
+    | 'font-awesome-5-pro';
 
 export interface IIconProps
-    extends Omit<IconProps, "color">,
-        Omit<ThemeProps, "useLightColor"> {
+    extends Omit<IconProps, 'color'>,
+        Omit<ThemeProps, 'useLightColor'> {
     color?: ColorKeyType;
     className?: string;
     type?: IconType;
@@ -63,13 +63,13 @@ const Icon: React.FC<IIconProps> = ({
     ...rest
 }) => {
     const transStyle = getStyleProps(rest);
-    const isDarkMode = useColorScheme() === "dark";
+    const isDarkMode = useColorScheme() === 'dark';
     const colorIcon = useMemo(() => {
         if (isDarkMode && colorDarkMode) {
             return getColorValue(colorDarkMode);
         }
         return getColorValue(color as any);
-    }, [color]);
+    }, [color, isDarkMode]);
     const props: IIconProps = {
         style: [transStyle as any, style],
         name,
@@ -80,37 +80,37 @@ const Icon: React.FC<IIconProps> = ({
     };
     let icon = <IconMaterialIcons {...props} />;
     switch (type) {
-        case "material-community":
+        case 'material-community':
             <IconMaterialCommunityIcons {...props} />;
             break;
-        case "simple-line-icon":
+        case 'simple-line-icon':
             <IconSimpleLineIcons {...props} />;
             break;
-        case "zocial":
+        case 'zocial':
             <IconZocial {...props} />;
             break;
-        case "font-awesome":
+        case 'font-awesome':
             <IconFontAwesome {...props} />;
             break;
-        case "octicon":
+        case 'octicon':
             <IconOcticons {...props} />;
             break;
-        case "ionicon":
+        case 'ionicon':
             <IconIonicons {...props} />;
             break;
-        case "foundation":
+        case 'foundation':
             <IconFoundation {...props} />;
             break;
-        case "evilicon":
+        case 'evilicon':
             <IconEvilIcons {...props} />;
             break;
-        case "entypo":
+        case 'entypo':
             <IconEntypo {...props} />;
             break;
-        case "antdesign":
+        case 'antdesign':
             <IconAntDesign {...props} />;
             break;
-        case "font-awesome-5":
+        case 'font-awesome-5':
             <FontAwesome5 {...props} />;
             break;
         // case "font-awesome-5-pro":
@@ -128,8 +128,7 @@ const Icon: React.FC<IIconProps> = ({
                 onPressOut={onPressOut as any}
                 onLongPress={onPressIn as any}
                 colorDarkMode="transparent"
-                className={`p-1 rounded-pill ${classNameWrapper}`}
-            >
+                className={`p-1 rounded-pill ${classNameWrapper}`}>
                 {icon}
             </TouchableOpacity>
         );

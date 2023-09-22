@@ -7,6 +7,7 @@ const DefaultColors = {
 
     secondary: 'rgba(211, 15, 15, 0.87)',
     secondaryColor: 'rgba(211, 15, 15, 0.87)',
+    secondaryDark: 'rgba(29,33,39,1)',
 
     error: '#E63B2E',
     errorColor: '#E63B2E',
