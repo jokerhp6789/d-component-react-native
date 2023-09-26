@@ -169,7 +169,7 @@ const InputDate: React.ForwardRefRenderFunction<
     }>({open: false});
 
     const displayValue = useMemo(() => {
-        if (!value) {
+        if (!value && !getValue) {
             if (placeholder) {
                 return placeholder;
             }
@@ -194,7 +194,7 @@ const InputDate: React.ForwardRefRenderFunction<
             res = getValue({value, mode, format});
         }
         return res;
-    }, [value, onChange, mode, format]);
+    }, [value, onChange, mode, format, getValue]);
 
     useImperativeHandle(ref, () => ({
         open: (type: DateModalType) => setOpenDateModal({open: true, type}),
