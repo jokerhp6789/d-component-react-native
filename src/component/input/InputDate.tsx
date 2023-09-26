@@ -37,7 +37,6 @@ export interface IInputDateProps
     extends Omit<DatePickerProps, 'date' | 'onDateChange' | 'mode'> {
     value?: DatePickerProps['date'];
     format?: TDateFormat;
-    onChange?: DatePickerProps['onDateChange'];
     label?: string;
     classNameLabel?: string;
     classNameText?: string;
@@ -51,8 +50,16 @@ export interface IInputDateProps
     height?: number;
     showIcon?: boolean;
     iconName?: string;
+    onChange?: DatePickerProps['onDateChange'];
     customIcon?: ((value: any) => Element) | Element;
     customInput?: ((props: ICustomInputProps) => Element) | Element;
+    getValue?:
+        | ((props: {
+              value?: any;
+              mode?: IInputDateProps['mode'];
+              format?: IInputDateProps['format'];
+          }) => Element | String)
+        | Element;
     disabled?: boolean;
     disabledColor?: ColorKeyType | null;
     styleDatePicker?: ViewStyle;
@@ -104,6 +111,7 @@ const InputDate: React.ForwardRefRenderFunction<
         disabledColor = 'muted',
         customInput,
         customIcon,
+        getValue,
         minimumDate,
         maximumDate,
         locale = 'en',
@@ -182,8 +190,11 @@ const InputDate: React.ForwardRefRenderFunction<
         if (format) {
             res = TimeUtils.convertMiliToDateWithFormat(value, format);
         }
+        if (getValue && typeof getValue === 'function') {
+            res = getValue({value, mode, format});
+        }
         return res;
-    }, [value, onChange]);
+    }, [value, onChange, mode, format]);
 
     useImperativeHandle(ref, () => ({
         open: (type: DateModalType) => setOpenDateModal({open: true, type}),
