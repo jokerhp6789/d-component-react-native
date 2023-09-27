@@ -2,6 +2,7 @@
 
 import React, {ElementRef, useRef, useState} from 'react';
 import DatePicker from 'react-native-date-picker';
+import Button from '../../component/button/Button';
 import CheckBox from '../../component/checkbox/CheckBox';
 import InputDate from '../../component/input/InputDate';
 import InputDateRange from '../../component/input/InputDateRange';
@@ -21,11 +22,18 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
     const [openDateModal, setOpenDateModal] = useState(false);
     const [date, setDate] = useState<any>();
     const [dateRange, setDateRange] = useState<any[]>([]);
+    const inputDefault = useRef<ElementRef<typeof InputText>>(null);
 
     return (
         <ScrollView className="my-4 w-100">
-            {/* <CheckBox /> */}
+            <Button
+                onPress={() => {
+                    // inputDefault.current?.blur();
+                }}>
+                Blurring Input
+            </Button>
             <InputText
+                ref={inputDefault}
                 className="my-2"
                 label="Input Default"
                 color="red"

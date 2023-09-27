@@ -2,7 +2,13 @@
 
 import ClassNames from 'classnames';
 import {isEmpty} from 'lodash';
-import React, {ElementRef, useMemo, useRef, useState} from 'react';
+import React, {
+    ElementRef,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     Platform,
     StyleProp,
@@ -58,7 +64,7 @@ export interface IInputTextProps extends TextInputProps, ThemeProps {
     prefixIconProps?: Partial<IIconProps>;
 }
 
-export interface IInputTextMethod {}
+export interface IInputTextMethod extends ITextInputMethods {}
 
 export interface IInputErrorViewProps {
     error: any;
@@ -193,6 +199,12 @@ const InputText: React.ForwardRefRenderFunction<
         return Platform.OS === 'ios' ? heightKeyboard - 50 : heightKeyboard;
     }, [heightKeyboard, isKeyboardShow, focusing]);
 
+    useImperativeHandle(ref, () => ({
+        clear: () => inputRef.current && inputRef?.current.clear?.(),
+        blur: () => inputRef.current && inputRef?.current.blur?.(),
+        focus: () => inputRef.current && inputRef?.current.focus?.(),
+    }));
+
     const content = (
         <View
             className={containerClass}
@@ -298,11 +310,28 @@ export interface ITextInputProps extends TextInputProps {
     className?: string;
 }
 
-export const TextInput: React.FC<ITextInputProps> = ({
-    style,
-    children,
-    ...rest
-}) => {
+export interface ITextInputMethods extends Partial<RNTextInput> {}
+
+export const TextInputRef: React.ForwardRefRenderFunction<
+    ITextInputMethods,
+    ITextInputProps
+> = ({style, children, ...rest}, ref) => {
+    const inputRef = useRef<ElementRef<typeof RNTextInput>>();
     const transStyle = getStyleProps(rest);
-    return <RNTextInput style={[transStyle, style]} {...rest} />;
+
+    useImperativeHandle(ref, () => ({
+        clear: () => inputRef.current && inputRef?.current.clear?.(),
+        blur: () => inputRef.current && inputRef?.current.blur?.(),
+        focus: () => inputRef.current && inputRef?.current.focus?.(),
+    }));
+
+    return (
+        <RNTextInput
+            ref={inputRef as any}
+            style={[transStyle, style]}
+            {...rest}
+        />
+    );
 };
+
+export const TextInput = React.forwardRef(TextInputRef);
