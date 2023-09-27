@@ -82,6 +82,7 @@ const Calendar: React.FC<ICalendarProps> = ({
                         <Icon
                             name="keyboard-arrow-left"
                             color={Colors.primary as any}
+                            colorDarkMode={Colors.light as any}
                         />
                     );
                 }
@@ -90,6 +91,7 @@ const Calendar: React.FC<ICalendarProps> = ({
                         <Icon
                             name="keyboard-arrow-right"
                             color={Colors.primary as any}
+                            colorDarkMode={Colors.light as any}
                         />
                     );
                 }

@@ -2,7 +2,7 @@
 
 import ClassNames from 'classnames';
 import {isEmpty} from 'lodash';
-import React, {useMemo, useState} from 'react';
+import React, {ElementRef, useMemo, useRef, useState} from 'react';
 import {
     Platform,
     StyleProp,
@@ -129,6 +129,7 @@ const InputText: React.ForwardRefRenderFunction<
 ) => {
     const {light} = Colors;
     const {inputConfig} = Configs;
+    const inputRef = useRef<ElementRef<typeof TextInput>>(null);
     const {variant: variantConfig} = inputConfig || {};
     const colorScheme = useColorScheme();
     const isDarkMode = colorScheme === 'dark';

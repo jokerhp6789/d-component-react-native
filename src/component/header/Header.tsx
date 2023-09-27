@@ -1,6 +1,6 @@
 import ClassNames from 'classnames';
 import React, {ReactNode} from 'react';
-import {StyleProp, useColorScheme, ViewStyle} from 'react-native';
+import {Platform, StyleProp, useColorScheme, ViewStyle} from 'react-native';
 import {ThemeProps} from '../../interface/iTheme';
 import {isDark} from '../../style/color/_color';
 import {ColorKeyType} from '../../style/constant/AppColors';
@@ -87,7 +87,7 @@ const Header: React.FC<IHeaderProps> = ({
         className,
     );
     const titleClass = ClassNames(
-        'flex-1 font-weight-bold text-center position-absolute left-0 right-0',
+        'flex-1 font-weight-bold text-center position-absolute left-40 right-40',
         {
             'text-dark': theme && !isDark(bgColor),
             'text-white': theme && isDark(bgColor),
@@ -147,7 +147,9 @@ const Header: React.FC<IHeaderProps> = ({
                 color={getTextColor()}
                 className={leftClass}
                 onPress={onLeftPress}
+                // size={Platform.OS === 'android' ? 28 : undefined}
                 {...iconLeftProps}
+                style={[{zIndex: 20, elevation: 10}, iconLeftProps?.style]}
                 name={leftIcon}
             />
         );
@@ -184,13 +186,13 @@ const Header: React.FC<IHeaderProps> = ({
             if (autoCenterCustomTitle) {
                 return typeof content === 'string' ? (
                     <Text
-                        style={{zIndex: 0, pointerEvents: 'none'}}
+                        style={{zIndex: 1, pointerEvents: 'none'}}
                         className={titleClass}>
                         {content}
                     </Text>
                 ) : (
                     <View
-                        style={{zIndex: 0, pointerEvents: 'none'}}
+                        style={{zIndex: 1, pointerEvents: 'none'}}
                         className={titleClass}
                         colorDarkMode="transparent">
                         {content}
@@ -203,7 +205,11 @@ const Header: React.FC<IHeaderProps> = ({
         if (title) {
             return (
                 <Text
-                    style={{zIndex: 0, pointerEvents: 'none'}}
+                    style={{
+                        zIndex: 1,
+                        elevation: 1,
+                        pointerEvents: 'none',
+                    }}
                     className={titleClass}>
                     {title}
                 </Text>
@@ -247,8 +253,8 @@ const Header: React.FC<IHeaderProps> = ({
             className={wrapperClass}
             style={headerStyle}
             colorDarkMode={colorDarkMode}>
-            {(onLeftPress || customLeft) && renderLeft()}
             {renderTitle()}
+            {(onLeftPress || customLeft) && renderLeft()}
             {renderCenter()}
             {(onRightPress || customRight) && renderRight()}
         </View>

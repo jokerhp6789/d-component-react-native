@@ -136,7 +136,7 @@ const Button: React.FC<IButtonProps> = ({
             return disableColorDarkMode;
         }
         return getColorValue(colorDarkMode);
-    }, [variant, color, loading, disabled]);
+    }, [variant, color, isDarkMode, loading, disabled]);
 
     const buttonHeight = useMemo(() => {
         let result: number | string = 10;

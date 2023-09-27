@@ -74,7 +74,7 @@
     "react-native-image-zoom-viewer": "3.0.1",
     "react-native-modal": "13.0.0",
     "react-native-month-picker": "1.0.1",
-    "react-native-pager-view": "5.4.6",
+    "react-native-pager-view": "^6.2.1",
     "react-native-reanimated": "^3.4.2",
     "react-native-router-flux": "^4.2.0",
     "react-native-safe-area-context": "3.3.2",
