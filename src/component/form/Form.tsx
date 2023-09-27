@@ -1,33 +1,33 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable indent */
-import ClassNames from "classnames";
-import _ from "lodash";
-import moment from "moment";
-import React, { useMemo } from "react";
-import { FlatList, ViewStyle } from "react-native";
-import InputDate, { IInputDateProps } from "../input/InputDate";
-import InputDateRange from "../input/InputDateRange";
-import InputText, { IInputTextProps } from "../input/InputText";
-import Select, { ISelectProps } from "../select/Select";
-import View from "../view/View";
+import ClassNames from 'classnames';
+import _ from 'lodash';
+import moment from 'moment';
+import React, {useMemo} from 'react';
+import {FlatList, ViewStyle} from 'react-native';
+import InputDate, {IInputDateProps} from '../input/InputDate';
+import InputDateRange from '../input/InputDateRange';
+import InputText, {IInputTextProps} from '../input/InputText';
+import Select, {ISelectProps} from '../select/Select';
+import View from '../view/View';
 
 export type IFormItemType =
-    | "checkbox"
-    | "inputText"
-    | "select"
-    | "multi-select"
-    | "date"
-    | "time"
-    | "date-time"
-    | "time-range"
-    | "date-range"
-    | "textarea"
-    | "radio";
+    | 'checkbox'
+    | 'inputText'
+    | 'select'
+    | 'multi-select'
+    | 'date'
+    | 'time'
+    | 'date-time'
+    | 'time-range'
+    | 'date-range'
+    | 'textarea'
+    | 'radio';
 
 export interface IFormItemDataRender<T> {
     value?: any;
     // eslint-disable-next-line no-use-before-define
-    onChange?: IFormItemProps["onChange"];
+    onChange?: IFormItemProps['onChange'];
     className?: string;
     key?: keyof T;
     error?: any;
@@ -42,10 +42,10 @@ export interface IFormItemData<T> {
     render?:
         | React.ReactElement
         | ((props: IFormItemDataRender<T>) => React.ReactElement);
-    onChangeValidate?: (props: { key: any; value: any }) => boolean;
+    onChangeValidate?: (props: {key: any; value: any}) => boolean;
 
     rows?: any;
-    inputType?: IInputTextProps["keyboardType"];
+    inputType?: IInputTextProps['keyboardType'];
 
     dataSource?: Array<any>;
     getLabel?: (item: any) => any;
@@ -101,19 +101,19 @@ export interface IFormProps {
 
 export const getDefaultValue = (type?: IFormItemType) => {
     switch (type) {
-        case "checkbox":
-        case "radio":
-        case "multi-select":
-        case "select":
+        case 'checkbox':
+        case 'radio':
+        case 'multi-select':
+        case 'select':
             return [];
-        case "date":
-        case "date-range":
-        case "time":
-        case "date-time":
+        case 'date':
+        case 'date-range':
+        case 'time':
+        case 'date-time':
             return null;
-        case "inputText":
-        case "textarea":
-            return "";
+        case 'inputText':
+        case 'textarea':
+            return '';
         default:
             return undefined;
     }
@@ -144,25 +144,27 @@ export function FormItem({
 
     const transformDateValue = (v: any): any => {
         let transValue: any = null;
-        if (v && typeof v === "string") {
+        if (v && typeof v === 'string') {
             transValue = new Date(v);
+        } else if (moment(value).isValid()) {
+            transValue = moment(value).toDate();
         }
         return transValue || undefined;
     };
 
-    if (type === "date-range" || type === "time-range") {
+    if (type === 'date-range' || type === 'time-range') {
         let transValue: any = null;
         if (Array.isArray(value)) {
-            transValue = value.map((item) =>
-                item ? moment(item)?.toDate() : null
+            transValue = value.map(item =>
+                item ? moment(item)?.toDate() : null,
             );
         }
-        if (type === "time-range") {
+        if (type === 'time-range') {
             return (
                 <InputDateRange
                     value={transValue}
                     //@ts-ignore
-                    onChange={(value) => {
+                    onChange={value => {
                         onChange(key, value);
                     }}
                     label={Messages?.[label as any] || label}
@@ -176,10 +178,10 @@ export function FormItem({
             <InputDate
                 value={transValue}
                 //@ts-ignore
-                onChange={(value) => {
+                onChange={value => {
                     let clone = null;
                     if (Array.isArray(value)) {
-                        clone = value.map((item) => {
+                        clone = value.map(item => {
                             const dateValue = transformDateValue(value);
                             return dateValue;
                         });
@@ -193,24 +195,24 @@ export function FormItem({
             />
         );
     }
-    if (type === "date" || type === "date-time" || type === "time") {
+    if (type === 'date' || type === 'date-time' || type === 'time') {
         const dateValue = transformDateValue(value);
         return (
             <InputDate
                 value={dateValue}
                 //@ts-ignore
-                onChange={(value) => {
+                onChange={value => {
                     return onChange(key, value) as any;
                 }}
                 label={itemLabel}
                 className={className}
                 error={error}
                 mode={
-                    type === "time"
-                        ? "time"
-                        : type === "date"
-                        ? "date"
-                        : "datetime"
+                    type === 'time'
+                        ? 'time'
+                        : type === 'date'
+                        ? 'date'
+                        : 'datetime'
                 }
                 {...dateInputProps}
             />
@@ -244,29 +246,29 @@ export function FormItem({
     //       />
     //     );
     //   }
-    if (type === "select" || type === "multi-select") {
+    if (type === 'select' || type === 'multi-select') {
         return (
             <Select
                 dataSource={dataSource}
                 value={value}
-                onChange={(value) => onChange(key, value)}
+                onChange={value => onChange(key, value)}
                 className={className}
                 label={itemLabel}
-                getLabel={(item) =>
+                getLabel={item =>
                     getLabel ? getLabel(item) : Messages?.[item?.label]
                 }
-                getValue={(item) => (getValue ? getValue(item) : item?.id)}
+                getValue={item => (getValue ? getValue(item) : item?.id)}
                 error={error}
-                multiple={type === "multi-select"}
+                multiple={type === 'multi-select'}
                 {...selectProps}
             />
         );
     }
-    if (type === "textarea") {
+    if (type === 'textarea') {
         return (
             <InputText
                 label={itemLabel}
-                onChangeText={(v) => onChange(key, v)}
+                onChangeText={v => onChange(key, v)}
                 value={value}
                 className={className}
                 error={error}
@@ -281,7 +283,7 @@ export function FormItem({
     return (
         <InputText
             label={itemLabel}
-            onChangeText={(v) => onChange(key, v)}
+            onChangeText={v => onChange(key, v)}
             value={value}
             className={className}
             error={error}
@@ -307,8 +309,8 @@ const Form: React.FC<IFormProps> = ({
 }) => {
     const transformData = useMemo(() => {
         const clone: Array<typeof dataSource> = [];
-        const groupData = _.groupBy(dataSource, (item) => item?.rowsId);
-        Object.keys(groupData).forEach((key) => {
+        const groupData = _.groupBy(dataSource, item => item?.rowsId);
+        Object.keys(groupData).forEach(key => {
             clone.push(groupData[key]);
         });
         return clone;
@@ -337,7 +339,7 @@ const Form: React.FC<IFormProps> = ({
     }) => {
         let validate = true;
         if (onValidate) {
-            validate = onValidate({ key, value });
+            validate = onValidate({key, value});
             if (!validate) {
                 return;
             }
@@ -348,7 +350,7 @@ const Form: React.FC<IFormProps> = ({
         // eslint-disable-next-line no-unused-expressions
         onChange && onChange(key, value);
     };
-    const wrapperClass = ClassNames("w-100", className);
+    const wrapperClass = ClassNames('w-100', className);
     const content = (
         <View className={wrapperClass} style={style}>
             {transformData &&
@@ -380,18 +382,18 @@ const Form: React.FC<IFormProps> = ({
                                 hasError = true;
                             }
                             let itemClass = ClassNames(
-                                "w-100",
+                                'w-100',
                                 {
-                                    "mr-1": rows?.length > 1 && index === 0,
-                                    "mx-1":
+                                    'mr-1': rows?.length > 1 && index === 0,
+                                    'mx-1':
                                         rows?.length > 1 &&
                                         index > 0 &&
                                         index < rows?.length,
-                                    "ml-1":
+                                    'ml-1':
                                         rows?.length > 1 &&
                                         index === rows?.length - 1,
                                 },
-                                className
+                                className,
                             );
 
                             if (getItemClass) {
@@ -434,7 +436,7 @@ const Form: React.FC<IFormProps> = ({
                                     error: errorLabel,
                                 });
                             }
-                            if (typeof render === "function") {
+                            if (typeof render === 'function') {
                                 content = render({
                                     value: valueItem,
                                     onChange: (key: any, value: any) =>
@@ -451,8 +453,8 @@ const Form: React.FC<IFormProps> = ({
                             }
 
                             let itemWrapperClass = ClassNames(
-                                "py-2 flex-1",
-                                elementClass
+                                'py-2 flex-1',
+                                elementClass,
                             );
 
                             if (getElementClass) {
@@ -478,12 +480,12 @@ const Form: React.FC<IFormProps> = ({
                     }
 
                     let rowClass = ClassNames(
-                        "flex-center-y w-100 my-2",
+                        'flex-center-y w-100 my-2',
                         {
-                            "align-items-center": !hasError,
+                            'align-items-center': !hasError,
                             // "border-top": i !== 0,
                         },
-                        classNameRow
+                        classNameRow,
                     );
                     if (setRowClass) {
                         rowClass = setRowClass;
@@ -497,7 +499,7 @@ const Form: React.FC<IFormProps> = ({
             <FlatList
                 bounces={false}
                 data={[1]}
-                renderItem={({ item }) => content}
+                renderItem={({item}) => content}
                 style={styleFlatList}
             />
         );
