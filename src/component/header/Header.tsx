@@ -253,8 +253,8 @@ const Header: React.FC<IHeaderProps> = ({
             className={wrapperClass}
             style={headerStyle}
             colorDarkMode={colorDarkMode}>
-            {renderTitle()}
             {(onLeftPress || customLeft) && renderLeft()}
+            {renderTitle()}
             {renderCenter()}
             {(onRightPress || customRight) && renderRight()}
         </View>
