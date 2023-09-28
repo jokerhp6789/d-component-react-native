@@ -88,7 +88,7 @@ export interface ISelectProps
 
 const Select: React.FC<ISelectProps> = ({
     variant: variantProps,
-    buttonSelectHeight = Platform.OS === 'android' ? 100 : 75,
+    buttonSelectHeight = Platform.OS === 'android' ? 100 : 85,
     height = Sizes.inputHeight,
     label,
     disabled,
@@ -444,7 +444,10 @@ const Select: React.FC<ISelectProps> = ({
                                       height: 100,
                                       paddingVertical: 20,
                                   }
-                                : undefined
+                                : {
+                                      height: 80,
+                                      paddingVertical: 25,
+                                  }
                         }
                         {...buttonSelectProps}>
                         {selectText}

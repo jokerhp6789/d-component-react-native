@@ -4,12 +4,17 @@
  * @format
  */
 
-import _ from "lodash";
-import tinycolor from "tinycolor2";
-import DefaultColors, { ColorKeyType } from "../constant/AppColors";
+import _ from 'lodash';
+import tinycolor from 'tinycolor2';
+import DefaultColors, {ColorKeyType} from '../constant/AppColors';
+import {getColorValue} from '../modifier';
 
 type ColorsRecord = Partial<Record<ColorKeyType, string>> & {
-    loadColors: (props: any) => any;
+    loadColors: (
+        props: {
+            [key in ColorKeyType]?: ColorKeyType;
+        } & {[key: string]: ColorKeyType | string},
+    ) => any;
     [key: string]: any;
 };
 
@@ -25,9 +30,9 @@ export class ColorsClass {
      * arguments:
      * colors - map of keys and colors values e.g {grey10: '#20303C', grey20: '#43515C'}
      */
-    loadColors(colors: { [key: string]: string }) {
+    loadColors(colors: {[key: string]: string}) {
         _.forEach(colors, (value, key) => {
-            this[key] = value;
+            this[key] = getColorValue(value);
         });
     }
 }
@@ -38,5 +43,5 @@ export const isDark = (color: string) => {
 };
 //@ts-ignore
 const Colors: ColorsRecord = new ColorsClass();
-Colors.loadColors(DefaultColors);
+Colors.loadColors(DefaultColors as any);
 export default Colors;

@@ -57,11 +57,18 @@ export interface IInputTextProps extends TextInputProps, ThemeProps {
     iconSize?: number;
     style?: ViewStyle;
     styleInput?: StyleProp<TextStyle>;
-    onPressIcon?: (props?: any) => any;
     useKeyboardAvoidingView?: boolean;
     offsetSpaceKeyboard?: number;
     iconProps?: Partial<IIconProps>;
     prefixIconProps?: Partial<IIconProps>;
+    onPressIcon?: (props?: any) => any;
+    onPressPrefixIcon?: (props?: any) => any;
+    renderPrefixIcon?:
+        | ((props?: Partial<IIconProps>) => React.ReactNode)
+        | React.ReactNode;
+    renderSuffixIcon?:
+        | ((props?: Partial<IIconProps>) => React.ReactNode)
+        | React.ReactNode;
 }
 
 export interface IInputTextMethod extends ITextInputMethods {}
@@ -123,12 +130,15 @@ const InputText: React.ForwardRefRenderFunction<
         onBlur,
         onFocus,
         onPressIcon,
+        onPressPrefixIcon,
         colorDarkMode,
         useLightColor = true,
         useKeyboardAvoidingView,
         offsetSpaceKeyboard,
         iconProps = {},
         prefixIconProps = {},
+        renderPrefixIcon,
+        renderSuffixIcon,
         ...rest
     },
     ref,
@@ -205,6 +215,27 @@ const InputText: React.ForwardRefRenderFunction<
         focus: () => inputRef.current && inputRef?.current.focus?.(),
     }));
 
+    const customPrefix = () => {
+        if (renderPrefixIcon) {
+            if (typeof renderPrefixIcon === 'function') {
+                return renderPrefixIcon(prefixIconProps);
+            }
+            return renderPrefixIcon;
+        }
+
+        return null;
+    };
+
+    const customSuffix = () => {
+        if (renderSuffixIcon) {
+            if (typeof renderSuffixIcon === 'function') {
+                return renderSuffixIcon(prefixIconProps);
+            }
+            return renderSuffixIcon;
+        }
+        return null;
+    };
+
     const content = (
         <View
             className={containerClass}
@@ -240,10 +271,11 @@ const InputText: React.ForwardRefRenderFunction<
                         type="material"
                         size={iconSize}
                         className={`ml-1 ${classNamePrefixIcon}`}
-                        onPress={onPressIcon}
+                        onPress={onPressPrefixIcon}
                         {...prefixIconProps}
                     />
                 )}
+                {customPrefix()}
                 <TextInput
                     className={inputClass}
                     onFocus={e => {
@@ -260,6 +292,7 @@ const InputText: React.ForwardRefRenderFunction<
                         styleInput,
                     ]}
                 />
+                {customSuffix()}
                 {iconName && (
                     <Icon
                         name={iconName}

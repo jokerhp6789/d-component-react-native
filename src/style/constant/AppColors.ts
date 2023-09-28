@@ -142,5 +142,4 @@ const DefaultColors = {
 };
 
 export type ColorKeyType = keyof typeof DefaultColors | 'transparent';
-
 export default DefaultColors;

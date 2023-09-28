@@ -23,6 +23,7 @@ import './configurationStyle';
 import DATA_SOURCE from './Source';
 import TestModal from './testModal/TestModal';
 import {AppColors} from '..';
+import InputComment from '../component/input/InputComment';
 
 interface ITestData {
     id: string;
@@ -80,11 +81,12 @@ const App = () => {
                         ? AppColors.dark
                         : AppColors.light,
                 }}
-                edges={['bottom', 'top']}>
+                edges={['top']}>
                 {/* <StatusBar
                     barStyle={isDarkMode ? 'light-content' : 'dark-content'}
                 /> */}
                 {renderMainView()}
+                {/* <InputComment /> */}
                 {/* <TestModal onPress={() => setOpenModal(true)} /> */}
                 <Modal
                     open={openModal}

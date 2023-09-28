@@ -53,7 +53,7 @@ export const generateStyleValue = (
 export const getColorValue = (color?: string) => {
   let value: any = color;
   //@ts-ignore
-  if (Colors[color]) {
+  if (Colors?.[color]) {
     //@ts-ignore
     value = Colors[color] as any;
   }
