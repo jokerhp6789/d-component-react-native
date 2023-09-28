@@ -28,24 +28,28 @@ export interface ITextProps extends TextProps {
 
 const Text: React.FC<ITextProps> = ({
     children,
-    color,
-    colorDarkMode,
+    color: colorProp,
+    colorDarkMode: colorDarkModeProp,
     style,
     ...rest
 }) => {
     const {locale, useFontToLocale} =
         useContext<IStyleStateContext>(StyleStateContext) || {};
-    const {generalConfig} = Configs;
+    const {generalConfig, textConfig} = Configs;
+    const {color: colorConfig, colorDarkMode: colorDarkModeConfig} =
+        textConfig || {};
     const {autoSwitchColor} = generalConfig || {};
     const transStyle = getStyleProps(rest);
     const isDarkMode = useColorScheme() === 'dark';
-    const {light} = Colors;
+    const {white, black} = Colors;
     const {fontClass, locale: loadFontLocale} = Fonts;
     const defaultStyle: TextStyle = {
         ...fontClass.h4,
-        color: isDarkMode && autoSwitchColor ? light : undefined,
+        color: isDarkMode && autoSwitchColor ? white : black,
     };
     const listStyle = [defaultStyle, transStyle, style];
+    const color = colorProp || colorConfig;
+    const colorDarkMode = colorDarkModeProp || colorDarkModeConfig;
     if (color) {
         const colorValue = getColorValue(color);
         listStyle.push({color: colorValue});

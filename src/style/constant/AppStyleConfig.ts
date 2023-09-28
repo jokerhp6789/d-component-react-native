@@ -1,10 +1,11 @@
-import {IButtonProps, IModalProps} from '../..';
+import {IButtonProps, IModalProps, ITextProps} from '../..';
 import {IInputTextProps} from '../../component/input/InputText';
 import {ThemeProps} from '../../interface/iTheme';
 
 export interface IGeneralStyleConfig extends ThemeProps {}
 
 export interface IDefaultStyleConfig {
+    textConfig?: Pick<ITextProps, 'color' | 'colorDarkMode'>;
     inputConfig?: Pick<IInputTextProps, 'variant'>;
     buttonConfig?: Pick<
         IButtonProps,
