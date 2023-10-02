@@ -64,10 +64,14 @@ export interface IInputTextProps extends TextInputProps, ThemeProps {
     onPressIcon?: (props?: any) => any;
     onPressPrefixIcon?: (props?: any) => any;
     renderPrefixIcon?:
-        | ((props?: Partial<IIconProps>) => React.ReactNode)
+        | ((
+              props?: Partial<IIconProps> & {focusing: boolean; error?: any},
+          ) => React.ReactNode)
         | React.ReactNode;
     renderSuffixIcon?:
-        | ((props?: Partial<IIconProps>) => React.ReactNode)
+        | ((
+              props?: Partial<IIconProps> & {focusing: boolean; error?: any},
+          ) => React.ReactNode)
         | React.ReactNode;
 }
 
@@ -215,10 +219,10 @@ const InputText: React.ForwardRefRenderFunction<
         focus: () => inputRef.current && inputRef?.current.focus?.(),
     }));
 
-    const customPrefix = () => {
+    const customPrefix = (otherProps: any) => {
         if (renderPrefixIcon) {
             if (typeof renderPrefixIcon === 'function') {
-                return renderPrefixIcon(prefixIconProps);
+                return renderPrefixIcon({...(otherProps || {})});
             }
             return renderPrefixIcon;
         }
@@ -226,10 +230,10 @@ const InputText: React.ForwardRefRenderFunction<
         return null;
     };
 
-    const customSuffix = () => {
+    const customSuffix = (otherProps: any) => {
         if (renderSuffixIcon) {
             if (typeof renderSuffixIcon === 'function') {
-                return renderSuffixIcon(prefixIconProps);
+                return renderSuffixIcon({...(otherProps || {})});
             }
             return renderSuffixIcon;
         }
@@ -275,7 +279,7 @@ const InputText: React.ForwardRefRenderFunction<
                         {...prefixIconProps}
                     />
                 )}
-                {customPrefix()}
+                {customPrefix({focusing, error})}
                 <TextInput
                     className={inputClass}
                     onFocus={e => {
@@ -292,7 +296,7 @@ const InputText: React.ForwardRefRenderFunction<
                         styleInput,
                     ]}
                 />
-                {customSuffix()}
+                {customSuffix({focusing, error})}
                 {iconName && (
                     <Icon
                         name={iconName}
