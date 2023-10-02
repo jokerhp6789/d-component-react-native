@@ -32,6 +32,12 @@ export type {
 } from './component/input/InputDateRange';
 export {default as InputDateRange} from './component/input/InputDateRange';
 
+export type {
+    IInputCommentProps,
+    IInputCommentMethods,
+} from './component/input/InputComment';
+export {default as InputComment} from './component/input/InputComment';
+
 /* ----------------------------------------
 // View
 // ---------------------------------------- */

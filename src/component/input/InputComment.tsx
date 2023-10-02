@@ -1,14 +1,20 @@
 /** @format */
 import ClassNames from 'classnames';
 import _ from 'lodash';
-import React, {useMemo, useState} from 'react';
+import React, {
+    ElementRef,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {Platform} from 'react-native';
 import useKeyboard, {IUseKeyboard} from '../../hooks/useKeyboard';
 import Avatar, {IAvatarProps} from '../avatar/Avatar';
 import {IUserBasic} from '../avatar/AvatarName';
 import TouchableOpacity from '../view/TouchableOpacity';
 import View from '../view/View';
-import InputText, {IInputTextProps} from './InputText';
+import InputText, {IInputTextMethod, IInputTextProps} from './InputText';
 
 export interface IInputCommentProps {
     className?: string;
@@ -23,18 +29,26 @@ export interface IInputCommentProps {
     avatarProps?: Partial<IAvatarProps>;
 }
 
-const InputComment: React.FC<IInputCommentProps> = ({
-    className,
-    classNameWrapper,
-    user,
-    onSubmit,
-    onPressUser,
-    getPaddingBottom,
-    placeholder,
-    positon = 'bottom',
-    inputProps = {},
-    avatarProps = {},
-}) => {
+export interface IInputCommentMethods extends IInputTextMethod {}
+
+const InputComment: React.ForwardRefRenderFunction<
+    IInputCommentMethods,
+    IInputCommentProps
+> = (
+    {
+        className,
+        classNameWrapper,
+        user,
+        onSubmit,
+        onPressUser,
+        getPaddingBottom,
+        placeholder,
+        positon = 'bottom',
+        inputProps = {},
+        avatarProps = {},
+    },
+    ref,
+) => {
     const [value, setValue] = useState<any>();
     const containerClass = ClassNames(
         'w-100 border-bottom shadow',
@@ -47,6 +61,7 @@ const InputComment: React.FC<IInputCommentProps> = ({
         'flex-1 flex-center-y p-2',
         classNameWrapper,
     );
+    const inputRef = useRef<ElementRef<typeof InputText>>();
     const useKeyboardState = useKeyboard(false);
     const {isKeyboardShow, heightKeyboard} = useKeyboardState || {};
     const bottomPadding = useMemo(() => {
@@ -61,6 +76,12 @@ const InputComment: React.FC<IInputCommentProps> = ({
         }
         return heightKeyboard;
     }, [heightKeyboard, isKeyboardShow]);
+
+    useImperativeHandle(ref, () => ({
+        clear: () => inputRef.current && inputRef?.current.clear?.(),
+        blur: () => inputRef.current && inputRef?.current.blur?.(),
+        focus: () => inputRef.current && inputRef?.current.focus?.(),
+    }));
 
     const onSubmitComment = () => {
         if (_.isEmpty(value)) {
@@ -99,10 +120,11 @@ const InputComment: React.FC<IInputCommentProps> = ({
                     placeholder={placeholder}
                     onPressIcon={() => onSubmitComment()}
                     {...inputProps}
+                    ref={inputRef as any}
                 />
             </View>
         </View>
     );
 };
 
-export default InputComment;
+export default React.forwardRef(InputComment);
