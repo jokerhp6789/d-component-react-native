@@ -3,16 +3,12 @@
 import React, {ElementRef, useRef, useState} from 'react';
 import DatePicker from 'react-native-date-picker';
 import Button from '../../component/button/Button';
-import CheckBox from '../../component/checkbox/CheckBox';
 import InputComment from '../../component/input/InputComment';
 import InputDate from '../../component/input/InputDate';
 import InputDateRange from '../../component/input/InputDateRange';
 import InputSearch from '../../component/input/InputSearch';
 import InputText from '../../component/input/InputText';
-import Text from '../../component/text/Text';
 import ScrollView from '../../component/view/ScrollView';
-import TouchableOpacity from '../../component/view/TouchableOpacity';
-import View from '../../component/view/View';
 import useKeyboard from '../../hooks/useKeyboard';
 
 export interface ITestInputProps {
@@ -28,7 +24,7 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
     const keyboardInfo = useKeyboard(false);
 
     return (
-        <ScrollView className="w-100">
+        <ScrollView className="w-100" showsVerticalScrollIndicator={false}>
             <Button
                 onPress={() => {
                     // inputDefault.current?.blur();

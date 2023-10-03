@@ -3,13 +3,12 @@ import ClassNames from 'classnames';
 import _ from 'lodash';
 import React, {
     ElementRef,
-    useEffect,
     useImperativeHandle,
     useMemo,
     useRef,
     useState,
 } from 'react';
-import {Animated, Keyboard, Platform} from 'react-native';
+import {Animated, Keyboard, Platform, KeyboardEvent} from 'react-native';
 import useKeyboard, {IUseKeyboard} from '../../hooks/useKeyboard';
 import {styleTransformer} from '../../style/style';
 import Avatar, {IAvatarProps} from '../avatar/Avatar';
@@ -27,9 +26,11 @@ export interface IInputCommentProps {
     onSubmit?: (value: any) => any;
     onPressUser?: (props?: any) => any;
     getPaddingBottom?: (props?: IUseKeyboard) => number;
+    getKeyboardOffset?: (props?: KeyboardEvent) => number;
     inputProps?: Partial<IInputTextProps>;
     avatarProps?: Partial<IAvatarProps>;
     useAnimation?: boolean;
+    dismissKeyboardAfterSubmit?: boolean;
 }
 
 export interface IInputCommentMethods extends IInputTextMethod {}
@@ -45,11 +46,13 @@ const InputComment: React.ForwardRefRenderFunction<
         onSubmit,
         onPressUser,
         getPaddingBottom,
+        getKeyboardOffset,
         placeholder,
         positon = 'bottom',
         inputProps = {},
         avatarProps = {},
         useAnimation,
+        dismissKeyboardAfterSubmit = true,
     },
     ref,
 ) => {
@@ -65,7 +68,20 @@ const InputComment: React.ForwardRefRenderFunction<
         className,
     );
 
-    const useKeyboardState = useKeyboard(false);
+    const useKeyboardState = useKeyboard(
+        false,
+        useAnimation
+            ? {
+                  keyboardWillShowHandler: e => {
+                      if (getKeyboardOffset) {
+                          return getKeyboardOffset(e);
+                      }
+                      return startAnimation(-e.endCoordinates?.height);
+                  },
+                  keyboardWillHideHandler: e => startAnimation(0),
+              }
+            : undefined,
+    );
     const inputRef = useRef<ElementRef<typeof InputText>>();
     const keyboardOffset = useRef(new Animated.Value(0)).current;
     const [value, setValue] = useState<any>();
@@ -90,23 +106,6 @@ const InputComment: React.ForwardRefRenderFunction<
         focus: () => inputRef.current && inputRef?.current.focus?.(),
     }));
 
-    useEffect(() => {
-        // start the animation when the keyboard appears
-        Keyboard.addListener('keyboardWillShow', e => {
-            // use the height of the keyboard (negative because the translateY moves upward)
-            startAnimation(-e.endCoordinates?.height);
-        });
-        // perform the reverse animation back to keyboardOffset initial value: 0
-        Keyboard.addListener('keyboardWillHide', () => {
-            startAnimation(0);
-        });
-        return () => {
-            // remove listeners to avoid memory leak
-            Keyboard.removeAllListeners('keyboardWillShow');
-            Keyboard.removeAllListeners('keyboardWillHide');
-        };
-    }, []);
-
     const startAnimation = (toValue: number) =>
         Animated.timing(keyboardOffset, {
             toValue,
@@ -120,7 +119,10 @@ const InputComment: React.ForwardRefRenderFunction<
         }
         setValue('');
         if (onSubmit) {
-            return onSubmit(value);
+            onSubmit(value);
+        }
+        if (dismissKeyboardAfterSubmit) {
+            Keyboard.dismiss();
         }
     };
 
@@ -157,11 +159,6 @@ const InputComment: React.ForwardRefRenderFunction<
 
     if (useAnimation) {
         const transformedStyles = styleTransformer(containerClass);
-
-        console.log(
-            '🚀 >>>>>> file: InputComment.tsx:133 >>>>>> transformedStyles:',
-            transformedStyles,
-        );
         return (
             <Animated.View
                 style={[

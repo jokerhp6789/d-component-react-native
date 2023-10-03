@@ -1,12 +1,28 @@
 import React, {useState, useEffect, memo} from 'react';
 import {Keyboard, KeyboardEvent} from 'react-native';
 
+export interface IUseKeyboardOptions {
+    keyboardDidShowHandler?: (e: KeyboardEvent) => any;
+    keyboardDidHideHandler?: (e: KeyboardEvent) => any;
+    keyboardWillShowHandler?: (e: KeyboardEvent) => any;
+    keyboardWillHideHandler?: (e: KeyboardEvent) => any;
+}
+
 export interface IUseKeyboard extends Partial<KeyboardEvent> {
     isKeyboardShow: boolean;
     heightKeyboard: number;
 }
 
-const useKeyBoard = (initialValue = false): IUseKeyboard => {
+const useKeyBoard = (
+    initialValue = false,
+    handlerOptions?: IUseKeyboardOptions,
+): IUseKeyboard => {
+    const {
+        keyboardDidHideHandler,
+        keyboardDidShowHandler,
+        keyboardWillHideHandler,
+        keyboardWillShowHandler,
+    } = handlerOptions || {};
     const [keyboardInfo, setKeyboardInfo] = useState<IUseKeyboard>({
         isKeyboardShow: initialValue,
         heightKeyboard: 0,
@@ -14,15 +30,45 @@ const useKeyBoard = (initialValue = false): IUseKeyboard => {
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
             'keyboardDidShow',
-            e => keyboardDidShow(e),
+            e => {
+                keyboardDidShow(e);
+                keyboardDidShowHandler && keyboardDidShowHandler(e);
+            },
         );
         const keyboardDidHideListener = Keyboard.addListener(
             'keyboardDidHide',
-            () => keyboardDidHide(),
+            e => {
+                keyboardDidHide();
+                keyboardDidHideHandler && keyboardDidHideHandler(e);
+            },
         );
         return () => {
             keyboardDidShowListener.remove();
             keyboardDidHideListener.remove();
+        };
+    }, [keyboardDidShowHandler,keyboardDidHideHandler]);
+
+    useEffect(() => {
+        if (keyboardWillShowHandler) {
+            const keyboardDidShowListener = Keyboard.addListener(
+                'keyboardWillShow',
+                e => {
+                    keyboardWillShowHandler && keyboardWillShowHandler(e);
+                },
+            );
+        }
+        if (keyboardWillHideHandler) {
+            const keyboardDidHideListener = Keyboard.addListener(
+                'keyboardWillHide',
+                e => {
+                    keyboardWillHideHandler && keyboardWillHideHandler(e);
+                },
+            );
+        }
+
+        return () => {
+            Keyboard.removeAllListeners('keyboardWillShow');
+            Keyboard.removeAllListeners('keyboardWillHide');
         };
     }, []);
 
