@@ -1,5 +1,5 @@
 import React, {useState, useEffect, memo} from 'react';
-import {Keyboard, KeyboardEvent} from 'react-native';
+import {EmitterSubscription, Keyboard, KeyboardEvent} from 'react-native';
 
 export interface IUseKeyboardOptions {
     keyboardDidShowHandler?: (e: KeyboardEvent) => any;
@@ -46,11 +46,13 @@ const useKeyBoard = (
             keyboardDidShowListener.remove();
             keyboardDidHideListener.remove();
         };
-    }, [keyboardDidShowHandler,keyboardDidHideHandler]);
+    }, [keyboardDidShowHandler, keyboardDidHideHandler]);
 
     useEffect(() => {
+        let keyboardWillShowListener: EmitterSubscription | null = null;
+        let keyboardWillHideListener: EmitterSubscription | null = null;
         if (keyboardWillShowHandler) {
-            const keyboardDidShowListener = Keyboard.addListener(
+            keyboardWillShowListener = Keyboard.addListener(
                 'keyboardWillShow',
                 e => {
                     keyboardWillShowHandler && keyboardWillShowHandler(e);
@@ -58,7 +60,7 @@ const useKeyBoard = (
             );
         }
         if (keyboardWillHideHandler) {
-            const keyboardDidHideListener = Keyboard.addListener(
+            keyboardWillHideListener = Keyboard.addListener(
                 'keyboardWillHide',
                 e => {
                     keyboardWillHideHandler && keyboardWillHideHandler(e);
@@ -67,8 +69,12 @@ const useKeyBoard = (
         }
 
         return () => {
-            Keyboard.removeAllListeners('keyboardWillShow');
-            Keyboard.removeAllListeners('keyboardWillHide');
+            if (keyboardWillShowHandler && keyboardWillShowListener) {
+                keyboardWillShowListener.remove();
+            }
+            if (keyboardWillHideHandler && keyboardWillHideListener) {
+                keyboardWillHideListener.remove();
+            }
         };
     }, []);
 

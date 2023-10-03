@@ -8,7 +8,14 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import {Animated, Keyboard, Platform, KeyboardEvent} from 'react-native';
+import {
+    Animated,
+    Keyboard,
+    Platform,
+    KeyboardEvent,
+    StyleProp,
+    ViewStyle,
+} from 'react-native';
 import useKeyboard, {IUseKeyboard} from '../../hooks/useKeyboard';
 import {styleTransformer} from '../../style/style';
 import Avatar, {IAvatarProps} from '../avatar/Avatar';
@@ -18,9 +25,12 @@ import View from '../view/View';
 import InputText, {IInputTextMethod, IInputTextProps} from './InputText';
 
 export interface IInputCommentProps {
-    className?: string;
     user?: IUserBasic;
-    classNameWrapper?: string;
+    className?: string;
+    classNameInputWrapper?: string;
+    classNameInput?: string;
+    style?: StyleProp<ViewStyle>;
+    styleInputWrapper?: StyleProp<ViewStyle>;
     positon?: 'bottom' | 'top' | 'free';
     placeholder?: string;
     onSubmit?: (value: any) => any;
@@ -41,7 +51,8 @@ const InputComment: React.ForwardRefRenderFunction<
 > = (
     {
         className,
-        classNameWrapper,
+        classNameInput,
+        classNameInputWrapper: classNameWrapper,
         user,
         onSubmit,
         onPressUser,
@@ -53,6 +64,8 @@ const InputComment: React.ForwardRefRenderFunction<
         avatarProps = {},
         useAnimation,
         dismissKeyboardAfterSubmit = true,
+        style,
+        styleInputWrapper,
     },
     ref,
 ) => {
@@ -74,7 +87,8 @@ const InputComment: React.ForwardRefRenderFunction<
             ? {
                   keyboardWillShowHandler: e => {
                       if (getKeyboardOffset) {
-                          return getKeyboardOffset(e);
+                          const value = getKeyboardOffset(e);
+                          return startAnimation(value);
                       }
                       return startAnimation(-e.endCoordinates?.height);
                   },
@@ -127,7 +141,11 @@ const InputComment: React.ForwardRefRenderFunction<
     };
 
     const content = (
-        <View className={wrapperClass} useLightColor colorDarkMode="dark">
+        <View
+            className={wrapperClass}
+            style={styleInputWrapper}
+            useLightColor
+            colorDarkMode="dark">
             {user && (
                 <TouchableOpacity
                     colorDarkMode="transparent"
@@ -146,7 +164,7 @@ const InputComment: React.ForwardRefRenderFunction<
                 height={45}
                 onChangeText={v => setValue(v)}
                 variant="trans"
-                className="flex-1 rounded-full"
+                className={`flex-1 rounded-full ${classNameInput}`}
                 iconName="send"
                 iconProps={{style: {transform: [{rotate: '-45deg'}]}}}
                 placeholder={placeholder}
@@ -162,6 +180,7 @@ const InputComment: React.ForwardRefRenderFunction<
         return (
             <Animated.View
                 style={[
+                    style,
                     ...(transformedStyles || []),
                     {transform: [{translateY: keyboardOffset}]},
                 ]}>
@@ -171,7 +190,9 @@ const InputComment: React.ForwardRefRenderFunction<
     }
 
     return (
-        <View className={containerClass} style={{paddingBottom: bottomPadding}}>
+        <View
+            className={containerClass}
+            style={[style, {paddingBottom: bottomPadding}]}>
             {content}
         </View>
     );
