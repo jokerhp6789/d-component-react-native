@@ -148,9 +148,9 @@ const Header: React.FC<IHeaderProps> = ({
                 className={leftClass}
                 onPress={onLeftPress}
                 // size={Platform.OS === 'android' ? 28 : undefined}
-                {...iconLeftProps}
                 style={[{zIndex: 20, elevation: 10}, iconLeftProps?.style]}
                 name={leftIcon}
+                {...iconLeftProps}
             />
         );
     };
@@ -242,8 +242,8 @@ const Header: React.FC<IHeaderProps> = ({
                 color={getTextColor()}
                 className={rightClass}
                 onPress={onRightPress}
-                {...iconRightProps}
                 name={rightIcon}
+                {...iconRightProps}
             />
         );
     };

@@ -30,7 +30,7 @@ export interface IInputCommentProps {
     classNameInputWrapper?: string;
     classNameInput?: string;
     style?: StyleProp<ViewStyle>;
-    styleInputWrapper?: StyleProp<ViewStyle>;
+    styleContentWrapper?: StyleProp<ViewStyle>;
     positon?: 'bottom' | 'top' | 'free';
     placeholder?: string;
     onSubmit?: (value: any) => any;
@@ -65,7 +65,7 @@ const InputComment: React.ForwardRefRenderFunction<
         useAnimation,
         dismissKeyboardAfterSubmit = true,
         style,
-        styleInputWrapper,
+        styleContentWrapper: styleInputWrapper,
     },
     ref,
 ) => {
