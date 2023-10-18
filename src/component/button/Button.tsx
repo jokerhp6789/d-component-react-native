@@ -2,6 +2,7 @@ import ClassNames from 'classnames';
 import React, {useMemo} from 'react';
 import {
     ActivityIndicator,
+    StyleProp,
     TextStyle,
     TouchableOpacityProps,
     useColorScheme,
@@ -53,11 +54,11 @@ export interface IButtonProps
     label?: string;
     height?: number | string;
     loading?: boolean;
-    styleLabel?: TextStyle;
+    styleLabel?: StyleProp<TextStyle>;
     renderPrefix?: ((props?: any) => React.ReactNode) | React.ReactNode;
     renderSuffix?: ((props?: any) => React.ReactNode) | React.ReactNode;
-    iconProps?: IIconProps;
-    textProps?: ITextProps;
+    iconProps?: Partial<IIconProps>;
+    textProps?: Partial<ITextProps>;
 }
 
 const Button: React.FC<IButtonProps> = ({
