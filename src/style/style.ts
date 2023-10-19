@@ -1,36 +1,34 @@
 /* eslint-disable no-nested-ternary */
-import {forEach, split, isEmpty, each, replace} from 'lodash';
+import {forEach, replace, split} from 'lodash';
 import {
-    StyleSheet,
-    ViewStyle,
-    TextStyle,
     FlexStyle,
     ImageStyle,
-    useColorScheme,
     StyleProp,
+    TextStyle,
+    ViewStyle,
 } from 'react-native';
-import flexStyle from './layout/_flex';
-import marginPadding from './layout/_padding-margin';
-import backgroundStyle, {BACKGROUND_PATTERN} from './theme/_background';
-import borderStyle from './theme/_border';
-import widthHeightStyle from './layout/_width-height';
-import textStyle from './text/_text';
-import positionStyle from './layout/_position';
-import imageStyle from './image/_image';
-import shadowStyle from './theme/_shadow';
 import {Colors} from '..';
-import {getColorValue} from './modifier';
-import gapStyle from './layout/_gap';
-import Configs from './config/_config';
 import {ThemeProps} from '../interface/iTheme';
+import Configs from './config/_config';
+import imageStyle from './image/_image';
+import flexStyle from './layout/_flex';
+import gapStyle from './layout/_gap';
+import marginPadding from './layout/_padding-margin';
+import positionStyle from './layout/_position';
+import widthHeightStyle from './layout/_width-height';
+import {getColorValue} from './modifier';
+import textStyle from './text/_text';
+import backgroundStyle from './theme/_background';
+import borderStyle from './theme/_border';
+import shadowStyle from './theme/_shadow';
 
 const {dark, light} = Colors;
 const SPECIAL_STYLE_COLOR_PATTERN =
     /^(bg|text|border)-(\[#[0-9A-Fa-f]{6}\]|(?!#)\[rgba\((?:\d{1,3},\s*){3}(?:1|0\.\d{1,2})\)\])$/;
-const SPECIAL_WIDTH_HEIGHT_PATTERN = /^(max-)?[wh]-\[\d+(\.\d+)?%?\]$/;
+const SPECIAL_WIDTH_HEIGHT_PATTERN = /^(max-)?(w|h|width|height)-\[\d+(\.\d+)?%?\]$/;
 const SPECIAL_PADDING_MARGIN_PATTERN =
     /^(p(x|y|l|t|r|b)?|g(x|y)?|m(x|y|l|t|r|b)?)-\[\d+\]$/;
-const SPECIAL_POSITION_PATTERN = /^[rtlbz]-\[\d+\]$/;
+const SPECIAL_POSITION_PATTERN = /^(r|t|l|b|top|left|right|bottom)-\[\d+\]$/;
 const PERCENTAGE_PATTERN = /^\d+(\.\d+)?%$/;
 
 export const getStyleProps = (props: any, key?: string) => {
@@ -79,9 +77,11 @@ export const getSpecialStyle = (className: string) => {
             value = getValue(stringArr?.[2]);
             switch (key) {
                 case 'max-w':
+                case 'max-width':
                     styleKey = 'maxWidth';
                     break;
                 case 'max-h':
+                case 'max-height':
                     styleKey = 'maxHeight';
                     break;
                 default:
@@ -92,9 +92,11 @@ export const getSpecialStyle = (className: string) => {
             value = getValue(stringArr?.[1]);
             switch (key) {
                 case 'w':
+                case 'width':
                     styleKey = 'width';
                     break;
                 case 'h':
+                case 'height':
                     styleKey = 'height';
                     break;
                 default:
@@ -186,21 +188,29 @@ export const getSpecialStyle = (className: string) => {
         let styleKey: any = null;
         if (stringArr?.length === 2) {
             const key = stringArr?.[0];
+
+            console.log("🚀 >>>>>> file: style.ts:188 >>>>>> getSpecialStyle >>>>>> key:", key);
             value = getValue(stringArr?.[1]);
+
+            console.log("🚀 >>>>>> file: style.ts:191 >>>>>> getSpecialStyle >>>>>> value:", value);
             switch (key) {
                 case 'z':
                     styleKey = 'zIndex';
                     break;
-                case 't':
+                case 't' :
+                case 'top' :
                     styleKey = 'top';
                     break;
-                case 'b':
+                case 'b' :
+                case 'bottom' :
                     styleKey = 'bottom';
                     break;
                 case 'l':
+                case 'left':
                     styleKey = 'left';
                     break;
                 case 'r':
+                case 'right':
                     styleKey = 'right';
                     break;
                 default:
@@ -227,12 +237,12 @@ export const styleTransformer = (
         [];
     if (typeof primaryStyle === 'string') {
         if (primaryStyle?.length > 1) {
-            const classArr = split(primaryStyle, ' ');
-            if (!isEmpty(classArr)) {
+            const classArr = primaryStyle.split(' ');
+            if (!!classArr) {
                 try {
                     forEach(classArr, (name: any) => {
                         if (style?.[name as keyof typeof style]) {
-                            styleProps.push(style[name as keyof typeof style]);
+                            styleProps.push(style[name]);
                         } else if (
                             !!name &&
                             typeof name === 'string' &&
@@ -288,7 +298,7 @@ export const getStyleWithTheme = (
     rest: any,
     styleProps: any,
     options?: ThemeProps & {isDarkMode?: boolean},
-): ViewStyle[] => {
+): StyleProp<ViewStyle> => {
     const {
         isDarkMode,
         useLightColor: useLightColorProps,
@@ -302,6 +312,7 @@ export const getStyleWithTheme = (
         colorDarkMode: colorDarkModeConfig,
     } = generalConfig || {};
     const tranStyle = getStyleProps(rest);
+    // const tranStyle = {};
     const useLightColor =
         typeof useLightColorProps === 'boolean'
             ? useLightColorProps
@@ -317,7 +328,10 @@ export const getStyleWithTheme = (
             : useLightColor
             ? light
             : 'transparent';
-    const listStyle: ViewStyle[] = [{backgroundColor}, tranStyle as any];
+    const listStyle: StyleProp<ViewStyle> = [
+        {backgroundColor},
+        tranStyle as any,
+    ];
     if (styleProps) {
         listStyle.push(styleProps);
     }
@@ -328,7 +342,7 @@ export const getStyleWithTheme = (
     return listStyle;
 };
 
-const style = StyleSheet.create({
+const style = {
     ...flexStyle,
     ...gapStyle,
     ...marginPadding,
@@ -339,6 +353,6 @@ const style = StyleSheet.create({
     ...positionStyle,
     ...imageStyle,
     ...shadowStyle,
-});
+};
 
 export default style;

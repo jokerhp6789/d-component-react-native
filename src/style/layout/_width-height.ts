@@ -3,17 +3,6 @@ import {StyleSheet} from 'react-native';
 import Sizes from '../size/_size';
 import {generateStyleValue} from '../modifier';
 
-const widthClass: any = {};
-const heightClass: any = {};
-for (let i = 0; i <= 500; i += 1) {
-    widthClass[`width-${i}`] = {
-        width: i,
-    };
-    heightClass[`height-${i}`] = {
-        height: i,
-    };
-}
-
 const WIDTH_HEIGHT_PERCENTAGE_VALUE = {
     0: '0%',
     5: '5%',
@@ -38,21 +27,43 @@ const WIDTH_HEIGHT_PERCENTAGE_VALUE = {
     100: '100%',
 };
 
-const maxWidthPercentageClass = generateStyleValue(
+const maxWPercentageClass = generateStyleValue(
     {['max-w']: 'maxWidth'},
     WIDTH_HEIGHT_PERCENTAGE_VALUE,
 );
+
+const maxWidthPercentageClass = generateStyleValue(
+    {['max-width']: 'maxWidth'},
+    WIDTH_HEIGHT_PERCENTAGE_VALUE,
+);
+
 const widthPercentageClass = generateStyleValue(
+    {width: 'width'},
+    WIDTH_HEIGHT_PERCENTAGE_VALUE,
+);
+
+const wPercentageClass = generateStyleValue(
     {w: 'width'},
     WIDTH_HEIGHT_PERCENTAGE_VALUE,
 );
 
-const maxHeightPercentageClass = generateStyleValue(
+const maxHPercentageClass = generateStyleValue(
     {['max-h']: 'maxHeight'},
     WIDTH_HEIGHT_PERCENTAGE_VALUE,
 );
-const heightPercentageClass = generateStyleValue(
+
+const maxHeightPercentageClass = generateStyleValue(
+    {['max-height']: 'maxHeight'},
+    WIDTH_HEIGHT_PERCENTAGE_VALUE,
+);
+
+const hPercentageClass = generateStyleValue(
     {h: 'height'},
+    WIDTH_HEIGHT_PERCENTAGE_VALUE,
+);
+
+const heightPercentageClass = generateStyleValue(
+    {height: 'height'},
     WIDTH_HEIGHT_PERCENTAGE_VALUE,
 );
 
@@ -81,11 +92,13 @@ const widthHeightStyle = StyleSheet.create({
     'width-auto': {
         width: 'auto',
     },
-    ...widthClass,
-    ...heightClass,
     ...widthPercentageClass,
+    ...wPercentageClass,
+    ...hPercentageClass,
     ...heightPercentageClass,
+    ...maxWPercentageClass,
     ...maxWidthPercentageClass,
+    ...maxHPercentageClass,
     ...maxHeightPercentageClass,
 });
 
