@@ -74,6 +74,18 @@ const widthHeightStyle = StyleSheet.create({
     'height-full': {
         height: Sizes.screenHeight,
     },
+    'min-h-full': {
+        height: Sizes.screenHeight,
+    },
+    'min-height-full': {
+        height: Sizes.screenHeight,
+    },
+    'max-h-full': {
+        height: Sizes.screenHeight,
+    },
+    'max-height-full': {
+        height: Sizes.screenHeight,
+    },
     'h-auto': {
         height: 'auto',
     },
@@ -84,6 +96,18 @@ const widthHeightStyle = StyleSheet.create({
         width: Sizes.screenWidth,
     },
     'width-full': {
+        width: Sizes.screenWidth,
+    },
+    'min-w-full': {
+        width: Sizes.screenWidth,
+    },
+    'min-width-full': {
+        width: Sizes.screenWidth,
+    },
+    'max-w-full': {
+        width: Sizes.screenWidth,
+    },
+    'max-width-full': {
         width: Sizes.screenWidth,
     },
     'w-auto': {
