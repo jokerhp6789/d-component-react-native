@@ -82,9 +82,6 @@ const App = () => {
                         : AppColors.light,
                 }}
                 edges={['top']}>
-                {/* <StatusBar
-                    barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                /> */}
                 {renderMainView()}
                 {/* <InputComment /> */}
                 {/* <TestModal onPress={() => setOpenModal(true)} /> */}
