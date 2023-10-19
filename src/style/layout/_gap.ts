@@ -5,12 +5,16 @@ import {MARGIN_PADDING_VALUES} from './_padding-margin';
 export const GAP_VARIATIONS = {
     g: 'gap',
     gap: 'gap',
-    gy: 'rowGap',
-    ['gap-y']: 'rowGap',
-    ['gap-row']: 'rowGap',
-    gx: 'columnGap',
-    ['gap-x']: 'columnGap',
+
+    gy: 'columnGap',
+    ['gap-y']: 'columnGap',
     ['gap-col']: 'columnGap',
+    ['g-col']: 'columnGap',
+
+    gx: 'rowGap',
+    ['gap-row']: 'rowGap',
+    ['g-row']: 'rowGap',
+    ['gap-x']: 'rowGap',
 };
 
 const gapClass = generateStyleValue(GAP_VARIATIONS, MARGIN_PADDING_VALUES);
