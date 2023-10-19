@@ -11,7 +11,6 @@ export interface ITestAvatarProps {
 
 const TestAvatar: React.FC<ITestAvatarProps> = ({ id }) => {
   const imageType = typeof images.birthdayCake;
-  console.log({ imageType });
   return (
     <ScrollView className="w-100">
       <View>

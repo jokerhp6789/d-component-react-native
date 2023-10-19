@@ -188,11 +188,7 @@ export const getSpecialStyle = (className: string) => {
         let styleKey: any = null;
         if (stringArr?.length === 2) {
             const key = stringArr?.[0];
-
-            console.log("🚀 >>>>>> file: style.ts:188 >>>>>> getSpecialStyle >>>>>> key:", key);
             value = getValue(stringArr?.[1]);
-
-            console.log("🚀 >>>>>> file: style.ts:191 >>>>>> getSpecialStyle >>>>>> value:", value);
             switch (key) {
                 case 'z':
                     styleKey = 'zIndex';

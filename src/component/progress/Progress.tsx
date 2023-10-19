@@ -215,7 +215,6 @@ class Progress extends Component<IProgressProps, IProgressState> {
         promiseAll = [this.generatePromiseFunc(promiseFunction as any)];
       }
       const task = Promise.all(promiseAll);
-      console.log(task);
       task
         .then((result: any) => {
           // call server and receive response with known exception
