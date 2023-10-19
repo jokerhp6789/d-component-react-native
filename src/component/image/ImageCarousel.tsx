@@ -79,7 +79,7 @@ const ImageCarousel: React.ForwardRefRenderFunction<
     }
 
     const iconClass =
-      "bg-blackOverlay position-absolute width-40 height-40 flex-center-y justify-center rounded-pilled";
+      "bg-blackOverlay position-absolute width-[40] height-[40] flex-center-y justify-center rounded-pilled";
 
     const iconLeftClass = ClassNames(iconClass, "left-5");
     const iconRightClass = ClassNames(iconClass, "right-5");

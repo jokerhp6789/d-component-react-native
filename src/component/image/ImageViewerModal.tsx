@@ -29,7 +29,7 @@ const ImageViewerModal: React.FC<IImageViewerModalProps> = ({
   ...rest
 }) => {
   const footerClass = ClassNames(
-    "flex-center-y justify-content-between bg-transparent height-70 p-3",
+    "flex-center-y justify-content-between bg-transparent height-[70] p-3",
     classNameFooter
   );
 

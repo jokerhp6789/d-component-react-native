@@ -344,7 +344,7 @@ const Select: React.FC<ISelectProps> = ({
                 </View>
             );
         }
-        return <View className="width-30" />;
+        return <View className="width-[30]" />;
     };
 
     const renderList = () => {

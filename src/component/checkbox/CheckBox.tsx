@@ -54,7 +54,7 @@ const CheckBox: React.FC<ICheckBoxProps> = ({
 }) => {
     const wrapperClass = ClassNames('flex-row', className);
     const boxClass = ClassNames(
-        `width-${size} height-${size} border border-grey flex-center-y justify-content-center`,
+        `width-[${size}] height-[${size}] border border-grey flex-center-y justify-content-center`,
         {
             [`bg-${color}`]: checked,
             [`rounded-full`]: variant === 'radio',

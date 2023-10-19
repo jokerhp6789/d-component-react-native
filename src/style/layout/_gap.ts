@@ -4,9 +4,12 @@ import {MARGIN_PADDING_VALUES} from './_padding-margin';
 
 export const GAP_VARIATIONS = {
     g: 'gap',
+    gap: 'gap',
     gy: 'rowGap',
+    ['gap-y']: 'rowGap',
     ['gap-row']: 'rowGap',
     gx: 'columnGap',
+    ['gap-x']: 'columnGap',
     ['gap-col']: 'columnGap',
 };
 
