@@ -1,6 +1,7 @@
 import ClassNames from 'classnames';
-import React, {ReactNode} from 'react';
-import {Platform, StyleProp, useColorScheme, ViewStyle} from 'react-native';
+import React, {ReactNode, useContext} from 'react';
+import {StyleProp, ViewStyle} from 'react-native';
+import StyleStateContext from '../../context/StyleContext';
 import {ThemeProps} from '../../interface/iTheme';
 import {isDark} from '../../style/color/_color';
 import {ColorKeyType} from '../../style/constant/AppColors';
@@ -73,7 +74,8 @@ const Header: React.FC<IHeaderProps> = ({
     buttonRightProps = {},
     iconRightProps = {},
 }) => {
-    const isDarkMode = useColorScheme() === 'dark';
+    const {colorSchema} = useContext(StyleStateContext) || {};
+    const isDarkMode = colorSchema === 'dark';
     const bgColor = isDarkMode
         ? getColorValue(colorDarkMode) || getColorValue(theme as any)
         : getColorValue(theme as any);

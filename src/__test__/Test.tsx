@@ -31,6 +31,7 @@ interface ITestData {
 }
 
 const App = () => {
+    const colorSchema = useColorScheme();
     const isDarkMode = useColorScheme() === 'dark';
     const [openModal, setOpenModal] = useState(false);
 
@@ -73,7 +74,7 @@ const App = () => {
 
     return (
         <StyleStateContext.Provider
-            value={{locale: 'th', useFontToLocale: true}}>
+            value={{locale: 'th', useFontToLocale: true, colorSchema}}>
             <SafeAreaView
                 style={{
                     flex: 1,

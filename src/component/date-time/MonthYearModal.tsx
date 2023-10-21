@@ -1,13 +1,14 @@
-import moment from "moment";
-import React, { useState } from "react";
-import { TextStyle, useColorScheme, ViewStyle } from "react-native";
+import moment from 'moment';
+import React, {useContext, useState} from 'react';
+import {TextStyle, ViewStyle} from 'react-native';
 // @ts-ignore
-import MonthPicker from "react-native-month-picker";
-import { Icon } from "../..";
-import AppColors, { ColorKeyType } from "../../style/constant/AppColors";
-import Fonts from "../../style/font/_font";
-import { getColorValue } from "../../style/modifier";
-import Modal, { IModalProps } from "../modal/Modal";
+import MonthPicker from 'react-native-month-picker';
+import {Icon} from '../..';
+import StyleStateContext from '../../context/StyleContext';
+import AppColors, {ColorKeyType} from '../../style/constant/AppColors';
+import Fonts from '../../style/font/_font';
+import {getColorValue} from '../../style/modifier';
+import Modal, {IModalProps} from '../modal/Modal';
 
 export interface IMonthYearModalProps extends IModalProps {
     onChange?: (value: Date) => any;
@@ -20,7 +21,7 @@ export interface IMonthYearModalProps extends IModalProps {
     nextIcon?: React.ReactNode;
     selectedBackgroundColor?: ColorKeyType;
     style?: ViewStyle;
-    monthFormat?: "MMM" | "MMMM" | "MM";
+    monthFormat?: 'MMM' | 'MMMM' | 'MM';
     locale?: string;
 }
 
@@ -40,14 +41,15 @@ const MonthYearModal: React.FC<IMonthYearModalProps> = ({
     prevIcon,
     nextIcon,
 }) => {
-    const isDarkMode = useColorScheme() === "dark";
+    const {colorSchema} = useContext(StyleStateContext) || {};
+    const isDarkMode = colorSchema === 'dark';
 
     const [selectingDate, setSelectingDate] = useState<Date>(
-        value || moment().toDate()
+        value || moment().toDate(),
     );
     const thisTextStyle: TextStyle = {
         ...Fonts.fontClass.h4,
-        color: isDarkMode ? "white" : "black",
+        color: isDarkMode ? 'white' : 'black',
     };
 
     return (
@@ -56,14 +58,13 @@ const MonthYearModal: React.FC<IMonthYearModalProps> = ({
             onClose={onClose}
             position="bottom"
             size="medium"
-            style={{ marginHorizontal: 0 }}
+            style={{marginHorizontal: 0}}
             swipeable={false}
             showFooter
             onSave={() => {
                 onChange && onChange(selectingDate);
                 onClose && onClose();
-            }}
-        >
+            }}>
             <MonthPicker
                 selectedDate={selectingDate}
                 onMonthChange={(value: any) => {
@@ -74,7 +75,7 @@ const MonthYearModal: React.FC<IMonthYearModalProps> = ({
                 maxDate={
                     maximumDate
                         ? moment(maximumDate)
-                        : moment().add(1000, "years")
+                        : moment().add(1000, 'years')
                 }
                 nextText={nextText}
                 prevText={prevText}
@@ -82,7 +83,7 @@ const MonthYearModal: React.FC<IMonthYearModalProps> = ({
                     prevIcon || (
                         <Icon
                             name="arrow-left"
-                            color={isDarkMode ? "white" : "black"}
+                            color={isDarkMode ? 'white' : 'black'}
                         />
                     )
                 }
@@ -90,7 +91,7 @@ const MonthYearModal: React.FC<IMonthYearModalProps> = ({
                     nextIcon || (
                         <Icon
                             name="arrow-right"
-                            color={isDarkMode ? "white" : "black"}
+                            color={isDarkMode ? 'white' : 'black'}
                         />
                     )
                 }

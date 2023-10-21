@@ -1,7 +1,9 @@
 import ClassNames from 'classnames';
-import React, {useImperativeHandle, useMemo, useState} from 'react';
-import {useColorScheme, ViewStyle} from 'react-native';
+import React, {useContext, useImperativeHandle, useMemo, useState} from 'react';
+import {ViewStyle} from 'react-native';
 import DatePicker, {DatePickerProps} from 'react-native-date-picker';
+import StyleStateContext from '../../context/StyleContext';
+import Configs from '../../style/config/_config';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getThemeColor} from '../../style/modifier';
 import Sizes from '../../style/size/_size';
@@ -14,7 +16,6 @@ import Text from '../text/Text';
 import TouchableOpacity from '../view/TouchableOpacity';
 import View from '../view/View';
 import {InputErrorView, InputVariantType} from './InputText';
-import Configs from '../../style/config/_config';
 
 export type TDateFormat =
     | 'DD/MM/YYYY HH:mm'
@@ -120,12 +121,12 @@ const InputDate: React.ForwardRefRenderFunction<
     },
     ref,
 ) => {
+    const {colorSchema} = useContext(StyleStateContext) || {};
     const {inputConfig} = Configs;
     const {variant: variantConfig} = inputConfig || {};
     const variant = variantProps || variantConfig || 'standard';
 
-    const colorScheme = useColorScheme();
-    const isDarkMode = colorScheme === 'dark';
+    const isDarkMode = colorSchema === 'dark';
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
     const wrapperClass = ClassNames(
@@ -151,7 +152,7 @@ const InputDate: React.ForwardRefRenderFunction<
         'rounded-1': variant === 'rounded',
         'border-error': !!error,
         [`bg-${disabledColor}`]: disabled && disabledColor,
-        [`border-${getThemeColor({colorScheme})}`]: !!value,
+        [`border-${getThemeColor({colorScheme: colorSchema})}`]: !!value,
     });
 
     const errorClass = ClassNames(

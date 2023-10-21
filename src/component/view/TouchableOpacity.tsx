@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
     TouchableOpacityProps,
     TouchableOpacity as TouchableOpacityRN,
-    useColorScheme,
 } from 'react-native';
+import StyleStateContext, {
+    IStyleStateContext,
+} from '../../context/StyleContext';
 import {ThemeProps} from '../../interface/iTheme';
 import {getStyleWithTheme} from '../../style/style';
 
@@ -20,7 +22,9 @@ const TouchableOpacity: React.ForwardRefRenderFunction<
     ITouchableOpacityMethod,
     ITouchableOpacityProps
 > = ({children, style, useLightColor, colorDarkMode, ...rest}, ref) => {
-    const isDarkMode = useColorScheme() === 'dark';
+    const {colorSchema} =
+        useContext<IStyleStateContext>(StyleStateContext) || {};
+    const isDarkMode = colorSchema === 'dark';
     const listStyle = getStyleWithTheme(rest, style, {
         colorDarkMode,
         useLightColor,

@@ -6,7 +6,6 @@ import {
     Text as RNText,
     TextProps,
     TextStyle,
-    useColorScheme,
     StyleSheet,
     Platform,
 } from 'react-native';
@@ -33,14 +32,14 @@ const Text: React.FC<ITextProps> = ({
     style,
     ...rest
 }) => {
-    const {locale, useFontToLocale} =
+    const {locale, useFontToLocale, colorSchema} =
         useContext<IStyleStateContext>(StyleStateContext) || {};
     const {generalConfig, textConfig} = Configs;
     const {color: colorConfig, colorDarkMode: colorDarkModeConfig} =
         textConfig || {};
     const {autoSwitchColor} = generalConfig || {};
     const transStyle = getStyleProps(rest);
-    const isDarkMode = useColorScheme() === 'dark';
+    const isDarkMode = colorSchema === 'dark';
     const {white, black} = Colors;
     const {fontClass, locale: loadFontLocale} = Fonts;
     const defaultStyle: TextStyle = {

@@ -1,10 +1,11 @@
-import React from 'react';
-import {StyleSheet, ViewStyle, useColorScheme} from 'react-native';
+import React, {useContext} from 'react';
+import {StyleSheet, ViewStyle} from 'react-native';
 import {
+    CalendarProps,
     Calendar as RNCalendar,
     LocaleConfig as RNLocaleConfig,
-    CalendarProps,
 } from 'react-native-calendars';
+import StyleStateContext from '../../context/StyleContext';
 import Colors from '../../style/color/_color';
 import {getStyleProps} from '../../style/style';
 import Icon from '../icon/Icon';
@@ -71,7 +72,8 @@ const Calendar: React.FC<ICalendarProps> = ({
     enableSwipeMonths = true,
     ...rest
 }) => {
-    const isDarkMode = useColorScheme() === 'dark';
+    const {colorSchema} = useContext(StyleStateContext);
+    const isDarkMode = colorSchema === 'dark';
     const tranStyle = getStyleProps(rest);
     return (
         <RNCalendar

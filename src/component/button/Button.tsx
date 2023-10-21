@@ -1,11 +1,10 @@
 import ClassNames from 'classnames';
-import React, {useMemo} from 'react';
+import React, {useContext, useMemo} from 'react';
 import {
     ActivityIndicator,
     StyleProp,
     TextStyle,
     TouchableOpacityProps,
-    useColorScheme,
 } from 'react-native';
 import {ThemeProps} from '../../interface/iTheme';
 import {isDark} from '../../style/color/_color';
@@ -16,6 +15,7 @@ import Sizes from '../../style/size/_size';
 import Icon, {IIconProps} from '../icon/Icon';
 import Text, {ITextProps} from '../text/Text';
 import TouchableOpacity from '../view/TouchableOpacity';
+import StyleStateContext from '../../context/StyleContext';
 
 const defaultButtonHeight = Sizes?.buttonHeight ?? 30;
 
@@ -94,7 +94,8 @@ const Button: React.FC<IButtonProps> = ({
     textProps = {},
     ...rest
 }) => {
-    const isDarkMode = useColorScheme() === 'dark';
+    const {colorSchema} = useContext(StyleStateContext) || {};
+    const isDarkMode = colorSchema === 'dark';
     const {buttonConfig} = Configs;
     const {
         variant: variantConfig,

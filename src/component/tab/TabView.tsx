@@ -3,6 +3,7 @@ import ClassNames from 'classnames';
 import React, {
     ElementRef,
     forwardRef,
+    useContext,
     useImperativeHandle,
     useRef,
     useState,
@@ -13,7 +14,6 @@ import {
     StyleProp,
     StyleSheet,
     TextStyle,
-    useColorScheme,
     ViewStyle,
 } from 'react-native';
 import {
@@ -32,6 +32,7 @@ import Text from '../text/Text';
 import View from '../view/View';
 import TabBarComponent from './TabBarComponent';
 import Configs from '../../style/config/_config';
+import StyleStateContext from '../../context/StyleContext';
 
 export interface ITabViewRoute extends Route {
     label?: string;
@@ -164,12 +165,13 @@ function TabView(
     ref: React.ForwardedRef<ITabViewMethod>,
 ) {
     const {generalConfig} = Configs;
+    const {colorSchema} = useContext(StyleStateContext) || {};
     const {colorDarkMode, autoSwitchColor} = generalConfig || {};
     const [index, setIndex] = useState(initialIndex);
     const [routes] = useState(dataSource);
     const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
     const tranStyle = getStyleProps(rest);
-    const isDarkMode = useColorScheme() === 'dark';
+    const isDarkMode = colorSchema === 'dark';
     const showLabelBgColor = variant !== 'standard';
     const containerBg = {
         backgroundColor: isDarkMode

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
     Button,
     SafeAreaView,
@@ -13,6 +13,7 @@ import Colors from '../../style/color/_color';
 import DReactNative from './components/DReactNative';
 import ReactNative from './components/ReactNative';
 import TimedRender from './components/TimedRender';
+import TWReactNativeClassName from './components/TWReactNativeClassName';
 
 export interface ITestBenchmarkProps {
     [key: string]: any;
@@ -36,6 +37,8 @@ const TestBenchmark: React.FC<ITestBenchmarkProps> = ({id}) => {
                 return <ReactNative />;
             case 'DReactNative':
                 return <DReactNative />;
+            case 'Tailwind React Native ClassName':
+                return <TWReactNativeClassName />;
             default:
                 return null;
         }
@@ -49,7 +52,6 @@ const TestBenchmark: React.FC<ITestBenchmarkProps> = ({id}) => {
                 <Header />
                 <View style={{paddingHorizontal: 10}}>
                     <Button
-                    
                         title="React Native"
                         onPress={onStyleTypePress('React Native')}
                     />
@@ -57,12 +59,18 @@ const TestBenchmark: React.FC<ITestBenchmarkProps> = ({id}) => {
                         title="D Component React Native"
                         onPress={onStyleTypePress('DReactNative')}
                     />
+                    <Button
+                        title="Tailwind React Native ClassName"
+                        onPress={onStyleTypePress(
+                            'Tailwind React Native ClassName',
+                        )}
+                    />
                     {styleType ? (
                         <TimedRender key={styleType}>
                             <Text style={styles.text}>
                                 Rendering with{' '}
                                 <Text style={styles.bold}>{styleType}</Text>
-                                src/__test__/testBenchmark/components/ReactNative.tsx{' '}
+                                {` src/__test__/testBenchmark/components/${styleType}.tsx`}{' '}
                             </Text>
                         </TimedRender>
                     ) : null}

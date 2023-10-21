@@ -4,6 +4,7 @@ import ClassNames from 'classnames';
 import {isEmpty} from 'lodash';
 import React, {
     ElementRef,
+    useContext,
     useImperativeHandle,
     useMemo,
     useRef,
@@ -11,13 +12,13 @@ import React, {
 } from 'react';
 import {
     Platform,
-    StyleProp,
     TextInput as RNTextInput,
+    StyleProp,
     TextInputProps,
     TextStyle,
-    useColorScheme,
     ViewStyle,
 } from 'react-native';
+import StyleStateContext from '../../context/StyleContext';
 import useKeyBoard from '../../hooks/useKeyboard';
 import {ThemeProps} from '../../interface/iTheme';
 import Colors from '../../style/color/_color';
@@ -149,10 +150,10 @@ const InputText: React.ForwardRefRenderFunction<
 ) => {
     const {light} = Colors;
     const {inputConfig} = Configs;
+    const {colorSchema} = useContext(StyleStateContext);
     const inputRef = useRef<ElementRef<typeof TextInput>>(null);
     const {variant: variantConfig} = inputConfig || {};
-    const colorScheme = useColorScheme();
-    const isDarkMode = colorScheme === 'dark';
+    const isDarkMode = colorSchema === 'dark';
     const [focusing, setFocusing] = useState(false);
     const variant: InputVariantType =
         variantProps || variantConfig || 'standard';
@@ -263,7 +264,7 @@ const InputText: React.ForwardRefRenderFunction<
                                 ? error
                                     ? 'error'
                                     : getThemeColor({
-                                          colorScheme,
+                                          colorScheme: colorSchema,
                                           colorLightMode: colorFocus,
                                           colorDarkMode:
                                               colorDark || colorFocus,
@@ -306,7 +307,7 @@ const InputText: React.ForwardRefRenderFunction<
                                 ? error
                                     ? 'error'
                                     : getThemeColor({
-                                          colorScheme,
+                                          colorScheme: colorSchema,
                                           colorLightMode: colorFocus,
                                           colorDarkMode:
                                               colorDark || colorFocus,

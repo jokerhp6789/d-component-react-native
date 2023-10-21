@@ -1,9 +1,8 @@
-import React from 'react';
-import {
-    SafeAreaView as SafeAreaViewRN,
-    useColorScheme,
-    ViewProps,
-} from 'react-native';
+import React, {useContext} from 'react';
+import {SafeAreaView as SafeAreaViewRN, ViewProps} from 'react-native';
+import StyleStateContext, {
+    IStyleStateContext,
+} from '../../context/StyleContext';
 import {ThemeProps} from '../../interface/iTheme';
 import {getStyleWithTheme} from '../../style/style';
 
@@ -19,11 +18,12 @@ const SafeAreaView: React.FC<ISafeAreaViewProps> = ({
     colorDarkMode,
     ...rest
 }) => {
-    const isDarkMode = useColorScheme() === 'dark';
+    const {colorSchema} =
+        useContext<IStyleStateContext>(StyleStateContext) || {};
     const listStyle = getStyleWithTheme(rest, style, {
         colorDarkMode,
         useLightColor,
-        isDarkMode,
+        isDarkMode: colorSchema === 'dark',
     });
     return <SafeAreaViewRN style={listStyle}>{children}</SafeAreaViewRN>;
 };

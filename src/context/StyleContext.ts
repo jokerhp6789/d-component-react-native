@@ -1,11 +1,13 @@
-import React, { Context } from "react";
+import React from 'react';
+import {ColorSchemeName} from 'react-native';
 
-const appState: any = null;
-const StyleStateContext: Context<IStyleStateContext> = React.createContext<any>(appState);
+const appState: IStyleStateContext = {};
+const StyleStateContext = React.createContext<IStyleStateContext>(appState);
 
 export default StyleStateContext;
 
 export interface IStyleStateContext {
-  locale?: string;
-  useFontToLocale?: boolean;
+    locale?: string;
+    useFontToLocale?: boolean;
+    colorSchema?: ColorSchemeName;
 }

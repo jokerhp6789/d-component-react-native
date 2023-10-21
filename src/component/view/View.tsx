@@ -1,5 +1,8 @@
-import React from 'react';
-import {useColorScheme, View as ViewRN, ViewProps} from 'react-native';
+import React, {useContext, useMemo} from 'react';
+import {ViewProps, View as ViewRN} from 'react-native';
+import StyleStateContext, {
+    IStyleStateContext,
+} from '../../context/StyleContext';
 import {ThemeProps} from '../../interface/iTheme';
 import {getStyleWithTheme} from '../../style/style';
 
@@ -15,12 +18,15 @@ const View: React.FC<IViewProps> = ({
     useLightColor,
     ...rest
 }) => {
-    const isDarkMode = useColorScheme() === 'dark';
-    const listStyle = getStyleWithTheme(rest, style, {
-        colorDarkMode,
-        useLightColor,
-        isDarkMode,
-    });
+    const {colorSchema} =
+        useContext<IStyleStateContext>(StyleStateContext) || {};
+    const listStyle = useMemo(() => {
+        return getStyleWithTheme(rest, style, {
+            colorDarkMode,
+            useLightColor,
+            isDarkMode: colorSchema === 'dark',
+        });
+    }, [colorDarkMode, style, rest?.className, colorSchema]);
 
     return (
         <ViewRN {...rest} style={listStyle}>

@@ -2,10 +2,13 @@ import ClassNames from 'classnames';
 import React, {
     ElementRef,
     forwardRef,
+    useContext,
     useImperativeHandle,
     useRef,
 } from 'react';
-import {useColorScheme, ViewStyle} from 'react-native';
+import {ViewStyle} from 'react-native';
+import StyleStateContext from '../../context/StyleContext';
+import Configs from '../../style/config/_config';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getThemeColor} from '../../style/modifier';
 import TimeUtils from '../../utils/TimeUtils';
@@ -13,12 +16,11 @@ import Icon from '../icon/Icon';
 import Text from '../text/Text';
 import View from '../view/View';
 import InputDate, {
-    getDateModalTypeFromMode,
     ICustomInputProps,
     IInputDateProps,
+    getDateModalTypeFromMode,
 } from './InputDate';
 import {InputErrorView} from './InputText';
-import Configs from '../../style/config/_config';
 
 export interface IRangeDateCustomInputProps extends ICustomInputProps {
     side?: 'start' | 'end';
@@ -65,10 +67,10 @@ const InputDateRange: React.ForwardRefRenderFunction<
     },
     ref,
 ) => {
+    const {colorSchema} = useContext(StyleStateContext);
     const {inputConfig} = Configs;
     const {variant: variantConfig} = inputConfig || {};
     const variant = variantProps || variantConfig || 'outline';
-    const colorScheme = useColorScheme();
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
     const labelClass = ClassNames(
@@ -144,7 +146,7 @@ const InputDateRange: React.ForwardRefRenderFunction<
                     color={
                         value?.length === 0
                             ? 'gray'
-                            : getThemeColor({colorScheme})
+                            : getThemeColor({colorScheme: colorSchema})
                     }
                 />
                 <InputDate

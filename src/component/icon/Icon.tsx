@@ -1,24 +1,26 @@
-import React, {useMemo} from 'react';
-import {useColorScheme} from 'react-native';
-import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import React, {useContext, useMemo} from 'react';
+import IconAntDesign from 'react-native-vector-icons/AntDesign';
+import IconEntypo from 'react-native-vector-icons/Entypo';
+import IconEvilIcons from 'react-native-vector-icons/EvilIcons';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import IconFoundation from 'react-native-vector-icons/Foundation';
+import {IconProps} from 'react-native-vector-icons/Icon';
+import IconIonicons from 'react-native-vector-icons/Ionicons';
 import IconMaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import IconOcticons from 'react-native-vector-icons/Octicons';
 import IconSimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import IconZocial from 'react-native-vector-icons/Zocial';
-import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
-import IconOcticons from 'react-native-vector-icons/Octicons';
-import IconIonicons from 'react-native-vector-icons/Ionicons';
-import IconFoundation from 'react-native-vector-icons/Foundation';
-import IconEvilIcons from 'react-native-vector-icons/EvilIcons';
-import IconEntypo from 'react-native-vector-icons/Entypo';
-import IconAntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import StyleStateContext, {
+    IStyleStateContext,
+} from '../../context/StyleContext';
 import {ThemeProps} from '../../interface/iTheme';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getColorValue} from '../../style/modifier';
 import Sizes from '../../style/size/_size';
 import {getStyleProps} from '../../style/style';
 import TouchableOpacity from '../view/TouchableOpacity';
-import {IconProps} from 'react-native-vector-icons/Icon';
 
 export declare type IconType =
     | 'material'
@@ -63,7 +65,9 @@ const Icon: React.FC<IIconProps> = ({
     ...rest
 }) => {
     const transStyle = getStyleProps(rest);
-    const isDarkMode = useColorScheme() === 'dark';
+    const {colorSchema} =
+        useContext<IStyleStateContext>(StyleStateContext) || {};
+    const isDarkMode = colorSchema === 'dark';
     const colorIcon = useMemo(() => {
         if (isDarkMode && colorDarkMode) {
             return getColorValue(colorDarkMode);

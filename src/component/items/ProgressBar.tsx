@@ -1,6 +1,9 @@
 import ClassNames from 'classnames';
-import React, {useMemo} from 'react';
-import {useColorScheme, ViewStyle} from 'react-native';
+import React, {useContext, useMemo} from 'react';
+import {ViewStyle} from 'react-native';
+import StyleStateContext, {
+    IStyleStateContext,
+} from '../../context/StyleContext';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getColorValue} from '../../style/modifier';
 import View from '../view/View';
@@ -36,7 +39,9 @@ const ProgressBar: React.FC<IProgressBarProps> = ({
     height = 10,
     rounded = true,
 }) => {
-    const isDarkMode = useColorScheme() === 'dark';
+    const {colorSchema} =
+        useContext<IStyleStateContext>(StyleStateContext) || {};
+    const isDarkMode = colorSchema === 'dark';
     const bgColor = isDarkMode
         ? getColorValue(trailColorDarkMode) || getColorValue(trailColor as any)
         : getColorValue(trailColor as any);

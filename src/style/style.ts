@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import {forEach, replace, split} from 'lodash';
 import {
+    Appearance,
     FlexStyle,
     ImageStyle,
     StyleProp,
@@ -10,22 +11,16 @@ import {
 import {Colors} from '..';
 import {ThemeProps} from '../interface/iTheme';
 import Configs from './config/_config';
-import imageStyle from './image/_image';
-import flexStyle from './layout/_flex';
-import gapStyle from './layout/_gap';
-import marginPadding from './layout/_padding-margin';
-import positionStyle from './layout/_position';
-import widthHeightStyle from './layout/_width-height';
 import {getColorValue} from './modifier';
-import textStyle from './text/_text';
-import backgroundStyle from './theme/_background';
-import borderStyle from './theme/_border';
-import shadowStyle from './theme/_shadow';
+import {StyleMap} from './data/styleData';
+import Cache from './cache/cache';
 
+const StyleCache = new Cache();
 const {dark, light} = Colors;
 const SPECIAL_STYLE_COLOR_PATTERN =
     /^(bg|text|border)-(\[#[0-9A-Fa-f]{6}\]|(?!#)\[rgba\((?:\d{1,3},\s*){3}(?:1|0\.\d{1,2})\)\])$/;
-const SPECIAL_WIDTH_HEIGHT_PATTERN = /^(max-)?(w|h|width|height)-\[\d+(\.\d+)?%?\]$/;
+const SPECIAL_WIDTH_HEIGHT_PATTERN =
+    /^(max-)?(w|h|width|height)-\[\d+(\.\d+)?%?\]$/;
 const SPECIAL_PADDING_MARGIN_PATTERN =
     /^(p(x|y|l|t|r|b)?|g(x|y)?|m(x|y|l|t|r|b)?)-\[\d+\]$/;
 const SPECIAL_POSITION_PATTERN = /^(r|t|l|b|top|left|right|bottom)-\[\d+\]$/;
@@ -34,6 +29,9 @@ const PERCENTAGE_PATTERN = /^\d+(\.\d+)?%$/;
 export const getStyleProps = (props: any, key?: string) => {
     const keyProps = key || 'className';
     const classStr = props?.[keyProps] ?? '';
+    if (!classStr) {
+        return {};
+    }
     return styleTransformer(classStr);
 };
 
@@ -193,12 +191,12 @@ export const getSpecialStyle = (className: string) => {
                 case 'z':
                     styleKey = 'zIndex';
                     break;
-                case 't' :
-                case 'top' :
+                case 't':
+                case 'top':
                     styleKey = 'top';
                     break;
-                case 'b' :
-                case 'bottom' :
+                case 'b':
+                case 'bottom':
                     styleKey = 'bottom';
                     break;
                 case 'l':
@@ -233,26 +231,39 @@ export const styleTransformer = (
         [];
     if (typeof primaryStyle === 'string') {
         if (primaryStyle?.length > 1) {
-            const classArr = primaryStyle.split(' ');
-            if (!!classArr) {
-                try {
-                    forEach(classArr, (name: any) => {
-                        if (style?.[name as keyof typeof style]) {
-                            styleProps.push(style[name]);
-                        } else if (
-                            !!name &&
-                            typeof name === 'string' &&
-                            name?.length > 3 &&
-                            name !== 'undefined'
-                        ) {
-                            const specialStyle = getSpecialStyle(name);
-                            if (!!specialStyle) {
-                                styleProps.push(specialStyle);
+            const cachedSets = StyleCache.getStyleSet(primaryStyle);
+            if (cachedSets?.length) {
+                styleProps.push(...cachedSets);
+            } else {
+                const classArr = primaryStyle
+                    .split(' ')
+                    ?.filter?.(item => !!item);
+                if (classArr && classArr.length) {
+                    try {
+                        const styleSets: any[] = [];
+                        forEach(classArr, (name: any) => {
+                            const styleItem = StyleMap.get(name);
+                            if (styleItem) {
+                                styleSets.push(styleItem);
+                            } else if (
+                                !!name &&
+                                typeof name === 'string' &&
+                                name?.length > 3 &&
+                                name !== 'undefined'
+                            ) {
+                                const specialStyle = getSpecialStyle(name);
+                                if (!!specialStyle) {
+                                    styleSets.push(specialStyle);
+                                }
                             }
+                        });
+                        if (styleSets?.length) {
+                            StyleCache.setStyleSet(primaryStyle, styleSets);
+                            styleProps.push(...styleSets);
                         }
-                    });
-                } catch (error) {
-                    console.error('GET STYLE PROPS ERROR', {error});
+                    } catch (error) {
+                        console.error('GET STYLE PROPS ERROR', {error});
+                    }
                 }
             }
         }
@@ -308,7 +319,6 @@ export const getStyleWithTheme = (
         colorDarkMode: colorDarkModeConfig,
     } = generalConfig || {};
     const tranStyle = getStyleProps(rest);
-    // const tranStyle = {};
     const useLightColor =
         typeof useLightColorProps === 'boolean'
             ? useLightColorProps
@@ -323,11 +333,14 @@ export const getStyleWithTheme = (
             ? colorDarkModeConfig || dark
             : useLightColor
             ? light
-            : 'transparent';
-    const listStyle: StyleProp<ViewStyle> = [
-        {backgroundColor},
-        tranStyle as any,
-    ];
+            : undefined;
+    const listStyle: StyleProp<ViewStyle> = [];
+    if (backgroundColor) {
+        listStyle.push({backgroundColor});
+    }
+    if (tranStyle) {
+        listStyle.push(tranStyle);
+    }
     if (styleProps) {
         listStyle.push(styleProps);
     }
@@ -337,18 +350,3 @@ export const getStyleWithTheme = (
     }
     return listStyle;
 };
-
-const style = {
-    ...flexStyle,
-    ...gapStyle,
-    ...marginPadding,
-    ...backgroundStyle,
-    ...borderStyle,
-    ...widthHeightStyle,
-    ...textStyle,
-    ...positionStyle,
-    ...imageStyle,
-    ...shadowStyle,
-};
-
-export default style;
