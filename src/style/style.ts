@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import {forEach, replace, split} from 'lodash';
 import {
-    Appearance,
     FlexStyle,
     ImageStyle,
     StyleProp,
