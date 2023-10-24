@@ -267,15 +267,17 @@ export const styleTransformer = (
                 }
             }
         }
-    } else if (primaryStyle) {
-        Object.keys(primaryStyle).forEach(key => {
-            if (!!primaryStyle?.[key]) {
+    } else if (typeof primaryStyle === 'object' && primaryStyle !== null) {
+        for (const [key, value] of Object.entries(primaryStyle)) {
+            if (typeof value === 'boolean') {
                 const conditionalStyle = styleTransformer(key);
                 if (conditionalStyle && conditionalStyle?.length) {
                     styleProps.push(...(conditionalStyle as any));
                 }
+            } else if (key && value) {
+                styleProps.push({[key]: value});
             }
-        });
+        }
     }
     if (otherStyle && otherStyle?.length) {
         for (const secondaryStyle of otherStyle) {
@@ -285,15 +287,20 @@ export const styleTransformer = (
                     if (conditionalStyle && conditionalStyle?.length) {
                         styleProps.push(...(conditionalStyle as any));
                     }
-                } else {
-                    Object.keys(secondaryStyle).forEach(key => {
-                        if (!!secondaryStyle?.[key]) {
+                } else if (
+                    typeof secondaryStyle === 'object' &&
+                    secondaryStyle !== null
+                ) {
+                    for (const [key, value] of Object.entries(secondaryStyle)) {
+                        if (typeof value === 'boolean') {
                             const conditionalStyle = styleTransformer(key);
                             if (conditionalStyle && conditionalStyle?.length) {
                                 styleProps.push(...(conditionalStyle as any));
                             }
+                        } else if (key && value) {
+                            styleProps.push({[key]: value});
                         }
-                    });
+                    }
                 }
             }
         }
