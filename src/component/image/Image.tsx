@@ -1,9 +1,9 @@
 import React from "react";
 import { Image as ImageRN, ImageProps } from "react-native";
-import { getStyleProps } from "../../style/style";
+import { getStyleProps, IStyleTransformerProps } from "../../style/style";
 
 export interface IImageProps extends ImageProps {
-  className?: string;
+  className?: IStyleTransformerProps;
   children?: any;
 }
 

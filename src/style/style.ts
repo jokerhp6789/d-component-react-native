@@ -25,6 +25,15 @@ const SPECIAL_PADDING_MARGIN_PATTERN =
 const SPECIAL_POSITION_PATTERN = /^(r|t|l|b|top|left|right|bottom)-\[\d+\]$/;
 const PERCENTAGE_PATTERN = /^\d+(\.\d+)?%$/;
 
+export type IStyleTransformerProps =
+    | string
+    | {[key: string]: boolean}
+    | FlexStyle
+    | ImageStyle
+    | ViewStyle
+    | TextStyle
+    | undefined;
+
 export const getStyleProps = (props: any, key?: string) => {
     const keyProps = key || 'className';
     const classStr = props?.[keyProps] ?? '';
@@ -223,11 +232,10 @@ export const getSpecialStyle = (className: string) => {
 };
 
 export const styleTransformer = (
-    primaryStyle: string | {[key: string]: any},
-    ...otherStyle: any
+    primaryStyle: IStyleTransformerProps,
+    ...otherStyle: IStyleTransformerProps[]
 ) => {
-    const styleProps: ViewStyle[] | TextStyle[] | ImageStyle[] | FlexStyle[] =
-        [];
+    const styleProps: any[] = [];
     if (typeof primaryStyle === 'string') {
         if (primaryStyle?.length > 1) {
             const cachedSets = StyleCache.getStyleSet(primaryStyle);
