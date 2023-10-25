@@ -269,9 +269,11 @@ export const styleTransformer = (
     } else if (typeof primaryStyle === 'object' && primaryStyle !== null) {
         for (const [key, value] of Object.entries(primaryStyle)) {
             if (typeof value === 'boolean') {
-                const conditionalStyle = styleTransformer(key);
-                if (conditionalStyle && conditionalStyle?.length) {
-                    styleProps.push(...(conditionalStyle as any));
+                if (value) {
+                    const conditionalStyle = styleTransformer(key);
+                    if (conditionalStyle && conditionalStyle?.length) {
+                        styleProps.push(...(conditionalStyle as any));
+                    }
                 }
             } else if (key && value) {
                 styleProps.push({[key]: value});
@@ -292,9 +294,16 @@ export const styleTransformer = (
                 ) {
                     for (const [key, value] of Object.entries(secondaryStyle)) {
                         if (typeof value === 'boolean') {
-                            const conditionalStyle = styleTransformer(key);
-                            if (conditionalStyle && conditionalStyle?.length) {
-                                styleProps.push(...(conditionalStyle as any));
+                            if (value) {
+                                const conditionalStyle = styleTransformer(key);
+                                if (
+                                    conditionalStyle &&
+                                    conditionalStyle?.length
+                                ) {
+                                    styleProps.push(
+                                        ...(conditionalStyle as any),
+                                    );
+                                }
                             }
                         } else if (key && value) {
                             styleProps.push({[key]: value});
