@@ -10,6 +10,7 @@ import TestImages from './testImage/TestImages';
 import TestInput from './testInput/TestInput';
 import TestItems from './testItems/TestItems';
 import TestList from './testList/TestList';
+import TestProgress from './testProgress/TestProgress';
 import TestSelect from './testSelect/TestSelect';
 import TestStyle from './testStyle/TestStyle';
 import TestTabBar from './testTab/TestTabBar';
@@ -29,6 +30,7 @@ const DATA_SOURCE: ITabViewProps['dataSource'] = [
     {key: 'testHeader', label: 'Header', component: <TestHeader />},
     {key: 'testCalendar', label: 'Calendar', component: <TestCalendar />},
     {key: 'testList', label: 'List', component: <TestList />},
+    {key: 'testProgress', label: 'Progress', component: <TestProgress />},
     {
         key: 'testTabBar',
         label: 'Tab Bar',

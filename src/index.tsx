@@ -277,3 +277,17 @@ export {default as StyleContext} from './context/StyleContext';
 export type {IGetThemeColorProps} from './style/modifier';
 export {getColorValue} from './style/modifier';
 export {styleTransformer as styles} from './style/style';
+
+/* ----------------------------------------
+// Progress
+// ---------------------------------------- */
+
+export type {
+    IProgressComponentProps,
+    IProgressTaskProps,
+    IProgressComponentState,
+    IResponseAPI,
+    IProgressFunctionProps,
+} from './component/progress/ProgressComponent';
+export {default as ProgressComponent} from './component/progress/ProgressComponent';
+export {default as Progress} from './component/progress/ProgressController';

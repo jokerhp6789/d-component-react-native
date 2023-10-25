@@ -8,7 +8,7 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {ElementRef, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -24,6 +24,8 @@ import DATA_SOURCE from './Source';
 import TestModal from './testModal/TestModal';
 import {AppColors} from '..';
 import InputComment from '../component/input/InputComment';
+import ProgressComponent from '../component/progress/ProgressComponent';
+import ProgressController from '../component/progress/ProgressController';
 
 interface ITestData {
     id: string;
@@ -32,12 +34,19 @@ interface ITestData {
 
 const App = () => {
     const colorSchema = useColorScheme();
+    const progressRef = useRef<ElementRef<typeof ProgressComponent>>(null);
     const isDarkMode = useColorScheme() === 'dark';
     const [openModal, setOpenModal] = useState(false);
 
     const backgroundStyle = {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
+
+    useEffect(() => {
+        if (progressRef.current) {
+            ProgressController.initialize(progressRef.current);
+        }
+    }, [progressRef]);
 
     const renderMainView = () => {
         return (
@@ -83,6 +92,7 @@ const App = () => {
                         : AppColors.light,
                 }}
                 edges={['top']}>
+                <ProgressComponent ref={progressRef} />
                 {renderMainView()}
                 {/* <InputComment /> */}
                 {/* <TestModal onPress={() => setOpenModal(true)} /> */}
