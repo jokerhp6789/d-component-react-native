@@ -13,6 +13,7 @@ import Configs from './config/_config';
 import {getColorValue} from './modifier';
 import {StyleMap} from './data/styleData';
 import Cache from './cache/cache';
+import {BORDER_WIDTH_VARIATIONS} from './theme/_border';
 
 const StyleCache = new Cache();
 const {dark, light} = Colors;
@@ -22,6 +23,8 @@ const SPECIAL_WIDTH_HEIGHT_PATTERN =
     /^(max-)?(w|h|width|height)-\[\d+(\.\d+)?%?\]$/;
 const SPECIAL_PADDING_MARGIN_PATTERN =
     /^(p(x|y|l|t|r|b)?|g(x|y)?|m(x|y|l|t|r|b)?)-\[\d+\]$/;
+const SPECIAL_BORDER_PATTERN =
+    /^border(?:-(?:right|r|left|l|top|t|bottom|b))?-\[\d+\]$/;
 const SPECIAL_POSITION_PATTERN = /^(r|t|l|b|top|left|right|bottom)-\[\d+\]$/;
 const PERCENTAGE_PATTERN = /^\d+(\.\d+)?%$/;
 
@@ -219,6 +222,29 @@ export const getSpecialStyle = (className: string) => {
                     break;
             }
         }
+        if (styleKey && value) {
+            if (!isNaN(parseFloat(value))) {
+                value = parseFloat(value);
+            }
+            if (typeof value === 'number') {
+                return {[styleKey]: value};
+            }
+        }
+    }
+    if (SPECIAL_BORDER_PATTERN.test(className)) {
+        const stringArr = split(className, '-');
+        let value = null;
+        let styleKey: any = null;
+        console.log('GET IN SPECIAL BORDER PATTERN');
+        if (stringArr?.length === 2) {
+            value = stringArr[1];
+            styleKey = stringArr[0];
+        } else if (stringArr?.length === 3) {
+            value = stringArr[2];
+            styleKey = `${stringArr[0]}-${stringArr[1]}`;
+        }
+        value = value ? getValue(value) : null;
+        styleKey = (BORDER_WIDTH_VARIATIONS as any)[styleKey];
         if (styleKey && value) {
             if (!isNaN(parseFloat(value))) {
                 value = parseFloat(value);
