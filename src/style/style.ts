@@ -299,6 +299,33 @@ export const styleTransformer = (
                     }
                 }
             }
+            // const classArr = primaryStyle.split(' ')?.filter?.(item => !!item);
+            // if (classArr && classArr.length) {
+            //     try {
+            //         const styleSets: any[] = [];
+            //         forEach(classArr, (name: any) => {
+            //             const styleItem = StyleMap.get(name);
+            //             if (styleItem) {
+            //                 styleSets.push(styleItem);
+            //             } else if (
+            //                 !!name &&
+            //                 typeof name === 'string' &&
+            //                 name?.length > 3 &&
+            //                 name !== 'undefined'
+            //             ) {
+            //                 const specialStyle = getSpecialStyle(name);
+            //                 if (!!specialStyle) {
+            //                     styleSets.push(specialStyle);
+            //                 }
+            //             }
+            //         });
+            //         if (styleSets?.length) {
+            //             styleProps.push(...styleSets);
+            //         }
+            //     } catch (error) {
+            //         console.error('GET STYLE PROPS ERROR', {error});
+            //     }
+            // }
         }
     } else if (typeof primaryStyle === 'object' && primaryStyle !== null) {
         for (const [key, value] of Object.entries(primaryStyle)) {
