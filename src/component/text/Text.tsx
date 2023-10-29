@@ -16,11 +16,11 @@ import Colors from '../../style/color/_color';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import Fonts from '../../style/font/_font';
 import {getColorValue} from '../../style/modifier';
-import {getStyleProps} from '../../style/style';
+import {IStyleTransformerProps, getStyleProps} from '../../style/style';
 import Configs from '../../style/config/_config';
 
 export interface ITextProps extends TextProps {
-    className?: string;
+    className?: IStyleTransformerProps;
     color?: ColorKeyType;
     colorDarkMode?: ColorKeyType;
 }
@@ -59,7 +59,7 @@ const Text: React.FC<ITextProps> = ({
     }
     const flattenStyle = StyleSheet.flatten<TextStyle>(listStyle);
     const hasBoldStyle =
-        split(rest?.['className'], ' ').includes('font-weight-bold') ||
+        split((rest as any)?.['className'], ' ').includes('font-weight-bold') ||
         ['500', '600', '700', '800', '900', 'bold'].includes(
             flattenStyle?.fontWeight as any,
         );

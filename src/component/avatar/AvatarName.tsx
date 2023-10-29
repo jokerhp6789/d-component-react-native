@@ -1,12 +1,9 @@
-import ClassNames from 'classnames';
-import {isEmpty} from 'lodash';
 import React from 'react';
-import {StyleProp, TextStyle, ViewStyle} from 'react-native';
+import {StyleProp, TextStyle, View, ViewStyle} from 'react-native';
 import {ThemeProps} from '../../interface/iTheme';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import {IButtonProps} from '../button/Button';
 import Text, {ITextProps} from '../text/Text';
-import View from '../view/View';
 import Avatar, {IAvatarProps} from './Avatar';
 
 export interface IUserBasic {

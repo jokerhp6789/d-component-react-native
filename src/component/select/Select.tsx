@@ -1,9 +1,10 @@
-// @ts-nocheck
-import ClassNames from 'classnames';
 import _, {filter, some} from 'lodash';
 import React, {ElementRef, useEffect, useMemo, useRef, useState} from 'react';
-import {Platform, ViewStyle} from 'react-native';
+import {Platform, TouchableOpacity, ViewStyle} from 'react-native';
+import Colors from '../../style/color/_color';
+import Configs from '../../style/config/_config';
 import Sizes from '../../style/size/_size';
+import {styleTransformer} from '../../style/style';
 import Button, {IButtonProps} from '../button/Button';
 import CheckBox from '../checkbox/CheckBox';
 import Icon from '../icon/Icon';
@@ -16,10 +17,7 @@ import AwesomeList, {
 } from '../list/awesomeList/AwesomeList';
 import Modal from '../modal/Modal';
 import Text from '../text/Text';
-import TouchableOpacity from '../view/TouchableOpacity';
-import View from '../view/View';
-import Configs from '../../style/config/_config';
-import Colors from '../../style/color/_color';
+import {View} from 'react-native';
 
 export interface ISelectSourceProps extends IPaginationProps {
     search?: string;
@@ -81,7 +79,7 @@ export interface ISelectProps
     valueType?: 'object' | 'string';
 
     inputSearchProps?: IInputSearchProps;
-    listProps?: IAwesomeListProps<any>;
+    listProps?: Partial<IAwesomeListProps<any>>;
     chipProps?: IChipProps;
     buttonSelectProps?: IButtonProps;
 }
@@ -134,8 +132,8 @@ const Select: React.FC<ISelectProps> = ({
 
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
-    const containerClass = ClassNames(`w-100`, className);
-    const labelClass = ClassNames(
+    const containerClass = styleTransformer(`w-100`, className);
+    const labelClass = styleTransformer(
         `h4`,
         {
             'mb-1': hasBorder,
@@ -143,13 +141,13 @@ const Select: React.FC<ISelectProps> = ({
         },
         `${classNameLabel}`,
     );
-    const contentClass = ClassNames('flex-center-y pr-1 pl-2', {
+    const contentClass = styleTransformer('flex-center-y pr-1 pl-2', {
         'border-bottom': variant === 'standard',
-        'pl-1 py-1': multiple,
+        'pl-1 py-1': !!multiple,
         border: hasBorder,
         'rounded-1': variant === 'rounded',
     });
-    const errorClass = ClassNames(
+    const errorClass = styleTransformer(
         'mt-1',
         {
             'px-2': variant === 'pill',
@@ -275,7 +273,7 @@ const Select: React.FC<ISelectProps> = ({
         }
         if (multiple && _.isArray(value)) {
             return (
-                <View className="flex-wrap flex-row flex-1">
+                <View style={styleTransformer('flex-wrap flex-row flex-1')}>
                     {value.map(i => {
                         const iLabel = getLabelFromValue(i);
                         return (
@@ -306,7 +304,7 @@ const Select: React.FC<ISelectProps> = ({
 
     const renderSelectItem = ({item, index}: any) => {
         const selected = checkSelectedItem(item);
-        const selectItemClass = ClassNames('flex-center-y py-3', {
+        const selectItemClass = styleTransformer('flex-center-y py-3', {
             'border-top': index !== 0,
         });
         let content: any = (
@@ -321,8 +319,8 @@ const Select: React.FC<ISelectProps> = ({
         return (
             <TouchableOpacity
                 onPress={() => handleSelectItem(item, selected)}
-                className={selectItemClass}>
-                <View className="flex-1">{content}</View>
+                style={selectItemClass}>
+                <View style={styleTransformer('flex-1')}>{content}</View>
                 <CheckBox checked={selected} pressEnable={false} />
             </TouchableOpacity>
         );
@@ -344,7 +342,7 @@ const Select: React.FC<ISelectProps> = ({
                 </View>
             );
         }
-        return <View className="width-[30]" />;
+        return <View style={styleTransformer('width-[30]')} />;
     };
 
     const renderList = () => {
@@ -388,11 +386,10 @@ const Select: React.FC<ISelectProps> = ({
     };
 
     return (
-        <View className={containerClass} style={style}>
-            {label && <Text className={labelClass}>{label}</Text>}
+        <View style={[containerClass, style]}>
+            {label && <Text style={labelClass}>{label}</Text>}
             <TouchableOpacity
-                style={[{height: inputHeight}, styleContent]}
-                className={contentClass}
+                style={[{height: inputHeight}, contentClass, styleContent]}
                 onPress={() => setOpenModal(true)}
                 disabled={disabled}
                 activeOpacity={0.5}>
@@ -417,7 +414,7 @@ const Select: React.FC<ISelectProps> = ({
                 classNameHeader="border-bottom"
                 className="px-0"
                 swipeable={false}>
-                <View className="h-100 position-relative px-3">
+                <View style={styleTransformer('h-100 position-relative px-3')}>
                     {showSearch && (
                         <InputSearch
                             useLightColor

@@ -4,6 +4,7 @@ import {
     FlexStyle,
     ImageStyle,
     StyleProp,
+    StyleSheet,
     TextStyle,
     ViewStyle,
 } from 'react-native';
@@ -262,6 +263,7 @@ export const styleTransformer = (
     ...otherStyle: IStyleTransformerProps[]
 ) => {
     const styleProps: any[] = [];
+
     if (typeof primaryStyle === 'string') {
         if (primaryStyle?.length > 1) {
             const cachedSets = StyleCache.getStyleSet(primaryStyle);
@@ -332,11 +334,11 @@ export const styleTransformer = (
             if (typeof value === 'boolean') {
                 if (value) {
                     const conditionalStyle = styleTransformer(key);
-                    if (conditionalStyle && conditionalStyle?.length) {
-                        styleProps.push(...(conditionalStyle as any));
+                    if (conditionalStyle) {
+                        styleProps.push(conditionalStyle);
                     }
                 }
-            } else if (key && value) {
+            } else if (key && (value || typeof value === 'number')) {
                 styleProps.push({[key]: value});
             }
         }
@@ -346,8 +348,8 @@ export const styleTransformer = (
             if (secondaryStyle) {
                 if (typeof secondaryStyle === 'string') {
                     const conditionalStyle = styleTransformer(secondaryStyle);
-                    if (conditionalStyle && conditionalStyle?.length) {
-                        styleProps.push(...(conditionalStyle as any));
+                    if (conditionalStyle) {
+                        styleProps.push(conditionalStyle);
                     }
                 } else if (
                     typeof secondaryStyle === 'object' &&
@@ -357,13 +359,8 @@ export const styleTransformer = (
                         if (typeof value === 'boolean') {
                             if (value) {
                                 const conditionalStyle = styleTransformer(key);
-                                if (
-                                    conditionalStyle &&
-                                    conditionalStyle?.length
-                                ) {
-                                    styleProps.push(
-                                        ...(conditionalStyle as any),
-                                    );
+                                if (conditionalStyle) {
+                                    styleProps.push(conditionalStyle);
                                 }
                             }
                         } else if (key && value) {
@@ -374,7 +371,7 @@ export const styleTransformer = (
             }
         }
     }
-    return styleProps;
+    return StyleSheet.flatten(styleProps);
 };
 
 export const getStyleWithTheme = (

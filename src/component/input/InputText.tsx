@@ -1,6 +1,5 @@
 /** @format */
 
-import ClassNames from 'classnames';
 import {isEmpty} from 'lodash';
 import React, {
     ElementRef,
@@ -26,10 +25,11 @@ import Configs from '../../style/config/_config';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getThemeColor} from '../../style/modifier';
 import Sizes from '../../style/size/_size';
-import {getStyleProps} from '../../style/style';
+import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Icon, {IIconProps} from '../icon/Icon';
 import Text from '../text/Text';
-import View from '../view/View';
+import ViewD from '../view/View';
+import {View} from 'react-native';
 
 export type InputVariantType =
     | 'standard'
@@ -46,13 +46,13 @@ export interface IInputTextProps extends TextInputProps, ThemeProps {
     color?: ColorKeyType;
     colorFocus?: ColorKeyType;
     colorDark?: ColorKeyType;
-    className?: string;
-    classNameLabel?: string;
-    classNameWrapper?: string;
-    classNameInput?: string;
-    classNameIcon?: string;
-    classNamePrefixIcon?: string;
-    classNameError?: string;
+    className?: IStyleTransformerProps;
+    classNameLabel?: IStyleTransformerProps;
+    classNameWrapper?: IStyleTransformerProps;
+    classNameInput?: IStyleTransformerProps;
+    classNameIcon?: IStyleTransformerProps;
+    classNamePrefixIcon?: IStyleTransformerProps;
+    classNameError?: IStyleTransformerProps;
     iconName?: string;
     prefixIcon?: string;
     iconSize?: number;
@@ -80,30 +80,34 @@ export interface IInputTextMethod extends ITextInputMethods {}
 
 export interface IInputErrorViewProps {
     error: any;
-    className?: string;
+    className?: IStyleTransformerProps;
     iconName?: string;
     iconSize?: number;
-    classNameText?: string;
+    classNameText?: IStyleTransformerProps;
+    style?: StyleProp<ViewStyle>;
+    styleText?: StyleProp<TextStyle>;
 }
 
 export const InputErrorView: React.FC<IInputErrorViewProps> = ({
     error,
     className,
     classNameText,
+    style,
+    styleText,
     iconName = 'info',
     iconSize = 12,
 }) => {
-    const errorClass = ClassNames('flex-center-y', className);
-    const textClass = ClassNames('text-error h5 ml-1', classNameText);
+    const errorClass = styleTransformer('flex-center-y', className);
+    const textClass = styleTransformer('text-error h5 ml-1', classNameText);
 
     if (isEmpty(error) && typeof error !== 'string') {
         return null;
     }
 
     return (
-        <View className={errorClass}>
+        <View style={[style, errorClass]}>
             <Icon name={iconName} size={iconSize} color="error" />
-            <Text className={textClass}>{error}</Text>
+            <Text style={[textClass, styleText]}>{error}</Text>
         </View>
     );
 };
@@ -151,7 +155,7 @@ const InputText: React.ForwardRefRenderFunction<
     const {light} = Colors;
     const {inputConfig} = Configs;
     const {colorSchema} = useContext(StyleStateContext);
-    const inputRef = useRef<ElementRef<typeof TextInput>>(null);
+    const inputRef = useRef<ElementRef<typeof RNTextInput>>(null);
     const {variant: variantConfig} = inputConfig || {};
     const isDarkMode = colorSchema === 'dark';
     const [focusing, setFocusing] = useState(false);
@@ -161,8 +165,8 @@ const InputText: React.ForwardRefRenderFunction<
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
 
-    const containerClass = ClassNames(`w-100`, `${className}`);
-    const labelClass = ClassNames(
+    const containerClass = styleTransformer(`w-100`, `${className}`);
+    const labelClass = styleTransformer(
         `h4`,
         {
             'mb-1': hasBorder,
@@ -170,7 +174,7 @@ const InputText: React.ForwardRefRenderFunction<
         },
         `${classNameLabel}`,
     );
-    const wrapperClass = ClassNames(
+    const wrapperClass = styleTransformer(
         'flex-center-y justify-content-center',
         {
             border: hasBorder,
@@ -185,14 +189,15 @@ const InputText: React.ForwardRefRenderFunction<
         },
         classNameWrapper,
     );
-    const inputClass = ClassNames(
+    const inputClass = styleTransformer(
         'flex-1 h4 px-2',
         {
             'py-2': Platform.OS === 'android',
         },
         classNameInput,
     );
-    const errorClass = ClassNames(
+
+    const errorClass = styleTransformer(
         'mt-1',
         {
             'px-2': variant === 'pill',
@@ -242,10 +247,10 @@ const InputText: React.ForwardRefRenderFunction<
     };
 
     const content = (
-        <View
-            className={containerClass}
+        <ViewD
             key={label}
             style={[
+                containerClass,
                 {
                     paddingBottom: bottomPadding,
                 },
@@ -253,8 +258,8 @@ const InputText: React.ForwardRefRenderFunction<
             ]}
             colorDarkMode={colorDarkMode}
             useLightColor={useLightColor}>
-            {label && <Text className={labelClass}>{label}</Text>}
-            <View className={wrapperClass}>
+            {label && <Text style={labelClass}>{label}</Text>}
+            <View style={wrapperClass}>
                 {prefixIcon && (
                     <Icon
                         name={prefixIcon}
@@ -281,8 +286,7 @@ const InputText: React.ForwardRefRenderFunction<
                     />
                 )}
                 {customPrefix({focusing, error})}
-                <TextInput
-                    className={inputClass}
+                <RNTextInput
                     onFocus={e => {
                         onFocus && onFocus(e);
                         setFocusing(true);
@@ -293,6 +297,7 @@ const InputText: React.ForwardRefRenderFunction<
                     }}
                     {...rest}
                     style={[
+                        inputClass,
                         {height, color: isDarkMode ? light : undefined},
                         styleInput,
                     ]}
@@ -327,18 +332,9 @@ const InputText: React.ForwardRefRenderFunction<
             {!isEmpty(error) && typeof error === 'string' && (
                 <InputErrorView error={error} className={errorClass} />
             )}
-        </View>
+        </ViewD>
     );
 
-    // if (useKeyboardAvoidingView && focusing) {
-    //     return (
-    //         <KeyboardAvoidingView
-    //             behavior={Platform.OS === "ios" ? "padding" : "height"}
-    //         >
-    //             {content}
-    //         </KeyboardAvoidingView>
-    //     );
-    // }
     return content;
 };
 
@@ -349,27 +345,3 @@ export interface ITextInputProps extends TextInputProps {
 }
 
 export interface ITextInputMethods extends Partial<RNTextInput> {}
-
-export const TextInputRef: React.ForwardRefRenderFunction<
-    ITextInputMethods,
-    ITextInputProps
-> = ({style, children, ...rest}, ref) => {
-    const inputRef = useRef<ElementRef<typeof RNTextInput>>();
-    const transStyle = getStyleProps(rest);
-
-    useImperativeHandle(ref, () => ({
-        clear: () => inputRef.current && inputRef?.current.clear?.(),
-        blur: () => inputRef.current && inputRef?.current.blur?.(),
-        focus: () => inputRef.current && inputRef?.current.focus?.(),
-    }));
-
-    return (
-        <RNTextInput
-            ref={inputRef as any}
-            style={[transStyle, style]}
-            {...rest}
-        />
-    );
-};
-
-export const TextInput = React.forwardRef(TextInputRef);

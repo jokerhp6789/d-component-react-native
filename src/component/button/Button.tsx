@@ -1,4 +1,3 @@
-import ClassNames from 'classnames';
 import React, {useContext, useMemo} from 'react';
 import {
     ActivityIndicator,
@@ -6,16 +5,17 @@ import {
     TextStyle,
     TouchableOpacityProps,
 } from 'react-native';
+import StyleStateContext from '../../context/StyleContext';
 import {ThemeProps} from '../../interface/iTheme';
 import {isDark} from '../../style/color/_color';
 import Configs from '../../style/config/_config';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getColorValue} from '../../style/modifier';
 import Sizes from '../../style/size/_size';
+import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Icon, {IIconProps} from '../icon/Icon';
 import Text, {ITextProps} from '../text/Text';
 import TouchableOpacity from '../view/TouchableOpacity';
-import StyleStateContext from '../../context/StyleContext';
 
 const defaultButtonHeight = Sizes?.buttonHeight ?? 30;
 
@@ -32,8 +32,8 @@ export type ButtonSizeType =
 export interface IButtonProps
     extends TouchableOpacityProps,
         Omit<ThemeProps, 'useLightColor'> {
-    className?: string;
-    classNameLabel?: string;
+    className?: IStyleTransformerProps;
+    classNameLabel?: IStyleTransformerProps;
     children?: any;
     size?: ButtonSizeType;
     variant?: ButtonVariantType;
@@ -179,22 +179,22 @@ const Button: React.FC<IButtonProps> = ({
         buttonStyle.push({backgroundColor: buttonDisableBg});
     }
 
-    const wrapperClass = ClassNames(
+    const wrapperClass = styleTransformer(
         'flex-center-y justify-content-center px-2.5',
         {
             [`bg-${color}`]: variant === 'standard',
             'rounded-pill': shape === 'pill',
             'rounded-2': shape === 'rounded',
             [`border border-${color}`]: variant === 'outline',
-            [`border-${colorBorderDisable}`]: colorBorderDisable && disabled,
+            [`border-${colorBorderDisable}`]: colorBorderDisable && !!disabled,
             [`border-${colorBorderDisableDarkMode}`]:
-                colorBorderDisableDarkMode && disabled && isDarkMode,
-            'bg-transparent': loading,
+                colorBorderDisableDarkMode && !!disabled && isDarkMode,
+            'bg-transparent': !!loading,
         },
         className,
     );
 
-    const labelClass = ClassNames(
+    const labelClass = styleTransformer(
         'text-center',
         {
             [`text-${color}`]: variant === 'outline' || variant === 'trans',
@@ -234,11 +234,10 @@ const Button: React.FC<IButtonProps> = ({
         }
         mainView = (
             <Text
-                className={labelClass}
                 color={textColor}
                 numberOfLines={1}
                 colorDarkMode={textColorDM}
-                style={styleLabel}
+                style={[styleLabel, labelClass]}
                 {...textProps}>
                 {content}
             </Text>
@@ -285,8 +284,7 @@ const Button: React.FC<IButtonProps> = ({
 
     return (
         <TouchableOpacity
-            className={wrapperClass}
-            style={buttonStyle}
+            style={[buttonStyle, wrapperClass]}
             disabled={disabled || loading}
             colorDarkMode={buttonDarkModeBg}
             activeOpacity={activeOpacity || 0.85}

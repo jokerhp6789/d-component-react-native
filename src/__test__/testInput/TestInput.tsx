@@ -50,7 +50,7 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
                 colorDark="yellow"
                 onPressIcon={() => {}}
                 placeholder="Input Standard"
-                // error="Error Test Input"
+                error="Error Test Input"
             />
 
             <InputText

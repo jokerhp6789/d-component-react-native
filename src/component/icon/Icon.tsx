@@ -19,7 +19,11 @@ import {ThemeProps} from '../../interface/iTheme';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getColorValue} from '../../style/modifier';
 import Sizes from '../../style/size/_size';
-import {getStyleProps} from '../../style/style';
+import {
+    IStyleTransformerProps,
+    getStyleProps,
+    styleTransformer,
+} from '../../style/style';
 import TouchableOpacity from '../view/TouchableOpacity';
 
 export declare type IconType =
@@ -47,7 +51,7 @@ export interface IIconProps
      * className for the TouchableOpacity component wrap outside of the icon,
      * only available when the onPress props has truthy value.
      */
-    classNameWrapper?: string;
+    classNameWrapper?: IStyleTransformerProps;
 }
 
 const Icon: React.FC<IIconProps> = ({
@@ -132,7 +136,9 @@ const Icon: React.FC<IIconProps> = ({
                 onPressOut={onPressOut as any}
                 onLongPress={onPressIn as any}
                 colorDarkMode="transparent"
-                className={`p-1 rounded-pill ${classNameWrapper}`}>
+                style={styleTransformer(
+                    `p-1 rounded-pill ${classNameWrapper}`,
+                )}>
                 {icon}
             </TouchableOpacity>
         );

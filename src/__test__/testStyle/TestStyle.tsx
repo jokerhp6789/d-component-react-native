@@ -5,6 +5,7 @@ import View from '../../component/view/View';
 import Text from '../../component/text/Text';
 import {map} from 'lodash';
 import {Switch} from 'react-native';
+import {styleTransformer} from '../../style/style';
 
 export interface ITestStyleProps {
     [key: string]: any;
@@ -27,7 +28,9 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
             <View className="justify-content-center align-center bg-[rgba(12,12,12,0.3)] max-width-[250] p-[30]">
                 <View className="width-[60] height-[60]  border-dashed border-primary my-3" />
                 <Text
-                    className="h5 label font-weight-bold border-[20] border-green"
+                    className={styleTransformer(
+                        'h5 label font-weight-bold border-[20] border-green',
+                    )}
                     style={{fontWeight: '800'}}>
                     width-50 height-50 border-dashed border-primary my-3
                     width-50 height-50 border-dashed border-primary my-3

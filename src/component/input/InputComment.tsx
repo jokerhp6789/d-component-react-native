@@ -1,5 +1,4 @@
 /** @format */
-import ClassNames from 'classnames';
 import _ from 'lodash';
 import React, {
     ElementRef,
@@ -15,13 +14,13 @@ import {
     KeyboardEvent,
     StyleProp,
     ViewStyle,
+    View,
 } from 'react-native';
 import useKeyboard, {IUseKeyboard} from '../../hooks/useKeyboard';
 import {styleTransformer} from '../../style/style';
 import Avatar, {IAvatarProps} from '../avatar/Avatar';
 import {IUserBasic} from '../avatar/AvatarName';
 import TouchableOpacity from '../view/TouchableOpacity';
-import View from '../view/View';
 import InputText, {IInputTextMethod, IInputTextProps} from './InputText';
 
 export interface IInputCommentProps {
@@ -69,11 +68,11 @@ const InputComment: React.ForwardRefRenderFunction<
     },
     ref,
 ) => {
-    const wrapperClass = ClassNames(
+    const wrapperClass = styleTransformer(
         'flex-1 flex-center-y p-2',
         classNameWrapper,
     );
-    const containerClass = ClassNames(
+    const containerClass = styleTransformer(
         'w-100 border-bottom shadow',
         {
             'position-absolute bottom-0': positon === 'bottom',
@@ -141,11 +140,7 @@ const InputComment: React.ForwardRefRenderFunction<
     };
 
     const content = (
-        <View
-            className={wrapperClass}
-            style={styleInputWrapper}
-            useLightColor
-            colorDarkMode="dark">
+        <View style={[wrapperClass, styleInputWrapper]}>
             {user && (
                 <TouchableOpacity
                     colorDarkMode="transparent"
@@ -176,12 +171,11 @@ const InputComment: React.ForwardRefRenderFunction<
     );
 
     if (useAnimation) {
-        const transformedStyles = styleTransformer(containerClass);
         return (
             <Animated.View
                 style={[
                     style,
-                    ...(transformedStyles || []),
+                    {...(containerClass || {})},
                     {transform: [{translateY: keyboardOffset}]},
                 ]}>
                 {content}
@@ -190,9 +184,7 @@ const InputComment: React.ForwardRefRenderFunction<
     }
 
     return (
-        <View
-            className={containerClass}
-            style={[style, {paddingBottom: bottomPadding}]}>
+        <View style={[style, containerClass, {paddingBottom: bottomPadding}]}>
             {content}
         </View>
     );

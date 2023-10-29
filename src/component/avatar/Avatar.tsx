@@ -2,7 +2,6 @@ import React from 'react';
 import {View} from 'react-native';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
-import {IButtonProps} from '../button/Button';
 import Image, {IImageProps} from '../image/Image';
 import Text from '../text/Text';
 

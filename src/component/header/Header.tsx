@@ -1,4 +1,3 @@
-import ClassNames from 'classnames';
 import React, {ReactNode, useContext} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 import StyleStateContext from '../../context/StyleContext';
@@ -11,6 +10,7 @@ import Icon, {IIconProps} from '../icon/Icon';
 import InputSearch, {IInputSearchProps} from '../input/InputSearch';
 import Text from '../text/Text';
 import View from '../view/View';
+import {styleTransformer} from '../../style/style';
 
 export interface IHeaderProps extends ThemeProps {
     title?: string;
@@ -79,7 +79,7 @@ const Header: React.FC<IHeaderProps> = ({
     const bgColor = isDarkMode
         ? getColorValue(colorDarkMode) || getColorValue(theme as any)
         : getColorValue(theme as any);
-    const wrapperClass = ClassNames(
+    const wrapperClass = styleTransformer(
         `flex-center-y px-2 bg-${theme}`,
         {
             'py-2': showSearch || size === 'medium',
@@ -88,11 +88,11 @@ const Header: React.FC<IHeaderProps> = ({
         },
         className,
     );
-    const titleClass = ClassNames(
+    const titleClass = styleTransformer(
         'flex-1 font-weight-bold text-center position-absolute left-40 right-40',
         {
-            'text-dark': theme && !isDark(bgColor),
-            'text-white': theme && isDark(bgColor),
+            'text-dark': !!theme && !isDark(bgColor),
+            'text-white': !!theme && isDark(bgColor),
             h5: size === 'small',
             h4: size === 'medium',
             h3: size === 'large',
@@ -100,8 +100,8 @@ const Header: React.FC<IHeaderProps> = ({
         classNameTitle,
     );
 
-    const leftClass = ClassNames('px-0', classNameLeft);
-    const rightClass = ClassNames('px-0', classNameRight);
+    const leftClass = styleTransformer('px-0', classNameLeft);
+    const rightClass = styleTransformer('px-0', classNameRight);
 
     const headerStyle: Array<any> = [];
 
@@ -109,7 +109,7 @@ const Header: React.FC<IHeaderProps> = ({
         headerStyle.push(style);
     }
 
-    const searchClass = ClassNames('flex-1 mx-3', classNameSearch);
+    const searchClass = styleTransformer('flex-1 mx-3', classNameSearch);
 
     const getTextColor = () => {
         if (!theme) {
@@ -134,7 +134,7 @@ const Header: React.FC<IHeaderProps> = ({
         if (leftText) {
             return (
                 <Button
-                    className={leftClass}
+                    style={leftClass}
                     height="auto"
                     variant="trans"
                     color={getTextColor()}
@@ -147,10 +147,13 @@ const Header: React.FC<IHeaderProps> = ({
         return (
             <Icon
                 color={getTextColor()}
-                className={leftClass}
                 onPress={onLeftPress}
                 // size={Platform.OS === 'android' ? 28 : undefined}
-                style={[{zIndex: 20, elevation: 10}, iconLeftProps?.style]}
+                style={[
+                    leftClass,
+                    {zIndex: 20, elevation: 10},
+                    iconLeftProps?.style,
+                ]}
                 name={leftIcon}
                 {...iconLeftProps}
             />
@@ -161,7 +164,7 @@ const Header: React.FC<IHeaderProps> = ({
         if (showSearch) {
             return (
                 <InputSearch
-                    className={searchClass}
+                    style={searchClass}
                     value={textSearch}
                     onChangeText={onChangeTextSearch}
                     {...inputSearchProps}
@@ -188,14 +191,15 @@ const Header: React.FC<IHeaderProps> = ({
             if (autoCenterCustomTitle) {
                 return typeof content === 'string' ? (
                     <Text
-                        style={{zIndex: 1, pointerEvents: 'none'}}
-                        className={titleClass}>
+                        style={[
+                            {zIndex: 1, pointerEvents: 'none'},
+                            titleClass,
+                        ]}>
                         {content}
                     </Text>
                 ) : (
                     <View
-                        style={{zIndex: 1, pointerEvents: 'none'}}
-                        className={titleClass}
+                        style={[{zIndex: 1, pointerEvents: 'none'}, titleClass]}
                         colorDarkMode="transparent">
                         {content}
                     </View>
@@ -207,12 +211,14 @@ const Header: React.FC<IHeaderProps> = ({
         if (title) {
             return (
                 <Text
-                    style={{
-                        zIndex: 1,
-                        elevation: 1,
-                        pointerEvents: 'none',
-                    }}
-                    className={titleClass}>
+                    style={[
+                        {
+                            zIndex: 1,
+                            elevation: 1,
+                            pointerEvents: 'none',
+                        },
+                        titleClass,
+                    ]}>
                     {title}
                 </Text>
             );
@@ -229,7 +235,7 @@ const Header: React.FC<IHeaderProps> = ({
         if (rightText) {
             return (
                 <Button
-                    className={rightClass}
+                    style={rightClass}
                     height="auto"
                     variant="trans"
                     color={getTextColor()}
@@ -242,7 +248,7 @@ const Header: React.FC<IHeaderProps> = ({
         return (
             <Icon
                 color={getTextColor()}
-                className={rightClass}
+                style={rightClass}
                 onPress={onRightPress}
                 name={rightIcon}
                 {...iconRightProps}
@@ -251,10 +257,7 @@ const Header: React.FC<IHeaderProps> = ({
     };
 
     return (
-        <View
-            className={wrapperClass}
-            style={headerStyle}
-            colorDarkMode={colorDarkMode}>
+        <View style={[headerStyle, wrapperClass]} colorDarkMode={colorDarkMode}>
             {(onLeftPress || customLeft) && renderLeft()}
             {renderTitle()}
             {renderCenter()}

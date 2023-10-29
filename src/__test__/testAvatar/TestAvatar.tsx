@@ -4,6 +4,7 @@ import View from '../../component/view/View';
 import images from '../testImage/Images';
 import AvatarName from '../../component/avatar/AvatarName';
 import ScrollView from '../../component/view/ScrollView';
+import {styleTransformer} from '../../style/style';
 
 export interface ITestAvatarProps {
     [key: string]: any;
@@ -17,7 +18,10 @@ const TestAvatar: React.FC<ITestAvatarProps> = ({id}) => {
                 <Avatar
                     text="T"
                     size="xx-small"
-                    className="my-2"
+                    className={styleTransformer('my-2 ml-3', {
+                        width: 100,
+                        'border-red': true,
+                    })}
                     showBorder
                     borderColor="blue"
                 />
