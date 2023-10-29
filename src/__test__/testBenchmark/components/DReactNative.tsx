@@ -2,16 +2,22 @@
 
 import {View} from 'react-native';
 import {styleTransformer} from '../../../style/style';
+import Text from '../../../component/text/Text';
 
 const DReactNative = () => {
     return (
         <View style={styleTransformer('flex-center-y')}>
-            {new Array(1000).fill(0).map((_, i) => (
-                <View
-                    key={i}
-                    style={styleTransformer('border-1 p-2 border-red')}
-                />
-            ))}
+            {new Array(1000).fill(0).map((_, i) => {
+                return (
+                    <View
+                        key={i}
+                        style={styleTransformer(
+                            'border-1 p-1 border-red w-[30] h-[30]',
+                        )}>
+                        <Text>{i}</Text>
+                    </View>
+                );
+            })}
         </View>
     );
     //   return (
