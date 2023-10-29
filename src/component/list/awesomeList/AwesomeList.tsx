@@ -225,7 +225,6 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
                 });
             })
             .catch((error: any) => {
-                console.log(error);
                 if (this._unmounted) return;
                 /**
                  * if the first loading

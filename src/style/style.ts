@@ -236,7 +236,6 @@ export const getSpecialStyle = (className: string) => {
         const stringArr = split(className, '-');
         let value = null;
         let styleKey: any = null;
-        console.log('GET IN SPECIAL BORDER PATTERN');
         if (stringArr?.length === 2) {
             value = stringArr[1];
             styleKey = stringArr[0];

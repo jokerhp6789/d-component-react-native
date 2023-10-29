@@ -12,8 +12,6 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
     const [selectValue, setSelectValue] = useState();
     const [singleValue, setSingleValue] = useState();
 
-    console.log("🚀 >>>>>> file: TestSelect.tsx:15 >>>>>> singleValue:", singleValue);
-
     return (
         <ScrollView className="py-0 w-100">
             <View className="flex-1 bg- h-100 w-100">
