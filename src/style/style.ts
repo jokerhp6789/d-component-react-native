@@ -36,7 +36,8 @@ export type IStyleTransformerProps =
     | ImageStyle
     | ViewStyle
     | TextStyle
-    | undefined;
+    | undefined
+    | Array<IStyleTransformerProps>;
 
 export const getStyleProps = (props: any, key?: string) => {
     const keyProps = key || 'className';
@@ -328,6 +329,13 @@ export const styleTransformer = (
             //     }
             // }
         }
+    } else if (Array.isArray(primaryStyle) && primaryStyle.length) {
+        primaryStyle.forEach(styleItem => {
+            const transStyleItem = styleTransformer(styleItem);
+            if (transStyleItem) {
+                styleProps.push(transStyleItem);
+            }
+        });
     } else if (typeof primaryStyle === 'object' && primaryStyle !== null) {
         for (const [key, value] of Object.entries(primaryStyle)) {
             if (typeof value === 'boolean') {
@@ -350,6 +358,16 @@ export const styleTransformer = (
                     if (conditionalStyle) {
                         styleProps.push(conditionalStyle);
                     }
+                } else if (
+                    Array.isArray(secondaryStyle) &&
+                    secondaryStyle.length
+                ) {
+                    secondaryStyle.forEach(styleItem => {
+                        const transStyleItem = styleTransformer(styleItem);
+                        if (transStyleItem) {
+                            styleProps.push(transStyleItem);
+                        }
+                    });
                 } else if (
                     typeof secondaryStyle === 'object' &&
                     secondaryStyle !== null

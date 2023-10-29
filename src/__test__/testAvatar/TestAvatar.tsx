@@ -25,7 +25,11 @@ const TestAvatar: React.FC<ITestAvatarProps> = ({id}) => {
                     showBorder
                     borderColor="blue"
                 />
-                <Avatar text="T" size="x-small" className="my-2" />
+                <Avatar
+                    text="T"
+                    size="x-small"
+                    className={['my-2', {'ml-3': true}]}
+                />
                 <Avatar text="T" size="small" className="my-2" />
                 <Avatar text="T" size="medium" className="my-2" />
                 <Avatar text="T" size="large" className="my-2" />
