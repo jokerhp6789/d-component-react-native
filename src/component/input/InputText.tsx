@@ -156,56 +156,83 @@ const InputText: React.ForwardRefRenderFunction<
     const {inputConfig} = Configs;
     const {colorSchema} = useContext(StyleStateContext);
     const inputRef = useRef<ElementRef<typeof RNTextInput>>(null);
+
+    const [focusing, setFocusing] = useState(false);
+    const {isKeyboardShow, heightKeyboard} = useKeyBoard(false);
+
     const {variant: variantConfig} = inputConfig || {};
     const isDarkMode = colorSchema === 'dark';
-    const [focusing, setFocusing] = useState(false);
     const variant: InputVariantType =
         variantProps || variantConfig || 'standard';
-
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
 
     const containerClass = styleTransformer(`w-100`, `${className}`);
-    const labelClass = styleTransformer(
-        `h4`,
-        {
-            'mb-1': hasBorder,
-            'font-weight-bold': focusing,
-        },
-        `${classNameLabel}`,
+    const labelClass = useMemo(
+        () =>
+            styleTransformer(
+                `h4`,
+                {
+                    'mb-1': hasBorder,
+                    'font-weight-bold': focusing,
+                },
+                `${classNameLabel}`,
+            ),
+        [hasBorder, focusing, classNameLabel],
     );
-    const wrapperClass = styleTransformer(
-        'flex-center-y justify-content-center',
-        {
-            border: hasBorder,
-            [`border-${color}`]: hasBorder,
-            'border-bottom-1': variant === 'standard',
-            'rounded-pill': variant === 'pill',
-            'rounded-1': variant === 'rounded',
-            [`border-${colorFocus}`]: focusing,
-            [`border-${colorDark}`]: focusing && isDarkMode && !!colorDark,
-            'border-error': !!error,
-            'px-1': variant === 'pill',
-        },
-        classNameWrapper,
+    const wrapperClass = useMemo(
+        () =>
+            styleTransformer(
+                'flex-center-y justify-content-center',
+                {
+                    border: hasBorder,
+                    [`border-${color}`]: hasBorder,
+                    'border-bottom-1': variant === 'standard',
+                    'rounded-pill': variant === 'pill',
+                    'rounded-1': variant === 'rounded',
+                    [`border-${colorFocus}`]: focusing,
+                    [`border-${colorDark}`]:
+                        focusing && isDarkMode && !!colorDark,
+                    'border-error': !!error,
+                    'px-1': variant === 'pill',
+                },
+                classNameWrapper,
+            ),
+        [
+            hasBorder,
+            variant,
+            focusing,
+            isDarkMode,
+            color,
+            colorDark,
+            colorFocus,
+            classNameWrapper,
+        ],
     );
-    const inputClass = styleTransformer(
-        'flex-1 h4 px-2',
-        {
-            'py-2': Platform.OS === 'android',
-        },
-        classNameInput,
+    const inputClass = useMemo(
+        () =>
+            styleTransformer(
+                'flex-1 h4 px-2',
+                {
+                    'py-2': Platform.OS === 'android',
+                },
+                classNameInput,
+            ),
+        [classNameInput],
     );
 
-    const errorClass = styleTransformer(
-        'mt-1',
-        {
-            'px-2': variant === 'pill',
-        },
-        classNameError,
+    const errorClass = useMemo(
+        () =>
+            styleTransformer(
+                'mt-1',
+                {
+                    'px-2': variant === 'pill',
+                },
+                classNameError,
+            ),
+        [classNameError, variant],
     );
 
-    const {isKeyboardShow, heightKeyboard} = useKeyBoard(false);
     const bottomPadding = useMemo(() => {
         if (!useKeyboardAvoidingView || !focusing) {
             return undefined;
@@ -258,7 +285,7 @@ const InputText: React.ForwardRefRenderFunction<
             ]}
             colorDarkMode={colorDarkMode}
             useLightColor={useLightColor}>
-            {label && <Text style={labelClass}>{label}</Text>}
+            {label ? <Text style={labelClass}>{label}</Text> : null}
             <View style={wrapperClass}>
                 {prefixIcon && (
                     <Icon
@@ -287,6 +314,7 @@ const InputText: React.ForwardRefRenderFunction<
                 )}
                 {customPrefix({focusing, error})}
                 <RNTextInput
+                    ref={inputRef}
                     onFocus={e => {
                         onFocus && onFocus(e);
                         setFocusing(true);

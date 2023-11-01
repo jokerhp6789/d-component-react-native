@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {CheckBox, ScrollView} from '../..';
 import Avatar from '../../component/avatar/Avatar';
 import Icon from '../../component/icon/Icon';
@@ -13,6 +13,8 @@ export interface ITestItemsProps {
 }
 
 const TestItems: React.FC<ITestItemsProps> = ({id}) => {
+    const [checked, setChecked] = useState(false);
+
     const renderRow = (label: string, component: any) => {
         return (
             <View className="flex-center-y my-2">
@@ -107,7 +109,8 @@ const TestItems: React.FC<ITestItemsProps> = ({id}) => {
             {renderRow(
                 'Check Box',
                 <CheckBox
-                    checked
+                    checked={checked}
+                    onChange={() => setChecked(!checked)}
                     size={40}
                     iconSize={30}
                     classNameBox="rounded-1"
@@ -118,7 +121,8 @@ const TestItems: React.FC<ITestItemsProps> = ({id}) => {
                 <CheckBox
                     pressEnable={false}
                     disabled
-                    checked
+                    checked={checked}
+                    onChange={() => setChecked(!checked)}
                     variant="radio"
                 />,
             )}
