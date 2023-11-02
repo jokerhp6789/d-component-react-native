@@ -90,6 +90,12 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
                 useKeyboardAvoidingView
                 offsetSpaceKeyboard={50}
             />
+              <InputSearch
+                className="border-bottom px-3"
+                height={50}
+                iconName=""
+                prefixIcon="search"
+            />
             <InputDate
                 label="Date Input Default"
                 className="my-2"

@@ -1,20 +1,22 @@
-import ClassNames from 'classnames';
 import React, {
     ElementRef,
     forwardRef,
+    useCallback,
     useContext,
     useImperativeHandle,
+    useMemo,
     useRef,
 } from 'react';
-import {ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
+import {IStyleTransformerProps} from '../..';
 import StyleStateContext from '../../context/StyleContext';
 import Configs from '../../style/config/_config';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getThemeColor} from '../../style/modifier';
+import {styleTransformer} from '../../style/style';
 import TimeUtils from '../../utils/TimeUtils';
-import Icon from '../icon/Icon';
+import Icon, {IIconProps} from '../icon/Icon';
 import Text from '../text/Text';
-import View from '../view/View';
 import InputDate, {
     ICustomInputProps,
     IInputDateProps,
@@ -32,11 +34,19 @@ export interface IInputDateRangeProps
     onChange?: (props: IInputDateRangeProps['value']) => any;
     startText?: string;
     endText?: string;
-    classNameContent?: string;
-    styleContent?: ViewStyle;
+    classNameContent?: IStyleTransformerProps;
+    styleContent?: StyleProp<ViewStyle>;
     colorDarkMode?: ColorKeyType;
     colorDarkModeContent?: ColorKeyType;
-    customInput?: ((props: IRangeDateCustomInputProps) => Element) | Element;
+    middleIconProps?: Partial<IIconProps>;
+    customInput?:
+        | ((props: IRangeDateCustomInputProps) => React.ReactNode)
+        | React.ReactNode;
+    customMiddleIcon?:
+        | ((props: {color: ColorKeyType}) => React.ReactNode)
+        | React.ReactNode;
+    startInputProps?: Partial<IInputDateProps>;
+    endInputProps?: Partial<IInputDateProps>;
 }
 
 export interface IInputDateRangeMethod {}
@@ -62,24 +72,29 @@ const InputDateRange: React.ForwardRefRenderFunction<
         colorDarkMode = 'transparent',
         colorDarkModeContent = 'transparent',
         customInput,
+        customMiddleIcon,
         mode,
+        middleIconProps = {},
+        startInputProps = {},
+        endInputProps = {},
         ...rest
     },
     ref,
 ) => {
     const {colorSchema} = useContext(StyleStateContext);
-    const {inputConfig} = Configs;
+    const {inputConfig, generalConfig} = Configs;
+    const {autoSwitchColor} = generalConfig || {};
     const {variant: variantConfig} = inputConfig || {};
     const variant = variantProps || variantConfig || 'outline';
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
-    const labelClass = ClassNames(
+    const wrapperCLass = styleTransformer(className);
+    const labelClass = styleTransformer(
         `h4`,
         {'mb-1': hasBorder},
-        `${classNameLabel}`,
+        classNameLabel,
     );
-
-    const errorClass = ClassNames(
+    const errorClass = styleTransformer(
         'mt-1',
         {
             'px-2': variant === 'pill',
@@ -91,19 +106,47 @@ const InputDateRange: React.ForwardRefRenderFunction<
 
     useImperativeHandle(ref, () => ({}));
 
-    const handleChangeStartTime = (start: any) => {
-        const clone: any = [...(value || [])];
-        clone[0] = start;
-        if (
-            clone[1] &&
-            TimeUtils.convertDateTimeToMili(start) >
-                TimeUtils.convertDateTimeToMili(clone[1])
-        ) {
-            clone[1] = undefined;
+    const renderIcon = useMemo(() => {
+        const colorIcon =
+            value?.length === 0
+                ? 'gray'
+                : getThemeColor({
+                      colorScheme: colorSchema,
+                      autoSwitchColor,
+                  });
+        if (customMiddleIcon) {
+            return typeof customMiddleIcon === 'function'
+                ? customMiddleIcon({color: colorIcon})
+                : customMiddleIcon;
         }
-        onChange && onChange(clone);
-        endRef.current && endRef.current.open(getDateModalTypeFromMode(mode));
-    };
+
+        return (
+            <Icon
+                name="arrow-forward"
+                className="mx-2"
+                color={colorIcon}
+                {...middleIconProps}
+            />
+        );
+    }, [customMiddleIcon, value, colorSchema, autoSwitchColor]);
+
+    const handleChangeStartTime = useCallback(
+        (start: any) => {
+            const clone: any = [...(value || [])];
+            clone[0] = start;
+            if (
+                clone[1] &&
+                TimeUtils.convertDateTimeToMili(start) >
+                    TimeUtils.convertDateTimeToMili(clone[1])
+            ) {
+                clone[1] = undefined;
+            }
+            onChange && onChange(clone);
+            endRef.current &&
+                endRef.current.open(getDateModalTypeFromMode(mode));
+        },
+        [onChange, mode, value, endRef],
+    );
 
     const handleChangeEndTime = (end: any) => {
         const clone: any = [...(value || [])];
@@ -112,12 +155,13 @@ const InputDateRange: React.ForwardRefRenderFunction<
     };
 
     return (
-        <View className={className} style={style} colorDarkMode={colorDarkMode}>
-            {label && <Text className={labelClass}>{label}</Text>}
+        <View style={[wrapperCLass, style]}>
+            {label ? <Text className={labelClass}>{label}</Text> : null}
             <View
-                className={`flex-center-y ${classNameContent}`}
-                style={styleContent}
-                colorDarkMode={colorDarkModeContent}>
+                style={[
+                    styleTransformer('flex-center-y', classNameContent),
+                    styleContent,
+                ]}>
                 <InputDate
                     variant={variant}
                     className="flex-1"
@@ -139,16 +183,9 @@ const InputDateRange: React.ForwardRefRenderFunction<
                     onChange={v => handleChangeStartTime(v)}
                     maximumDate={value?.[1]}
                     value={value?.[0]}
+                    {...startInputProps}
                 />
-                <Icon
-                    name="arrow-forward"
-                    className="mx-2"
-                    color={
-                        value?.length === 0
-                            ? 'gray'
-                            : getThemeColor({colorScheme: colorSchema})
-                    }
-                />
+                {renderIcon}
                 <InputDate
                     variant={variant}
                     className="flex-1"
@@ -168,6 +205,7 @@ const InputDateRange: React.ForwardRefRenderFunction<
                     value={value?.[1]}
                     mode={mode}
                     minimumDate={value?.[0]}
+                    {...endInputProps}
                 />
             </View>
             {error && <InputErrorView error={error} className={errorClass} />}

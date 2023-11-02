@@ -1,20 +1,19 @@
-import ClassNames from 'classnames';
-import React, {useContext, useImperativeHandle, useMemo, useState} from 'react';
-import {ViewStyle} from 'react-native';
+import React, {ReactNode, useContext, useImperativeHandle, useMemo, useState} from 'react';
+import {TouchableOpacity, View, ViewStyle} from 'react-native';
 import DatePicker, {DatePickerProps} from 'react-native-date-picker';
+import {IStyleTransformerProps} from '../..';
 import StyleStateContext from '../../context/StyleContext';
 import Configs from '../../style/config/_config';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getThemeColor} from '../../style/modifier';
 import Sizes from '../../style/size/_size';
+import {styleTransformer} from '../../style/style';
 import TimeUtils from '../../utils/TimeUtils';
 import MonthYearModal, {
     IMonthYearModalProps,
 } from '../date-time/MonthYearModal';
 import Icon from '../icon/Icon';
 import Text from '../text/Text';
-import TouchableOpacity from '../view/TouchableOpacity';
-import View from '../view/View';
 import {InputErrorView, InputVariantType} from './InputText';
 
 export type TDateFormat =
@@ -39,10 +38,10 @@ export interface IInputDateProps
     value?: DatePickerProps['date'];
     format?: TDateFormat;
     label?: string;
-    classNameLabel?: string;
-    classNameText?: string;
-    className?: string;
-    classNameError?: string;
+    classNameLabel?: IStyleTransformerProps;
+    classNameText?: IStyleTransformerProps;
+    className?: IStyleTransformerProps;
+    classNameError?: IStyleTransformerProps;
     cancelText?: string;
     confirmText?: string;
     variant?: InputVariantType | 'icon';
@@ -52,8 +51,8 @@ export interface IInputDateProps
     showIcon?: boolean;
     iconName?: string;
     onChange?: DatePickerProps['onDateChange'];
-    customIcon?: ((value: any) => Element) | Element;
-    customInput?: ((props: ICustomInputProps) => Element) | Element;
+    customIcon?: ((value: any) => React.ReactNode) | ReactNode;
+    customInput?: ((props: ICustomInputProps) => ReactNode) | ReactNode;
     getValue?:
         | ((props: {
               value?: any;
@@ -122,40 +121,44 @@ const InputDate: React.ForwardRefRenderFunction<
     ref,
 ) => {
     const {colorSchema} = useContext(StyleStateContext) || {};
-    const {inputConfig} = Configs;
+    const {inputConfig, generalConfig} = Configs;
+    const {autoSwitchColor} = generalConfig || {};
     const {variant: variantConfig} = inputConfig || {};
     const variant = variantProps || variantConfig || 'standard';
 
     const isDarkMode = colorSchema === 'dark';
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
-    const wrapperClass = ClassNames(
+    const wrapperClass = styleTransformer(
         // { "width-40": variant === "icon" },
-        `${className}`,
+        className,
     );
-    const labelClass = ClassNames(
+    const labelClass = styleTransformer(
         `h4`,
         {'mb-1': hasBorder},
-        `${classNameLabel}`,
+        classNameLabel,
     );
-    const textClass = ClassNames(
+    const textClass = styleTransformer(
         'h4 flex-1',
         {
             'text-gray': !value || disabled,
         },
         classNameText,
     );
-    const contentClass = ClassNames('flex-center-y px-2', {
-        border: hasBorder,
+    const contentClass = styleTransformer('flex-center-y px-2', {
+        border: !!hasBorder,
         'border-bottom-1': variant === 'standard',
         'rounded-pill': variant === 'pill',
         'rounded-1': variant === 'rounded',
         'border-error': !!error,
-        [`bg-${disabledColor}`]: disabled && disabledColor,
-        [`border-${getThemeColor({colorScheme: colorSchema})}`]: !!value,
+        [`bg-${disabledColor}`]: !!disabled && !!disabledColor,
+        [`border-${getThemeColor({
+            colorScheme: colorSchema,
+            autoSwitchColor,
+        })}`]: !!value,
     });
 
-    const errorClass = ClassNames(
+    const errorClass = styleTransformer(
         'mt-1',
         {
             'px-2': variant === 'pill',
@@ -229,7 +232,7 @@ const InputDate: React.ForwardRefRenderFunction<
             return renderIcon();
         }
         return (
-            <View className={contentClass} style={{height}}>
+            <View style={[contentClass, {height}]}>
                 {typeof displayValue === 'string' ? (
                     <Text className={textClass}>{displayValue}</Text>
                 ) : (
@@ -241,12 +244,10 @@ const InputDate: React.ForwardRefRenderFunction<
     };
 
     return (
-        <View
-            className={wrapperClass}
-            colorDarkMode="transparent"
-            style={style}>
+        <View style={[style, wrapperClass]}>
             {label && <Text className={labelClass}>{label}</Text>}
             <TouchableOpacity
+                activeOpacity={0.85}
                 onPress={() => {
                     const type = getDateModalTypeFromMode(mode);
                     setOpenDateModal({
@@ -255,8 +256,7 @@ const InputDate: React.ForwardRefRenderFunction<
                         timeStamp: new Date().valueOf(),
                     });
                 }}
-                disabled={disabled}
-                colorDarkMode="transparent">
+                disabled={disabled}>
                 {renderContent()}
             </TouchableOpacity>
             {error && <InputErrorView error={error} className={errorClass} />}

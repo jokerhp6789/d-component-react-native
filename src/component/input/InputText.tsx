@@ -153,7 +153,7 @@ const InputText: React.ForwardRefRenderFunction<
     ref,
 ) => {
     const {light} = Colors;
-    const {inputConfig} = Configs;
+    const {inputConfig, generalConfig} = Configs;
     const {colorSchema} = useContext(StyleStateContext);
     const inputRef = useRef<ElementRef<typeof RNTextInput>>(null);
 
@@ -161,6 +161,7 @@ const InputText: React.ForwardRefRenderFunction<
     const {isKeyboardShow, heightKeyboard} = useKeyBoard(false);
 
     const {variant: variantConfig} = inputConfig || {};
+    const {autoSwitchColor} = generalConfig || {};
     const isDarkMode = colorSchema === 'dark';
     const variant: InputVariantType =
         variantProps || variantConfig || 'standard';
@@ -300,6 +301,7 @@ const InputText: React.ForwardRefRenderFunction<
                                           colorLightMode: colorFocus,
                                           colorDarkMode:
                                               colorDark || colorFocus,
+                                          autoSwitchColor,
                                       })
                                 : error
                                 ? 'error'

@@ -31,7 +31,7 @@ const PERCENTAGE_PATTERN = /^\d+(\.\d+)?%$/;
 
 export type IStyleTransformerProps =
     | string
-    | {[key: string]: boolean}
+    | {[key: string]: boolean | undefined | null}
     | FlexStyle
     | ImageStyle
     | ViewStyle
@@ -263,7 +263,9 @@ export const styleTransformer = (
     ...otherStyle: IStyleTransformerProps[]
 ) => {
     const styleProps: any[] = [];
-
+    if (!primaryStyle) {
+        return;
+    }
     if (typeof primaryStyle === 'string') {
         if (primaryStyle?.length > 1) {
             const cachedSets = StyleCache.getStyleSet(primaryStyle);

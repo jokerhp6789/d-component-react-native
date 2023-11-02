@@ -9,6 +9,7 @@ export interface IGetThemeColorProps {
     colorLightMode?: ColorKeyType;
     colorDarkMode?: ColorKeyType;
     colorScheme: ColorSchemeName;
+    autoSwitchColor?: boolean;
 }
 
 export const generateStyleValue = (
@@ -64,8 +65,9 @@ export const getThemeColor = ({
     colorDarkMode = 'white',
     colorLightMode = 'black',
     colorScheme,
+    autoSwitchColor,
 }: IGetThemeColorProps) => {
-    if (colorScheme === 'dark') {
+    if (colorScheme === 'dark' && autoSwitchColor) {
         return colorDarkMode;
     }
     return colorLightMode;
