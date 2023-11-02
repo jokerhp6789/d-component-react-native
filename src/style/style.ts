@@ -268,9 +268,6 @@ export const styleTransformer = (
     ...otherStyle: IStyleTransformerProps[]
 ) => {
     const styleProps: any[] = [];
-    if (!primaryStyle) {
-        return;
-    }
     if (typeof primaryStyle === 'string') {
         if (primaryStyle?.length > 1) {
             const cachedSets = StyleCache.getStyleSet(primaryStyle);

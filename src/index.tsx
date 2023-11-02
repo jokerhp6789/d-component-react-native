@@ -93,8 +93,8 @@ export {default as Header} from './component/header/Header';
 // Modal
 // ---------------------------------------- */
 
-export type {IModalProps, IModalTransProps} from './component/modal/Modal';
-export {default as Modal, ModalTrans} from './component/modal/Modal';
+export type {IModalProps} from './component/modal/Modal';
+export {default as Modal} from './component/modal/Modal';
 
 /* ----------------------------------------
 // Text

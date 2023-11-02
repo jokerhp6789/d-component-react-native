@@ -1,22 +1,27 @@
-import React, {useContext} from 'react';
-import {StyleSheet, ViewStyle} from 'react-native';
+import React, {ElementRef, useContext, useRef} from 'react';
+import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import {
     CalendarProps,
     Calendar as RNCalendar,
     LocaleConfig as RNLocaleConfig,
+    CalendarList,
+    CalendarListProps,
 } from 'react-native-calendars';
 import StyleStateContext from '../../context/StyleContext';
 import Colors from '../../style/color/_color';
-import {getStyleProps} from '../../style/style';
+import Sizes from '../../style/size/_size';
+import {getStyleProps, IStyleTransformerProps} from '../../style/style';
 import Icon from '../icon/Icon';
 
 //@ts-ignore
 export interface ICalendarProps extends CalendarProps {
     enableSwipeMonths?: boolean | undefined;
     markingType?: 'period' | 'dot' | 'multi-period' | 'custom';
-    style?: ViewStyle;
-    className?: string;
+    style?: StyleProp<ViewStyle>;
+    className?: IStyleTransformerProps;
     lightDarkMode?: boolean;
+    useCalendarList?: boolean;
+    calendarListProps?: Partial<CalendarListProps>;
 }
 
 const darkTheme = {
@@ -69,40 +74,58 @@ const lightTheme = {
 
 const Calendar: React.FC<ICalendarProps> = ({
     style,
-    enableSwipeMonths = true,
+    useCalendarList = false,
+    calendarListProps: calendarListFromProps = {},
     ...rest
 }) => {
     const {colorSchema} = useContext(StyleStateContext);
+    const listRef = useRef<ElementRef<typeof CalendarList>>(null);
     const isDarkMode = colorSchema === 'dark';
     const tranStyle = getStyleProps(rest);
-    return (
-        <RNCalendar
-            theme={isDarkMode ? {...darkTheme} : ({...lightTheme} as any)}
-            renderArrow={direction => {
-                if (direction === 'left') {
-                    return (
-                        <Icon
-                            name="keyboard-arrow-left"
-                            color={Colors.primary as any}
-                            colorDarkMode={Colors.light as any}
-                        />
-                    );
-                }
-                if (direction === 'right') {
-                    return (
-                        <Icon
-                            name="keyboard-arrow-right"
-                            color={Colors.primary as any}
-                            colorDarkMode={Colors.light as any}
-                        />
-                    );
-                }
-            }}
-            {...rest}
-            style={[styles.defaultStyle, tranStyle, style]}
-            enableSwipeMonths={enableSwipeMonths}
-        />
-    );
+    const calendarProps: ICalendarProps = {
+        theme: isDarkMode ? {...darkTheme} : ({...lightTheme} as any),
+        enableSwipeMonths: true,
+        ...rest,
+        style: [styles.defaultStyle, tranStyle, style],
+        renderArrow: direction => {
+            if (direction === 'left') {
+                return (
+                    <Icon
+                        name="keyboard-arrow-left"
+                        color={Colors.primary as any}
+                        colorDarkMode={Colors.light as any}
+                    />
+                );
+            }
+            if (direction === 'right') {
+                return (
+                    <Icon
+                        name="keyboard-arrow-right"
+                        color={Colors.primary as any}
+                        colorDarkMode={Colors.light as any}
+                    />
+                );
+            }
+        },
+    };
+    const calendarListProps: CalendarListProps = {
+        ...calendarProps,
+        ...calendarListFromProps,
+    };
+
+    if (useCalendarList) {
+        return (
+            <CalendarList
+                ref={listRef}
+                horizontal
+                pagingEnabled
+                {...calendarListProps}
+                enableSwipeMonths={rest?.enableSwipeMonths}
+            />
+        );
+    }
+
+    return <RNCalendar {...calendarProps} />;
 };
 
 export default Calendar;

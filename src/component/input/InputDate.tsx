@@ -1,4 +1,10 @@
-import React, {ReactNode, useContext, useImperativeHandle, useMemo, useState} from 'react';
+import React, {
+    ReactNode,
+    useContext,
+    useImperativeHandle,
+    useMemo,
+    useState,
+} from 'react';
 import {TouchableOpacity, View, ViewStyle} from 'react-native';
 import DatePicker, {DatePickerProps} from 'react-native-date-picker';
 import {IStyleTransformerProps} from '../..';
@@ -238,7 +244,7 @@ const InputDate: React.ForwardRefRenderFunction<
                 ) : (
                     displayValue
                 )}
-                {(showIcon || customIcon) && renderIcon()}
+                {showIcon || customIcon ? renderIcon() : null}
             </View>
         );
     };

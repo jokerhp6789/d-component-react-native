@@ -101,6 +101,8 @@ const Modal: React.FC<IModalProps> = ({
         },
         classNameModal,
     );
+
+    console.log("🚀 >>>>>> file: Modal.tsx:105 >>>>>> modalClass:", modalClass);
     const containerClass = styleTransformer(
         {'flex-1': size === 'fullscreen'},
         classNameContainer,
@@ -223,20 +225,3 @@ const Modal: React.FC<IModalProps> = ({
 };
 
 export default Modal;
-
-export interface IModalTransProps extends ModalProps {
-    className?: string;
-}
-
-export const ModalTrans: React.FC<IModalTransProps> = ({
-    children,
-    style,
-    ...rest
-}) => {
-    const transStyle = getStyleProps(rest);
-    return (
-        <RNModal style={[{marginBottom: 0}, transStyle, style]} {...rest}>
-            {children}
-        </RNModal>
-    );
-};
