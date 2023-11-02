@@ -238,6 +238,7 @@ const InputDate: React.ForwardRefRenderFunction<
             return renderIcon();
         }
         return (
+            //@ts-ignore
             <View style={[contentClass, {height}]}>
                 {typeof displayValue === 'string' ? (
                     <Text className={textClass}>{displayValue}</Text>
