@@ -24,7 +24,7 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
     }, [useSystemTheme]);
 
     return (
-        <ScrollView className="w-100 relative">
+        <ScrollView className="w-100 relative" overScrollMode="always">
             <View className="justify-content-center align-center bg-[rgba(12,12,12,0.3)] max-width-[250] p-[30]">
                 <View className="width-[60] height-[60]  border-dashed border-primary my-3" />
                 <Text
@@ -73,6 +73,13 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                 />
                 <Text>Use system theme</Text>
             </View>
+            <View className="mt-3 h-[200] border items-center justify-center">
+                <Text>Style Position Special Value</Text>
+                <View className="absolute border-2 border-green h-[20] w-[20] top-[-10] bg-red my-5" />
+                <View className="absolute border-2 border-green h-[20] w-[20] left-[-10]" />
+                <View className="absolute border-2 border-green h-[20] w-[20] right-[-10]" />
+                <View className="absolute border-2 border-green h-[20] w-[20] b-[-10]" />
+            </View>
             <View className="mt-3">
                 <Text>Text Style</Text>
                 <Text className="h0 mt-3 font-weight-bold">Text Style h0</Text>
@@ -82,6 +89,7 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                 <Text className="h4 mt-3">Text Style h4</Text>
                 <Text className="h5 mt-3">Text Style h5</Text>
             </View>
+
             <View className="h-[200]" />
         </ScrollView>
     );

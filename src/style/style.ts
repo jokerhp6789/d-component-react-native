@@ -26,7 +26,7 @@ const SPECIAL_PADDING_MARGIN_PATTERN =
     /^(p(x|y|l|t|r|b)?|g(x|y)?|m(x|y|l|t|r|b)?)-\[\d+\]$/;
 const SPECIAL_BORDER_PATTERN =
     /^border(?:-(?:right|r|left|l|top|t|bottom|b))?-\[\d+\]$/;
-const SPECIAL_POSITION_PATTERN = /^(r|t|l|b|top|left|right|bottom)-\[\d+\]$/;
+const SPECIAL_POSITION_PATTERN = /^(r|t|l|b|top|left|right|bottom)-\[-?\d+\]$/;
 const PERCENTAGE_PATTERN = /^\d+(\.\d+)?%$/;
 
 export type IStyleTransformerProps =
@@ -194,9 +194,14 @@ export const getSpecialStyle = (className: string) => {
         }
     }
     if (SPECIAL_POSITION_PATTERN.test(className)) {
-        const stringArr = split(className, '-');
+        let stringArr = split(className, '-');
         let value = null;
         let styleKey: any = null;
+        let isNegative = false;
+        if (stringArr?.length > 2) {
+            stringArr = split(className, '-[-');
+            isNegative = true;
+        }
         if (stringArr?.length === 2) {
             const key = stringArr?.[0];
             value = getValue(stringArr?.[1]);
@@ -229,7 +234,7 @@ export const getSpecialStyle = (className: string) => {
                 value = parseFloat(value);
             }
             if (typeof value === 'number') {
-                return {[styleKey]: value};
+                return isNegative ? {[styleKey]: -value} : {[styleKey]: value};
             }
         }
     }
