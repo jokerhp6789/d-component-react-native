@@ -10,7 +10,7 @@ import Icon, {IIconProps} from '../icon/Icon';
 import InputSearch, {IInputSearchProps} from '../input/InputSearch';
 import Text from '../text/Text';
 import View from '../view/View';
-import {styleTransformer} from '../../style/style';
+import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 
 export interface IHeaderProps extends ThemeProps {
     title?: string;
@@ -24,11 +24,11 @@ export interface IHeaderProps extends ThemeProps {
     rightIcon?: string;
     rightText?: string;
     theme?: ColorKeyType;
-    className?: string;
-    classNameTitle?: string;
-    classNameSearch?: string;
-    classNameRight?: string;
-    classNameLeft?: string;
+    className?: IStyleTransformerProps;
+    classNameTitle?: IStyleTransformerProps;
+    classNameSearch?: IStyleTransformerProps;
+    classNameRight?: IStyleTransformerProps;
+    classNameLeft?: IStyleTransformerProps;
     showSearch?: boolean;
     autoCenterCustomTitle?: boolean;
     size?: 'medium' | 'large' | 'small';

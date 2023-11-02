@@ -1,12 +1,11 @@
-import ClassNames from 'classnames';
 import React, {useContext, useMemo} from 'react';
-import {ViewStyle} from 'react-native';
+import {StyleProp, View, ViewStyle} from 'react-native';
 import StyleStateContext, {
     IStyleStateContext,
 } from '../../context/StyleContext';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getColorValue} from '../../style/modifier';
-import View from '../view/View';
+import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 
 export interface IProgressBarProps {
     variant?: 'line' | 'circel' | 'dashboard';
@@ -15,8 +14,8 @@ export interface IProgressBarProps {
     strokeColorDarkMode?: ColorKeyType;
     trailColor?: ColorKeyType;
     trailColorDarkMode?: ColorKeyType;
-    className?: string;
-    classNameStroke?: string;
+    className?: IStyleTransformerProps;
+    classNameStroke?: IStyleTransformerProps;
     style?: ViewStyle;
     percent?: number;
     showInfo?: boolean;
@@ -49,7 +48,7 @@ const ProgressBar: React.FC<IProgressBarProps> = ({
         ? getColorValue(strokeColorDarkMode) ||
           getColorValue(strokeColor as any)
         : getColorValue(strokeColor as any);
-    const wrapperClass = ClassNames(
+    const wrapperClass = styleTransformer(
         `flex-center-y`,
         {
             'rounded-2': rounded,
@@ -57,7 +56,7 @@ const ProgressBar: React.FC<IProgressBarProps> = ({
         className,
     );
 
-    const strokeClass = ClassNames(
+    const strokeClass = styleTransformer(
         ``,
         {
             'rounded-2': rounded,
@@ -84,17 +83,17 @@ const ProgressBar: React.FC<IProgressBarProps> = ({
         return percent * trailWidth;
     }, [percent, trailWidth]);
 
-    const wrapperStyle: ViewStyle[] = [
+    const wrapperStyle: StyleProp<ViewStyle> = [
         {backgroundColor: bgColor, width: trailWidth, height},
         style || {},
     ];
-    const strokeStyle: ViewStyle[] = [
+    const strokeStyle: StyleProp<ViewStyle> = [
         {width: strokeWidth, backgroundColor: lineColor, height},
     ];
 
     return (
-        <View className={wrapperClass} style={wrapperStyle}>
-            <View style={strokeStyle} className={strokeClass} />
+        <View style={[wrapperClass, wrapperStyle]}>
+            <View style={[strokeClass, strokeStyle]} />
         </View>
     );
 };

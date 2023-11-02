@@ -1,14 +1,12 @@
-import ClassNames from 'classnames';
 import React from 'react';
+import {ScrollView, ScrollViewProps, View} from 'react-native';
 import RNModal, {ModalProps} from 'react-native-modal';
-import {Configs} from '../..';
+import {Configs, IStyleTransformerProps} from '../..';
 import {ThemeProps} from '../../interface/iTheme';
-import {getStyleProps} from '../../style/style';
+import {getStyleProps, styleTransformer} from '../../style/style';
 import Button, {IButtonProps} from '../button/Button';
 import Header, {IHeaderProps} from '../header/Header';
 import SafeAreaView from '../view/SafeAreaView';
-import ScrollView, {IScrollViewProps} from '../view/ScrollView';
-import View from '../view/View';
 
 export interface IModalProps
     extends Partial<ModalProps>,
@@ -17,11 +15,11 @@ export interface IModalProps
     open: boolean;
     size?: 'fullscreen' | 'large' | 'medium' | 'small';
     position?: 'bottom' | 'center' | 'top';
-    className?: string;
-    classNameModal?: string;
-    classNameContainer?: string;
-    classNameHeader?: string;
-    classNameFooter?: string;
+    className?: IStyleTransformerProps;
+    classNameModal?: IStyleTransformerProps;
+    classNameContainer?: IStyleTransformerProps;
+    classNameHeader?: IStyleTransformerProps;
+    classNameFooter?: IStyleTransformerProps;
     cancelText?: string;
     saveText?: string;
     showHeader?: boolean;
@@ -38,7 +36,7 @@ export interface IModalProps
     customFooter?: ((props?: any) => Element) | Element;
     cancelButtonProps?: IButtonProps;
     saveButtonProps?: IButtonProps;
-    scrollViewProps?: Partial<IScrollViewProps>;
+    scrollViewProps?: Partial<ScrollViewProps>;
     headerProps?: Partial<IHeaderProps>;
 }
 
@@ -55,6 +53,7 @@ const Modal: React.FC<IModalProps> = ({
     showSaveButton = true,
     swipeable = true,
     disabledSave,
+    style,
     className,
     classNameModal,
     classNameContainer,
@@ -90,7 +89,7 @@ const Modal: React.FC<IModalProps> = ({
     const {theme: themeConfig} = modalConfig || {};
     const theme = themeProps || themeConfig;
 
-    const modalClass = ClassNames(
+    const modalClass = styleTransformer(
         '',
         {
             'm-0': size === 'fullscreen',
@@ -102,13 +101,13 @@ const Modal: React.FC<IModalProps> = ({
         },
         classNameModal,
     );
-    const containerClass = ClassNames(
+    const containerClass = styleTransformer(
         {'flex-1': size === 'fullscreen'},
         classNameContainer,
     );
-    const contentClass = ClassNames('px-3 py-2', className);
-    const headerClass = ClassNames('', classNameHeader);
-    const footerClass = ClassNames(
+    const contentClass = styleTransformer('px-3 py-2', className);
+    const headerClass = styleTransformer('', classNameHeader);
+    const footerClass = styleTransformer(
         'flex-center-y justify-content-between px-3 py-2',
         {
             'justify-content-end': !showCancelButton,
@@ -150,11 +149,11 @@ const Modal: React.FC<IModalProps> = ({
         if (useScrollView) {
             return (
                 <ScrollView bounces={false} {...scrollViewProps}>
-                    <View className={contentClass}>{children}</View>
+                    <View style={contentClass}>{children}</View>
                 </ScrollView>
             );
         }
-        return <View className={contentClass}>{children}</View>;
+        return <View style={contentClass}>{children}</View>;
     };
 
     const renderFooter = () => {
@@ -165,7 +164,7 @@ const Modal: React.FC<IModalProps> = ({
             return customFooter;
         }
         return (
-            <View className={footerClass}>
+            <View style={footerClass}>
                 {showCancelButton && (
                     <Button
                         onPress={onClose}
@@ -194,7 +193,7 @@ const Modal: React.FC<IModalProps> = ({
     };
 
     return (
-        <ModalTrans
+        <RNModal
             onSwipeMove={onClose}
             swipeDirection={
                 // eslint-disable-next-line no-nested-ternary
@@ -205,12 +204,12 @@ const Modal: React.FC<IModalProps> = ({
                     : undefined
             }
             {...(rest as any)}
+            style={[{marginBottom: 0}, modalClass, style]}
             isVisible={open}
             backdropTransitionInTiming={700}
             backdropTransitionOutTiming={300}
             onBackdropPress={handleBackDropPress}
-            hideModalContentWhileAnimating
-            className={modalClass}>
+            hideModalContentWhileAnimating>
             <SafeAreaView
                 className={containerClass}
                 useLightColor={useLightColor}
@@ -219,7 +218,7 @@ const Modal: React.FC<IModalProps> = ({
                 {renderMainView()}
                 {showFooter && renderFooter()}
             </SafeAreaView>
-        </ModalTrans>
+        </RNModal>
     );
 };
 
