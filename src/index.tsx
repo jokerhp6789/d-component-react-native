@@ -110,6 +110,9 @@ export {default as Text} from './component/text/Text';
 export type {IButtonProps} from './component/button/Button';
 export {default as Button} from './component/button/Button';
 
+export type {IButtonIconProps} from './component/button/ButtonIcon';
+export {default as ButtonIcon} from './component/button/ButtonIcon';
+
 /* ----------------------------------------
 // Select
 // ---------------------------------------- */
@@ -249,6 +252,9 @@ export {default as Badge} from './component/items/Badge';
 
 export type {IProgressBarProps} from './component/items/ProgressBar';
 export {default as ProgressBar} from './component/items/ProgressBar';
+
+export type {IDividerProps} from './component/items/Divider';
+export {default as Divider} from './component/items/Divider';
 
 /* ----------------------------------------
 // Form

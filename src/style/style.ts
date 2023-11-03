@@ -413,21 +413,12 @@ export const getStyleWithTheme = (
         colorDarkMode: colorDarkModeConfig,
     } = generalConfig || {};
     const tranStyle = getStyleProps(rest);
-    const useLightColor =
-        typeof useLightColorProps === 'boolean'
-            ? useLightColorProps
-            : useLightColorConfig;
     const colorDarkMode = colorDarkModeProps || colorDarkModeConfig;
     const autoSwitchColor =
         typeof autoSwitchColorProps === 'boolean'
             ? autoSwitchColorProps
             : !!autoSwitchColorConfig;
-    const backgroundColor =
-        isDarkMode && autoSwitchColor
-            ? colorDarkModeConfig || dark
-            : useLightColor
-            ? light
-            : undefined;
+    const backgroundColor = getThemeBackgroundColor(options);
     const listStyle: StyleProp<ViewStyle> = [];
     if (backgroundColor) {
         listStyle.push({backgroundColor});
@@ -438,9 +429,42 @@ export const getStyleWithTheme = (
     if (styleProps) {
         listStyle.push(styleProps);
     }
-    if (isDarkMode && colorDarkMode) {
+    if (isDarkMode && colorDarkMode && autoSwitchColor) {
         const backgroundColor = getColorValue(colorDarkMode || dark);
         listStyle.push({backgroundColor});
     }
     return listStyle;
+};
+
+export const getThemeBackgroundColor = (
+    options?: ThemeProps & {isDarkMode?: boolean},
+) => {
+    const {
+        colorDarkMode: colorDarkModeProps,
+        useLightColor: useLightColorProps,
+        autoSwitchColor: autoSwitchColorProps,
+        isDarkMode,
+    } = options || {};
+    const {generalConfig} = Configs;
+    const {
+        autoSwitchColor: autoSwitchColorConfig,
+        useLightColor: useLightColorConfig,
+        colorDarkMode: colorDarkModeConfig,
+    } = generalConfig || {};
+    const colorDarkMode = colorDarkModeProps || colorDarkModeConfig;
+    const autoSwitchColor =
+        typeof autoSwitchColorProps === 'boolean'
+            ? autoSwitchColorProps
+            : !!autoSwitchColorConfig;
+    const useLightColor =
+        typeof useLightColorProps === 'boolean'
+            ? useLightColorProps
+            : useLightColorConfig;
+    const backgroundColor =
+        isDarkMode && autoSwitchColor
+            ? getColorValue(colorDarkMode || dark)
+            : useLightColor
+            ? light
+            : undefined;
+    return backgroundColor;
 };

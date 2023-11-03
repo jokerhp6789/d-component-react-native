@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {FlatList} from 'react-native';
-import {Image} from '../..';
+import {Divider, Image} from '../..';
 import AwesomeList from '../../component/list/awesomeList/AwesomeList';
 import AwesomeListMode from '../../component/list/awesomeList/AwesomeListMode';
 import Text from '../../component/text/Text';
@@ -33,24 +33,30 @@ const ListFooterComponent: React.FC<IListFooterComponentProps> = ({
 };
 
 const TestList: React.FC<ITestListProps> = ({id}) => {
+    const renderItem = useCallback(({item, index}: any) => {
+        return (
+            <View className="py-3">
+                <Text>123</Text>
+            </View>
+        );
+    }, []);
+
     const renderList = () => {
         return (
             <AwesomeList
-                renderItem={({item}) => (
-                    <View>
-                        <Text>123</Text>
-                    </View>
-                )}
-                source={() => Promise.reject()}
-                transformer={res => []}
+                useFlashList
+                showsVerticalScrollIndicator={false}
+                renderItem={renderItem}
+                ItemSeparatorComponent={() => <Divider color="green" />}
+                source={() => Promise.resolve(new Array(1000).fill(0))}
+                transformer={res => res}
                 renderFooterComponent={({loading, emptyMode}) => {
                     return <ListFooterComponent />;
                 }}
-                style={{flex: 1, minWidth: '100%'}}
+                keyExtractor={(item, index) => `${index}`}
                 hideFooterInEmptyErrorMode
                 emptyViewStyle={{
                     paddingVertical: 100,
-                    backgroundColor: 'green',
                     width: '100%',
                     height: '100%',
                     // position:"relative"
@@ -59,7 +65,7 @@ const TestList: React.FC<ITestListProps> = ({id}) => {
         );
     };
 
-    return <View style={{flex: 1}}>{renderList()}</View>;
+    return <View style={{flex: 1, width: '100%'}}>{renderList()}</View>;
 };
 
 export default TestList;

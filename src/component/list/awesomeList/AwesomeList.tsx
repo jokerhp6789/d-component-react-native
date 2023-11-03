@@ -11,18 +11,25 @@ import {
     FlatListProps,
     SectionListProps,
     StyleProp,
-    RefreshControl,
+    View,
 } from 'react-native';
+import {FlashList, FlashListProps} from '@shopify/flash-list';
 import {ThemeProps} from '../../../interface/iTheme';
 import Text from '../../text/Text';
-import View from '../../view/View';
 import AwesomeListMode from './AwesomeListMode';
 import AwesomeListStyle from './AwesomeListStyle';
 import {isArray, isString} from './AwesomeListUtils';
 import EmptyView from './EmptyView';
 import PagingView from './PagingView';
+import {
+    getThemeBackgroundColor,
+    IStyleTransformerProps,
+    styleTransformer,
+} from '../../../style/style';
+import {Colors, Configs, IStyleStateContext, StyleContext} from '../../..';
 
 const DEFAULT_PAGE_SIZE = 20;
+const {dark, light} = Colors;
 
 export interface IPaginationProps {
     pageIndex: number;
@@ -44,7 +51,6 @@ export interface IAwesomeListProps<T>
     emptyViewStyle?: StyleProp<ViewStyle>;
     source: (props: IPaginationProps) => any;
     keyExtractor?: (props: any, index: number) => any;
-    renderSeparator?: () => SectionListProps<T>['ItemSeparatorComponent'];
     transformer?: (res: any) => any;
     isPaging?: boolean;
     isSectionList?: boolean;
@@ -52,11 +58,10 @@ export interface IAwesomeListProps<T>
     renderEmptyView?: (props?: any) => Element;
     renderErrorView?: (props?: any) => Element;
     renderProgress?: (props?: any) => Element;
-    listHeaderComponent?: FlatListProps<any>['ListHeaderComponent'];
     emptyText?: string;
     filterEmptyText?: string;
     pageSize?: number;
-    className?: string;
+    className?: IStyleTransformerProps;
     renderItem: SectionListProps<T>['renderItem'];
     renderFooterComponent?:
         | ((props: {loading: boolean; emptyMode?: AwesomeListMode}) => Element)
@@ -66,10 +71,14 @@ export interface IAwesomeListProps<T>
     hideFooterInEmptyErrorMode?: boolean;
     hideFooterInEmptyMode?: boolean;
     hideFooterInErrorMode?: boolean;
+
+    useFlashList?: boolean;
+    flashListProps?: FlashListProps<any>;
 }
 
 class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
-    static defaultProps = {
+    static contextType = StyleContext;
+    static defaultProps: IAwesomeListProps<any> = {
         keyExtractor: (item: any) => {
             if (item.id) {
                 return item.id;
@@ -79,29 +88,20 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
 
             console.log('You need to provide a key extractor');
         },
-        renderSeparator: () => <View />,
-        source: Promise.resolve([]),
+        source: () => Promise.resolve([]),
         transformer: (response: any) => {
             return response;
         },
-
+        renderItem: () => null,
         listStyle: AwesomeListStyle.listStyle,
-
         isPaging: false,
         isSectionList: false,
-
-        renderSectionHeader: null,
-        createSections: null,
-        renderEmptyView: null,
-        listHeaderComponent: null,
         emptyText: 'No result',
         filterEmptyText: 'No filter result',
-        renderErrorView: null,
-        renderProgress: null,
         numColumns: 1,
         pageSize: DEFAULT_PAGE_SIZE,
-
         hideFooterInEmptyErrorMode: true,
+        useFlashList: false,
     };
 
     DEFAULT_PAGING_DATA: {pageIndex: number; pageSize: any};
@@ -296,7 +296,7 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
     onEndReached() {
         if (
             this.noMoreData ||
-            !this.props.isPaging ||
+            !this?.props?.isPaging ||
             this.state.data.length === 0 ||
             this.state.pagingMode === AwesomeListMode.PROGRESS
         ) {
@@ -388,26 +388,19 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         }
         const title = props?.section?.title ?? 'N/A';
         return (
-            <View className="bg-primary p-2">
-                <Text color="white">{title}</Text>
+            <View style={styleTransformer('bg-primary p-2')}>
+                <Text color="green">{title}</Text>
             </View>
         );
     };
 
-    render() {
+    renderList = () => {
         const {
             listStyle,
-            style,
-            emptyViewStyle,
             keyExtractor,
             renderItem,
-            renderSeparator,
-            renderEmptyView,
-            listHeaderComponent,
             emptyText,
-            renderErrorView,
             renderProgress,
-            filterEmptyText,
             className,
             pageSize,
             createSections,
@@ -415,105 +408,175 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
             transformer,
             data,
             numColumns,
-            colorDarkMode,
-            useLightColor,
             renderFooterComponent,
             hideFooterInEmptyMode,
             hideFooterInErrorMode,
             hideFooterInEmptyErrorMode,
+            useFlashList,
+            flashListProps = {},
             ...rest
         } = this.props;
-
         const {emptyMode} = this.state;
+        if (this.isSectionsList()) {
+            return (
+                <SectionList
+                    style={[{flex: 1}, listStyle]}
+                    renderItem={renderItem}
+                    keyExtractor={(item, index) =>
+                        keyExtractor && keyExtractor(item, index)
+                    }
+                    stickySectionHeadersEnabled
+                    onRefresh={() => this.onRefresh()}
+                    refreshing={this.state.refreshing}
+                    renderSectionHeader={props =>
+                        this.renderSectionHeader(props)
+                    }
+                    {...rest}
+                    sections={this.state.sections}
+                />
+            );
+        }
+
+        if (useFlashList) {
+            return (
+                <FlashList
+                    style={[{flex: 1}, listStyle]}
+                    data={this.state.data}
+                    renderItem={renderItem as any}
+                    refreshing={this.state.refreshing}
+                    onRefresh={() => this.onRefresh()}
+                    onEndReached={this.onEndReached as any}
+                    ListFooterComponent={() => {
+                        if (
+                            hideFooterInEmptyMode &&
+                            emptyMode === AwesomeListMode.EMPTY
+                        ) {
+                            return null;
+                        }
+                        if (
+                            hideFooterInErrorMode &&
+                            emptyMode === AwesomeListMode.ERROR
+                        ) {
+                            return null;
+                        }
+                        if (
+                            hideFooterInEmptyErrorMode &&
+                            (emptyMode === AwesomeListMode.ERROR ||
+                                emptyMode === AwesomeListMode.EMPTY)
+                        ) {
+                            return null;
+                        }
+                        if (renderFooterComponent) {
+                            if (typeof renderFooterComponent === 'function') {
+                                return renderFooterComponent({
+                                    loading: this.state.refreshing,
+                                    emptyMode,
+                                }) as any;
+                            }
+                            return renderFooterComponent as any;
+                        }
+                        return (
+                            <PagingView
+                                mode={this.state.pagingMode}
+                                retry={() => this.onRetry()}
+                            />
+                        );
+                    }}
+                    onEndReachedThreshold={0.5}
+                    numColumns={numColumns}
+                    {...(rest || ({} as any))}
+                    {...(flashListProps || ({} as any))}
+                />
+            );
+        }
+
+        return (
+            <FlatList
+                style={[{flex: 1}, listStyle]}
+                data={this.state.data}
+                renderItem={renderItem as any}
+                keyExtractor={(item, index) =>
+                    keyExtractor && keyExtractor(item, index)
+                }
+                refreshing={this.state.refreshing}
+                onRefresh={() => this.onRefresh()}
+                onEndReached={() => this.onEndReached()}
+                ListFooterComponent={() => {
+                    if (
+                        hideFooterInEmptyMode &&
+                        emptyMode === AwesomeListMode.EMPTY
+                    ) {
+                        return null;
+                    }
+                    if (
+                        hideFooterInErrorMode &&
+                        emptyMode === AwesomeListMode.ERROR
+                    ) {
+                        return null;
+                    }
+                    if (
+                        hideFooterInEmptyErrorMode &&
+                        (emptyMode === AwesomeListMode.ERROR ||
+                            emptyMode === AwesomeListMode.EMPTY)
+                    ) {
+                        return null;
+                    }
+                    if (renderFooterComponent) {
+                        if (typeof renderFooterComponent === 'function') {
+                            return renderFooterComponent({
+                                loading: this.state.refreshing,
+                                emptyMode,
+                            }) as any;
+                        }
+                        return renderFooterComponent as any;
+                    }
+                    return (
+                        <PagingView
+                            mode={this.state.pagingMode}
+                            retry={() => this.onRetry()}
+                        />
+                    );
+                }}
+                onEndReachedThreshold={0.5}
+                numColumns={numColumns}
+                {...rest}
+            />
+        );
+    };
+
+    render() {
+        const {
+            style,
+            emptyViewStyle,
+            emptyText,
+            filterEmptyText,
+            className,
+            renderEmptyView,
+            renderErrorView,
+            renderProgress,
+            colorDarkMode,
+            useLightColor,
+            autoSwitchColor,
+        } = this.props;
+        const {emptyMode} = this.state;
+        const {colorSchema} = this.context as IStyleStateContext;
+        const isDarkMode = colorSchema === 'dark';
+        const backgroundColor = getThemeBackgroundColor({
+            isDarkMode,
+            colorDarkMode,
+            autoSwitchColor,
+            useLightColor,
+        });
 
         return (
             <View
-                className={className}
                 style={[
                     AwesomeListStyle.containerStyle,
-                    {minHeight: 100, minWidth: 100},
+                    {minHeight: 100, minWidth: 100, backgroundColor},
                     style,
-                ]}
-                colorDarkMode={colorDarkMode}
-                useLightColor={useLightColor}>
-                {this.isSectionsList() ? (
-                    <SectionList
-                        style={[{flex: 1}, listStyle]}
-                        renderItem={renderItem}
-                        keyExtractor={(item, index) =>
-                            keyExtractor && keyExtractor(item, index)
-                        }
-                        ItemSeparatorComponent={() =>
-                            renderSeparator && (renderSeparator() as any)
-                        }
-                        stickySectionHeadersEnabled
-                        onRefresh={() => this.onRefresh()}
-                        ListHeaderComponent={listHeaderComponent}
-                        refreshing={this.state.refreshing}
-                        renderSectionHeader={props =>
-                            this.renderSectionHeader(props)
-                        }
-                        {...rest}
-                        sections={this.state.sections}
-                    />
-                ) : (
-                    <FlatList
-                        style={[{flex: 1}, listStyle]}
-                        data={this.state.data}
-                        renderItem={renderItem as any}
-                        keyExtractor={(item, index) =>
-                            keyExtractor && keyExtractor(item, index)
-                        }
-                        ItemSeparatorComponent={() =>
-                            renderSeparator && (renderSeparator() as any)
-                        }
-                        refreshing={this.state.refreshing}
-                        onRefresh={() => this.onRefresh()}
-                        onEndReached={() => this.onEndReached()}
-                        ListFooterComponent={() => {
-                            if (
-                                hideFooterInEmptyMode &&
-                                emptyMode === AwesomeListMode.EMPTY
-                            ) {
-                                return null;
-                            }
-                            if (
-                                hideFooterInErrorMode &&
-                                emptyMode === AwesomeListMode.ERROR
-                            ) {
-                                return null;
-                            }
-                            if (
-                                hideFooterInEmptyErrorMode &&
-                                (emptyMode === AwesomeListMode.ERROR ||
-                                    emptyMode === AwesomeListMode.EMPTY)
-                            ) {
-                                return null;
-                            }
-                            if (renderFooterComponent) {
-                                if (
-                                    typeof renderFooterComponent === 'function'
-                                ) {
-                                    return renderFooterComponent({
-                                        loading: this.state.refreshing,
-                                        emptyMode,
-                                    }) as any;
-                                }
-                                return renderFooterComponent as any;
-                            }
-                            return (
-                                <PagingView
-                                    mode={this.state.pagingMode}
-                                    retry={() => this.onRetry()}
-                                />
-                            );
-                        }}
-                        onEndReachedThreshold={0.5}
-                        ListHeaderComponent={listHeaderComponent}
-                        numColumns={numColumns}
-                        {...rest}
-                    />
-                )}
+                    styleTransformer(className),
+                ]}>
+                {this.renderList()}
                 <EmptyView
                     style={emptyViewStyle}
                     mode={emptyMode}

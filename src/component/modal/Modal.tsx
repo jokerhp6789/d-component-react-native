@@ -102,7 +102,6 @@ const Modal: React.FC<IModalProps> = ({
         classNameModal,
     );
 
-    console.log("🚀 >>>>>> file: Modal.tsx:105 >>>>>> modalClass:", modalClass);
     const containerClass = styleTransformer(
         {'flex-1': size === 'fullscreen'},
         classNameContainer,

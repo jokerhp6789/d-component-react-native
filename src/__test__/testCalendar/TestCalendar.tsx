@@ -14,6 +14,7 @@ const TestCalendar: React.FC<ITestCalendarProps> = ({id}) => {
         <ScrollView className="my-4 w-100">
             <Calendar />
             <ModalCalendar
+                useCalendarList
                 open={openCalendarModal}
                 onClose={() => setOpenCalendarModal(false)}
             />
