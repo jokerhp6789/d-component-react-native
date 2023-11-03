@@ -6,7 +6,7 @@ export interface IGeneralStyleConfig extends ThemeProps {}
 
 export interface IDefaultStyleConfig {
     textConfig?: Pick<ITextProps, 'color' | 'colorDarkMode'>;
-    inputConfig?: Pick<IInputTextProps, 'variant'>;
+    inputConfig?: Pick<IInputTextProps, 'variant' | 'labelPosition'>;
     buttonConfig?: Pick<
         IButtonProps,
         | 'variant'

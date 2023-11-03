@@ -28,7 +28,6 @@ import Sizes from '../../style/size/_size';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Icon, {IIconProps} from '../icon/Icon';
 import Text from '../text/Text';
-import ViewD from '../view/View';
 import {View} from 'react-native';
 
 export type InputVariantType =
@@ -38,9 +37,12 @@ export type InputVariantType =
     | 'pill'
     | 'trans';
 
+export type InputLabelPositionType = 'inside' | 'outside';
+
 export interface IInputTextProps extends TextInputProps, ThemeProps {
     variant?: InputVariantType;
     label?: any;
+    labelPosition?: InputLabelPositionType;
     error?: any;
     height?: number;
     color?: ColorKeyType;
@@ -120,6 +122,7 @@ const InputText: React.ForwardRefRenderFunction<
         variant: variantProps,
         error,
         label,
+        labelPosition: labelPositionProp,
         height = Sizes.inputHeight,
         color = 'grey',
         colorFocus = Colors?.inputColorFocus ?? 'primary',
@@ -160,11 +163,17 @@ const InputText: React.ForwardRefRenderFunction<
     const [focusing, setFocusing] = useState(false);
     const {isKeyboardShow, heightKeyboard} = useKeyBoard(false);
 
-    const {variant: variantConfig} = inputConfig || {};
+    const {variant: variantConfig, labelPosition: labelPositionConfig} =
+        inputConfig || {};
     const {autoSwitchColor} = generalConfig || {};
     const isDarkMode = colorSchema === 'dark';
     const variant: InputVariantType =
         variantProps || variantConfig || 'standard';
+    const labelPosition: InputLabelPositionType =
+        labelPositionProp || labelPositionConfig || 'outside';
+    const isOutSideLabel = labelPosition === 'outside';
+    const isInSideLabel = labelPosition === 'inside';
+
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
 
@@ -174,24 +183,27 @@ const InputText: React.ForwardRefRenderFunction<
             styleTransformer(
                 `h4`,
                 {
-                    'mb-1': hasBorder,
+                    [`ml-2 mt-2 h5 text-${colorFocus}`]: isInSideLabel,
+                    'mb-1': hasBorder && !isInSideLabel,
                     'font-weight-bold': focusing,
                 },
                 `${classNameLabel}`,
             ),
-        [hasBorder, focusing, classNameLabel],
+        [hasBorder, focusing, isInSideLabel, classNameLabel],
     );
     const wrapperClass = useMemo(
         () =>
             styleTransformer(
-                'flex-center-y justify-content-center',
+                '',
                 {
                     border: hasBorder,
+                    'flex-center-y justify-content-center': isOutSideLabel,
                     [`border-${color}`]: hasBorder,
                     'border-bottom-1': variant === 'standard',
                     'rounded-pill': variant === 'pill',
                     'rounded-1': variant === 'rounded',
-                    [`border-${colorFocus}`]: focusing,
+                    [`border-${colorFocus}`]:
+                        focusing || (isInSideLabel && !!rest?.value),
                     [`border-${colorDark}`]:
                         focusing && isDarkMode && !!colorDark,
                     'border-error': !!error,
@@ -204,6 +216,8 @@ const InputText: React.ForwardRefRenderFunction<
             variant,
             focusing,
             isDarkMode,
+            isOutSideLabel,
+            isInSideLabel,
             color,
             colorDark,
             colorFocus,
@@ -221,7 +235,6 @@ const InputText: React.ForwardRefRenderFunction<
             ),
         [classNameInput],
     );
-
     const errorClass = useMemo(
         () =>
             styleTransformer(
@@ -253,29 +266,147 @@ const InputText: React.ForwardRefRenderFunction<
         focus: () => inputRef.current && inputRef?.current.focus?.(),
     }));
 
-    const customPrefix = (otherProps: any) => {
+    const getIconColor = () => {
+        return focusing
+            ? error
+                ? 'error'
+                : getThemeColor({
+                      colorScheme: colorSchema,
+                      colorLightMode: colorFocus,
+                      colorDarkMode: colorDark || colorFocus,
+                  })
+            : error
+            ? 'error'
+            : color;
+    };
+
+    const labelView = useMemo(() => {
+        return <Text style={labelClass}>{label}</Text>;
+    }, [label, labelClass]);
+
+    const prefixIconView = useMemo(() => {
+        const iconColor = getIconColor();
         if (renderPrefixIcon) {
             if (typeof renderPrefixIcon === 'function') {
-                return renderPrefixIcon({...(otherProps || {})});
+                return renderPrefixIcon({focusing, error, color: iconColor});
             }
             return renderPrefixIcon;
         }
-
+        if (prefixIcon) {
+            return (
+                <Icon
+                    name={prefixIcon}
+                    color={iconColor}
+                    type="material"
+                    size={iconSize}
+                    className={`ml-1 ${classNamePrefixIcon}`}
+                    onPress={onPressPrefixIcon}
+                    {...prefixIconProps}
+                />
+            );
+        }
         return null;
-    };
+    }, [
+        prefixIcon,
+        focusing,
+        color,
+        colorFocus,
+        colorDark,
+        error,
+        iconSize,
+        classNamePrefixIcon,
+        prefixIconProps,
+        onPressPrefixIcon,
+        renderPrefixIcon,
+    ]);
 
-    const customSuffix = (otherProps: any) => {
+    const suffixIconView = useMemo(() => {
+        const iconColor = getIconColor();
         if (renderSuffixIcon) {
             if (typeof renderSuffixIcon === 'function') {
-                return renderSuffixIcon({...(otherProps || {})});
+                return renderSuffixIcon({focusing, error, color: iconColor});
             }
             return renderSuffixIcon;
         }
+        if (iconName) {
+            return (
+                <Icon
+                    name={iconName}
+                    color={iconColor}
+                    type="material"
+                    size={iconSize}
+                    className={`mr-1 ${classNameIcon}`}
+                    onPress={onPressIcon}
+                    {...iconProps}
+                />
+            );
+        }
         return null;
-    };
+    }, [
+        iconName,
+        focusing,
+        color,
+        colorSchema,
+        colorFocus,
+        colorDark,
+        error,
+        iconSize,
+        classNameIcon,
+        prefixIconProps,
+        onPressIcon,
+        iconProps,
+    ]);
+
+    const inputView = useMemo(() => {
+        return (
+            <RNTextInput
+                ref={inputRef}
+                onFocus={e => {
+                    onFocus && onFocus(e);
+                    setFocusing(true);
+                }}
+                onBlur={e => {
+                    onBlur && onBlur(e);
+                    setFocusing(false);
+                }}
+                {...rest}
+                style={[
+                    inputClass,
+                    {
+                        height,
+                        color:
+                            isDarkMode && autoSwitchColor ? light : undefined,
+                    },
+                    styleInput,
+                ]}
+            />
+        );
+    }, [
+        inputClass,
+        isDarkMode,
+        autoSwitchColor,
+        inputClass,
+        styleInput,
+        rest,
+        onBlur,
+        onFocus,
+    ]);
+
+    const inputIcons = useMemo(() => {
+        if (isOutSideLabel) {
+            return null;
+        }
+        return (
+            <View style={styleTransformer('flex-center-y')}>
+                {prefixIconView}
+                {inputView}
+                {suffixIconView}
+            </View>
+        );
+    }, [labelPosition, prefixIconView, suffixIconView, inputView]);
 
     const content = (
-        <ViewD
+        <View
             key={label}
             style={[
                 containerClass,
@@ -283,86 +414,19 @@ const InputText: React.ForwardRefRenderFunction<
                     paddingBottom: bottomPadding,
                 },
                 style,
-            ]}
-            colorDarkMode={colorDarkMode}
-            useLightColor={useLightColor}>
-            {label ? <Text style={labelClass}>{label}</Text> : null}
+            ]}>
+            {label && isOutSideLabel ? labelView : null}
             <View style={wrapperClass}>
-                {prefixIcon && (
-                    <Icon
-                        name={prefixIcon}
-                        color={
-                            // eslint-disable-next-line no-nested-ternary
-                            focusing
-                                ? error
-                                    ? 'error'
-                                    : getThemeColor({
-                                          colorScheme: colorSchema,
-                                          colorLightMode: colorFocus,
-                                          colorDarkMode:
-                                              colorDark || colorFocus,
-                                          autoSwitchColor,
-                                      })
-                                : error
-                                ? 'error'
-                                : color
-                        }
-                        type="material"
-                        size={iconSize}
-                        className={`ml-1 ${classNamePrefixIcon}`}
-                        onPress={onPressPrefixIcon}
-                        {...prefixIconProps}
-                    />
-                )}
-                {customPrefix({focusing, error})}
-                <RNTextInput
-                    ref={inputRef}
-                    onFocus={e => {
-                        onFocus && onFocus(e);
-                        setFocusing(true);
-                    }}
-                    onBlur={e => {
-                        onBlur && onBlur(e);
-                        setFocusing(false);
-                    }}
-                    {...rest}
-                    style={[
-                        inputClass,
-                        {height, color: isDarkMode ? light : undefined},
-                        styleInput,
-                    ]}
-                />
-                {customSuffix({focusing, error})}
-                {iconName && (
-                    <Icon
-                        name={iconName}
-                        color={
-                            // eslint-disable-next-line no-nested-ternary
-                            focusing
-                                ? error
-                                    ? 'error'
-                                    : getThemeColor({
-                                          colorScheme: colorSchema,
-                                          colorLightMode: colorFocus,
-                                          colorDarkMode:
-                                              colorDark || colorFocus,
-                                      })
-                                : error
-                                ? 'error'
-                                : color
-                        }
-                        type="material"
-                        size={iconSize}
-                        className={`mr-1 ${classNameIcon}`}
-                        onPress={onPressIcon}
-                        {...iconProps}
-                    />
-                )}
+                {label && isInSideLabel && !!rest?.value ? labelView : null}
+                {isOutSideLabel ? prefixIconView : null}
+                {isOutSideLabel ? inputView : null}
+                {isOutSideLabel ? suffixIconView : null}
+                {inputIcons}
             </View>
             {!isEmpty(error) && typeof error === 'string' && (
                 <InputErrorView error={error} className={errorClass} />
             )}
-        </ViewD>
+        </View>
     );
 
     return content;

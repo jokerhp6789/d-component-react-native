@@ -59,6 +59,7 @@ const App = () => {
                 scrollEnabled
                 colorIndicator="pink"
                 colorActiveLabelText="pink"
+                style={{backgroundColor: AppColors.muted}}
                 renderLabelSuffix={({route}) => {
                     if (route.key === 'testInput') {
                         return <Badge size="xx-large" className="m ml-5" />;

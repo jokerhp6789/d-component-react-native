@@ -30,14 +30,18 @@ export interface IModalProps
     disabledSave?: boolean;
     swipeable?: boolean;
     closable?: boolean;
-    onClose?: (props?: any) => void;
-    onSave?: (props?: any) => void;
-    customHeader?: ((props?: any) => Element) | Element;
-    customFooter?: ((props?: any) => Element) | Element;
-    cancelButtonProps?: IButtonProps;
-    saveButtonProps?: IButtonProps;
+
+    cancelButtonProps?: Partial<IButtonProps>;
+    saveButtonProps?: Partial<IButtonProps>;
     scrollViewProps?: Partial<ScrollViewProps>;
     headerProps?: Partial<IHeaderProps>;
+
+    SafeAreaComponent?: React.Component;
+
+    onClose?: (props?: any) => void;
+    onSave?: (props?: any) => void;
+    customHeader?: ((props?: Partial<IHeaderProps>) => Element) | Element;
+    customFooter?: ((props?: any) => Element) | Element;
 }
 
 const Modal: React.FC<IModalProps> = ({
@@ -103,6 +107,7 @@ const Modal: React.FC<IModalProps> = ({
     );
 
     const containerClass = styleTransformer(
+        '',
         {'flex-1': size === 'fullscreen'},
         classNameContainer,
     );
@@ -117,33 +122,32 @@ const Modal: React.FC<IModalProps> = ({
     );
 
     const renderHeader = () => {
+        const presetHeaderProps: IHeaderProps = {
+            title,
+            className: headerClass,
+            onRightPress,
+            onLeftPress: () => {
+                if (onLeftPress) {
+                    return onLeftPress();
+                }
+                onClose && onClose();
+            },
+            leftIcon,
+            rightIcon,
+            leftText,
+            rightText,
+            theme,
+            customRight,
+            customLeft,
+            ...(headerProps || {}),
+        };
         if (customHeader) {
             if (typeof customHeader === 'function') {
-                return customHeader();
+                return customHeader(presetHeaderProps);
             }
             return customHeader;
         }
-        return (
-            <Header
-                title={title}
-                onLeftPress={() => {
-                    if (onLeftPress) {
-                        return onLeftPress();
-                    }
-                    onClose && onClose();
-                }}
-                onRightPress={onRightPress}
-                className={headerClass}
-                leftIcon={leftIcon}
-                rightIcon={rightIcon}
-                leftText={leftText}
-                rightText={rightText}
-                theme={theme}
-                customRight={customRight}
-                customLeft={customLeft}
-                {...headerProps}
-            />
-        );
+        return <Header {...presetHeaderProps} />;
     };
 
     const renderMainView = () => {
@@ -204,11 +208,11 @@ const Modal: React.FC<IModalProps> = ({
                     ? swipeDirection
                     : undefined
             }
+            backdropTransitionInTiming={700}
+            backdropTransitionOutTiming={300}
             {...(rest as any)}
             style={[{marginBottom: 0}, modalClass, style]}
             isVisible={open}
-            backdropTransitionInTiming={700}
-            backdropTransitionOutTiming={300}
             onBackdropPress={handleBackDropPress}
             hideModalContentWhileAnimating>
             <SafeAreaView

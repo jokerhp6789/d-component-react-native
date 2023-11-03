@@ -18,13 +18,16 @@ export interface ITestInputProps {
 const TestInput: React.FC<ITestInputProps> = ({id}) => {
     const dateRef = useRef<ElementRef<typeof DatePicker>>(null);
     const [openDateModal, setOpenDateModal] = useState(false);
+    const [inputTextValue, setInputTextValue] = useState('');
     const [date, setDate] = useState<any>();
     const [dateRange, setDateRange] = useState<any[]>([]);
     const inputDefault = useRef<ElementRef<typeof InputText>>(null);
     const keyboardInfo = useKeyboard(false);
 
     return (
-        <ScrollView className="w-100" showsVerticalScrollIndicator={false}>
+        <ScrollView
+            className="w-100 bg-muted"
+            showsVerticalScrollIndicator={false}>
             <Button
                 onPress={() => {
                     // inputDefault.current?.blur();
@@ -75,9 +78,21 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
                 variant="pill"
                 className="my-2"
                 label="Input Pill"
-                color="red"
                 placeholder="Input Pill"
                 onPressIcon={() => {}}
+            />
+
+            <InputText
+                variant="rounded"
+                labelPosition="inside"
+                className="my-2"
+                label="Input Label Inside"
+                placeholder="Input Label Inside"
+                color="red"
+                onPressIcon={() => {}}
+                value={inputTextValue}
+                onChangeText={setInputTextValue}
+                prefixIcon="search"
             />
 
             <InputSearch
@@ -90,7 +105,7 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
                 useKeyboardAvoidingView
                 offsetSpaceKeyboard={50}
             />
-              <InputSearch
+            <InputSearch
                 className="border-bottom px-3"
                 height={50}
                 iconName=""

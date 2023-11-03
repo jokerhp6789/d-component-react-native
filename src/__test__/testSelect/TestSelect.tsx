@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import Header from '../../component/header/Header';
 import Select from '../../component/select/Select';
 import ScrollView from '../../component/view/ScrollView';
 import View from '../../component/view/View';
@@ -29,6 +30,12 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     quickSelect
                     value={selectValue}
                     onChange={v => setSelectValue(v)}
+                    modalProps={{
+                        theme: 'primary',
+                        customHeader: props => (
+                            <Header {...props} title="Checking" />
+                        ),
+                    }}
                 />
                 <Select
                     showSearch

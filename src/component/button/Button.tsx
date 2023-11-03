@@ -26,8 +26,10 @@ export type ButtonSizeType =
     | 'medium'
     | 'small'
     | 'x-small'
+    | 'xx-small'
     | 'x-large'
-    | 'xx-large';
+    | 'xx-large'
+    | 'xxx-large';
 
 export interface IButtonProps
     extends TouchableOpacityProps,
@@ -143,6 +145,9 @@ const Button: React.FC<IButtonProps> = ({
     const buttonHeight = useMemo(() => {
         let result: number | string = 10;
         switch (size) {
+            case 'xxx-large':
+                result = defaultButtonHeight + 25;
+                break;
             case 'xx-large':
                 result = defaultButtonHeight + 15;
                 break;
@@ -160,6 +165,9 @@ const Button: React.FC<IButtonProps> = ({
                 break;
             case 'x-small':
                 result = defaultButtonHeight - 10;
+                break;
+            case 'xx-small':
+                result = defaultButtonHeight - 15;
                 break;
             default:
                 break;

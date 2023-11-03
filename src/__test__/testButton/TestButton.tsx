@@ -15,6 +15,20 @@ const TestButton: React.FC<ITestButtonProps> = ({id}) => {
     return (
         <ScrollView className="w-100">
             <Button
+                size="xxx-large"
+                className="my-2"
+                colorDarkMode="red"
+                style={styleTransformer(
+                    'bg-yellow',
+                    {
+                        'border-4 border-red': true,
+                    },
+                    {'bg-pink': true},
+                    'w-50',
+                )}>
+                Button XXX Large
+            </Button>
+            <Button
                 size="xx-large"
                 className="my-2"
                 colorDarkMode="red"

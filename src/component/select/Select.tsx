@@ -1,12 +1,17 @@
 import _, {filter, some} from 'lodash';
 import React, {ElementRef, useEffect, useMemo, useRef, useState} from 'react';
-import {Platform, TouchableOpacity, ViewStyle} from 'react-native';
-import Colors from '../../style/color/_color';
+import {
+    Platform,
+    StyleProp,
+    TouchableOpacity,
+    View,
+    ViewStyle,
+} from 'react-native';
 import Configs from '../../style/config/_config';
 import Sizes from '../../style/size/_size';
-import {styleTransformer} from '../../style/style';
+import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Button, {IButtonProps} from '../button/Button';
-import CheckBox from '../checkbox/CheckBox';
+import CheckBox, {ICheckBoxProps} from '../checkbox/CheckBox';
 import Icon from '../icon/Icon';
 import InputSearch, {IInputSearchProps} from '../input/InputSearch';
 import {InputErrorView, InputVariantType} from '../input/InputText';
@@ -15,9 +20,8 @@ import AwesomeList, {
     IAwesomeListProps,
     IPaginationProps,
 } from '../list/awesomeList/AwesomeList';
-import Modal from '../modal/Modal';
+import Modal, {IModalProps} from '../modal/Modal';
 import Text from '../text/Text';
-import {View} from 'react-native';
 
 export interface ISelectSourceProps extends IPaginationProps {
     search?: string;
@@ -38,14 +42,14 @@ export interface ISelectProps
     error?: any;
     height?: number;
     buttonSelectHeight?: number;
-    className?: string;
-    classNameLabel?: string;
-    classNameContent?: string;
-    classNameError?: string;
+    className?: IStyleTransformerProps;
+    classNameLabel?: IStyleTransformerProps;
+    classNameContent?: IStyleTransformerProps;
+    classNameError?: IStyleTransformerProps;
     iconName?: string;
-    style?: ViewStyle;
-    styleContent?: ViewStyle;
-    styleList?: ViewStyle;
+    style?: StyleProp<ViewStyle>;
+    styleContent?: StyleProp<ViewStyle>;
+    styleList?: StyleProp<ViewStyle>;
     // if valueType props === 'object' will be object for
     // single select and array of obj for multiple select
     // if valueType === string will be string for
@@ -70,6 +74,7 @@ export interface ISelectProps
     quickSelect?: boolean;
     quickRemove?: boolean;
     disabled?: boolean;
+    showClearButton?: boolean;
     // input search props.
     showSearch?: boolean;
     searchOffline?: boolean;
@@ -78,10 +83,12 @@ export interface ISelectProps
     dataSource?: Array<any>;
     valueType?: 'object' | 'string';
 
-    inputSearchProps?: IInputSearchProps;
+    inputSearchProps?: Partial<IInputSearchProps>;
     listProps?: Partial<IAwesomeListProps<any>>;
-    chipProps?: IChipProps;
-    buttonSelectProps?: IButtonProps;
+    chipProps?: Partial<IChipProps>;
+    buttonSelectProps?: Partial<IButtonProps>;
+    modalProps?: Partial<IModalProps>;
+    checkboxProps?: Partial<ICheckBoxProps>;
 }
 
 const Select: React.FC<ISelectProps> = ({
@@ -114,18 +121,20 @@ const Select: React.FC<ISelectProps> = ({
     quickSelect,
     quickRemove,
     isPaging,
+    showClearButton = true,
     showSearch,
     inputSearchProps = {},
     searchOffline = false,
     keySearchOffline = ['name'],
     listProps = {},
     chipProps = {},
+    modalProps = {},
     buttonSelectProps = {},
+    checkboxProps = {},
     dataSource = [],
     valueType = 'object',
 }) => {
     const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
-    const {light} = Colors;
     const {inputConfig} = Configs;
     const {variant: variantConfig} = inputConfig || {};
     const variant = variantProps || variantConfig || 'standard';
@@ -263,7 +272,7 @@ const Select: React.FC<ISelectProps> = ({
         return data;
     };
 
-    const renderContent = () => {
+    const renderContent = useMemo(() => {
         if (_.isEmpty(value)) {
             if (placeholder) {
                 return (
@@ -300,7 +309,15 @@ const Select: React.FC<ISelectProps> = ({
             ? getDisplayValue(value)
             : getLabelFromValue(value);
         return <Text className="flex-1 h4">{label}</Text>;
-    };
+    }, [
+        value,
+        placeholder,
+        multiple,
+        chipProps,
+        getDisplayValue,
+        getLabelFromValue,
+        onChange,
+    ]);
 
     const renderSelectItem = ({item, index}: any) => {
         const selected = checkSelectedItem(item);
@@ -318,16 +335,21 @@ const Select: React.FC<ISelectProps> = ({
 
         return (
             <TouchableOpacity
+                activeOpacity={0.85}
                 onPress={() => handleSelectItem(item, selected)}
                 style={selectItemClass}>
                 <View style={styleTransformer('flex-1')}>{content}</View>
-                <CheckBox checked={selected} pressEnable={false} />
+                <CheckBox
+                    checked={selected}
+                    pressEnable={false}
+                    {...(checkboxProps || {})}
+                />
             </TouchableOpacity>
         );
     };
 
     const renderClearButton = () => {
-        if (multiple && !_.isEmpty(selectingValue)) {
+        if (multiple && !_.isEmpty(selectingValue) && showClearButton) {
             return (
                 <View>
                     <Button
@@ -345,7 +367,7 @@ const Select: React.FC<ISelectProps> = ({
         return <View style={styleTransformer('width-[30]')} />;
     };
 
-    const renderList = () => {
+    const renderList = useMemo(() => {
         if (dataSource && dataSource?.length > 0) {
             return (
                 <AwesomeList
@@ -383,7 +405,7 @@ const Select: React.FC<ISelectProps> = ({
                 {...listProps}
             />
         );
-    };
+    }, [dataSource, listProps, renderSelectItem, keyExtractor]);
 
     return (
         <View style={[containerClass, style]}>
@@ -393,7 +415,7 @@ const Select: React.FC<ISelectProps> = ({
                 onPress={() => setOpenModal(true)}
                 disabled={disabled}
                 activeOpacity={0.5}>
-                {renderContent()}
+                {renderContent}
                 <Icon
                     name={iconName}
                     size={16}
@@ -413,7 +435,8 @@ const Select: React.FC<ISelectProps> = ({
                 customRight={renderClearButton() as any}
                 classNameHeader="border-bottom"
                 className="px-0"
-                swipeable={false}>
+                swipeable={false}
+                {...modalProps}>
                 <View style={styleTransformer('h-100 position-relative px-3')}>
                     {showSearch && (
                         <InputSearch
@@ -424,7 +447,7 @@ const Select: React.FC<ISelectProps> = ({
                             onChangeText={handleChangeTextSearch}
                         />
                     )}
-                    {renderList()}
+                    {renderList}
                 </View>
                 {!(quickSelect && !multiple) && (
                     <Button
