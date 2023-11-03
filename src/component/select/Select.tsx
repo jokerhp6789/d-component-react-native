@@ -1,5 +1,12 @@
 import _, {filter, some} from 'lodash';
-import React, {ElementRef, useEffect, useMemo, useRef, useState} from 'react';
+import React, {
+    ElementRef,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import {
     Platform,
     StyleProp,
@@ -12,9 +19,13 @@ import Sizes from '../../style/size/_size';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Button, {IButtonProps} from '../button/Button';
 import CheckBox, {ICheckBoxProps} from '../checkbox/CheckBox';
-import Icon from '../icon/Icon';
+import Icon, {IIconProps} from '../icon/Icon';
 import InputSearch, {IInputSearchProps} from '../input/InputSearch';
-import {InputErrorView, InputVariantType} from '../input/InputText';
+import {
+    InputErrorView,
+    InputLabelPositionType,
+    InputVariantType,
+} from '../input/InputText';
 import Chip, {IChipProps} from '../items/Chip';
 import AwesomeList, {
     IAwesomeListProps,
@@ -22,6 +33,7 @@ import AwesomeList, {
 } from '../list/awesomeList/AwesomeList';
 import Modal, {IModalProps} from '../modal/Modal';
 import Text from '../text/Text';
+import {ColorKeyType} from '../../style/constant/AppColors';
 
 export interface ISelectSourceProps extends IPaginationProps {
     search?: string;
@@ -36,9 +48,14 @@ export interface ISelectProps
     > {
     variant?: InputVariantType;
     label?: any;
+    labelPosition?: InputLabelPositionType;
     placeholder?: string;
     selectText?: string;
     clearText?: string;
+
+    color?: ColorKeyType;
+    colorFocus?: ColorKeyType;
+    colorDark?: ColorKeyType;
     error?: any;
     height?: number;
     buttonSelectHeight?: number;
@@ -86,6 +103,7 @@ export interface ISelectProps
     inputSearchProps?: Partial<IInputSearchProps>;
     listProps?: Partial<IAwesomeListProps<any>>;
     chipProps?: Partial<IChipProps>;
+    iconProps?: Partial<IIconProps>;
     buttonSelectProps?: Partial<IButtonProps>;
     modalProps?: Partial<IModalProps>;
     checkboxProps?: Partial<ICheckBoxProps>;
@@ -96,6 +114,7 @@ const Select: React.FC<ISelectProps> = ({
     buttonSelectHeight = Platform.OS === 'android' ? 110 : 85,
     height = Sizes.inputHeight,
     label,
+    labelPosition: labelPositionProp,
     disabled,
     selectText = 'Select',
     clearText = 'Clear',
@@ -104,6 +123,9 @@ const Select: React.FC<ISelectProps> = ({
     className,
     classNameLabel,
     classNameError,
+    color,
+    colorDark,
+    colorFocus = 'primary',
     style,
     styleContent,
     styleList,
@@ -128,6 +150,7 @@ const Select: React.FC<ISelectProps> = ({
     keySearchOffline = ['name'],
     listProps = {},
     chipProps = {},
+    iconProps = {},
     modalProps = {},
     buttonSelectProps = {},
     checkboxProps = {},
@@ -136,25 +159,32 @@ const Select: React.FC<ISelectProps> = ({
 }) => {
     const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
     const {inputConfig} = Configs;
-    const {variant: variantConfig} = inputConfig || {};
+    const {variant: variantConfig, labelPosition: labelPositionConfig} =
+        inputConfig || {};
     const variant = variantProps || variantConfig || 'standard';
-
+    const labelPosition: InputLabelPositionType =
+        labelPositionProp || labelPositionConfig || 'outside';
+    const isOutSideLabel = labelPosition === 'outside';
+    const isInSideLabel = labelPosition === 'inside';
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
     const containerClass = styleTransformer(`w-100`, className);
     const labelClass = styleTransformer(
         `h4`,
         {
-            'mb-1': hasBorder,
+            'mb-1': hasBorder && !isInSideLabel,
+            [`ml-2 mt-1 h5 text-${colorFocus}`]: isInSideLabel,
             //   "font-weight-bold": focusing,
         },
         `${classNameLabel}`,
     );
-    const contentClass = styleTransformer('flex-center-y pr-1 pl-2', {
+    const contentClass = styleTransformer('', {
         'border-bottom': variant === 'standard',
         'pl-1 py-1': !!multiple,
         border: hasBorder,
+        'flex-center-y pr-1 pl-2': isOutSideLabel,
         'rounded-1': variant === 'rounded',
+        [`border border-${colorFocus}`]: isInSideLabel && !!value?.length,
     });
     const errorClass = styleTransformer(
         'mt-1',
@@ -165,11 +195,11 @@ const Select: React.FC<ISelectProps> = ({
     );
 
     const inputHeight = useMemo(() => {
-        if (multiple && !_.isEmpty(value)) {
+        if ((multiple && !_.isEmpty(value)) || isInSideLabel) {
             return undefined;
         }
         return height;
-    }, [value, multiple, height]);
+    }, [value, multiple, height, isInSideLabel]);
 
     const [openModal, setOpenModal] = useState(false);
     const [textSearch, setTextSearch] = useState<string>();
@@ -272,6 +302,65 @@ const Select: React.FC<ISelectProps> = ({
         return data;
     };
 
+    const renderSelectItem = useCallback(
+        ({item, index}: any) => {
+            const selected = checkSelectedItem(item);
+            const selectItemClass = styleTransformer('flex-center-y py-3', {
+                'border-top': index !== 0,
+            });
+            let content: any = (
+                <View>
+                    <Text>{getLabel(item)}</Text>
+                </View>
+            );
+            if (customSelectItem) {
+                content = customSelectItem({item, index, selected});
+            }
+
+            return (
+                <TouchableOpacity
+                    activeOpacity={0.85}
+                    onPress={() => handleSelectItem(item, selected)}
+                    style={selectItemClass}>
+                    <View style={styleTransformer('flex-1')}>{content}</View>
+                    <CheckBox
+                        checked={selected}
+                        pressEnable={false}
+                        {...(checkboxProps || {})}
+                    />
+                </TouchableOpacity>
+            );
+        },
+        [handleSelectItem, checkSelectedItem, customSelectItem, checkboxProps],
+    );
+
+    const renderClearButton = useMemo(() => {
+        if (multiple && !_.isEmpty(selectingValue) && showClearButton) {
+            return (
+                <Button
+                    variant="trans"
+                    classNameLabel="h5"
+                    className="px-0 align-self-end"
+                    iconName="refresh"
+                    height={20}
+                    onPress={() => setSelectingValue([])}>
+                    {clearText}
+                </Button>
+            );
+        }
+        return <View style={styleTransformer('width-[30]')} />;
+    }, [
+        multiple,
+        selectingValue,
+        showClearButton,
+        clearText,
+        setSelectingValue,
+    ]);
+
+    const renderLabel = useMemo(() => {
+        return <Text style={labelClass}>{label}</Text>;
+    }, [label, labelClass]);
+
     const renderContent = useMemo(() => {
         if (_.isEmpty(value)) {
             if (placeholder) {
@@ -319,53 +408,68 @@ const Select: React.FC<ISelectProps> = ({
         onChange,
     ]);
 
-    const renderSelectItem = ({item, index}: any) => {
-        const selected = checkSelectedItem(item);
-        const selectItemClass = styleTransformer('flex-center-y py-3', {
-            'border-top': index !== 0,
-        });
-        let content: any = (
-            <View>
-                <Text>{getLabel(item)}</Text>
+    const renderIcon = useCallback(
+        (otherProps?: Partial<IIconProps>) => {
+            return (
+                <Icon
+                    name={iconName}
+                    size={16}
+                    color={!_.isEmpty(value) ? undefined : 'gray'}
+                    {...iconProps}
+                    {...(otherProps || {})}
+                />
+            );
+        },
+        [iconName, value, iconProps],
+    );
+
+    const contentIcons = useMemo(() => {
+        if (isOutSideLabel) {
+            return null;
+        }
+        return (
+            <View
+                style={styleTransformer('flex-center-y px-2', {
+                    height: multiple ? undefined : height,
+                    minHeight: multiple ? height : undefined,
+                })}>
+                {renderContent}
+                {!!value?.length ? null : renderIcon()}
             </View>
         );
-        if (customSelectItem) {
-            content = customSelectItem({item, index, selected});
-        }
+    }, [labelPosition, isOutSideLabel, renderContent, renderIcon]);
 
+    const renderInput = useMemo(() => {
         return (
             <TouchableOpacity
-                activeOpacity={0.85}
-                onPress={() => handleSelectItem(item, selected)}
-                style={selectItemClass}>
-                <View style={styleTransformer('flex-1')}>{content}</View>
-                <CheckBox
-                    checked={selected}
-                    pressEnable={false}
-                    {...(checkboxProps || {})}
-                />
+                style={[{height: inputHeight}, contentClass, styleContent]}
+                onPress={() => setOpenModal(true)}
+                disabled={disabled}
+                activeOpacity={0.5}>
+                {label && isInSideLabel && !!value?.length ? renderLabel : null}
+                {isOutSideLabel ? renderContent : null}
+                {isOutSideLabel ? renderIcon() : null}
+                {isInSideLabel && !!value?.length
+                    ? renderIcon({
+                          color: colorFocus,
+                          classNameWrapper: [
+                              'absolute right-0 top-5 bottom-5 justify-center ',
+                              {},
+                          ],
+                          onPress: () => {},
+                      })
+                    : null}
+                {contentIcons}
             </TouchableOpacity>
         );
-    };
-
-    const renderClearButton = () => {
-        if (multiple && !_.isEmpty(selectingValue) && showClearButton) {
-            return (
-                <View>
-                    <Button
-                        variant="trans"
-                        classNameLabel="h5"
-                        className="px-0 align-self-end"
-                        iconName="refresh"
-                        height={20}
-                        onPress={() => setSelectingValue([])}>
-                        {clearText}
-                    </Button>
-                </View>
-            );
-        }
-        return <View style={styleTransformer('width-[30]')} />;
-    };
+    }, [
+        inputHeight,
+        contentClass,
+        renderContent,
+        styleContent,
+        iconName,
+        value,
+    ]);
 
     const renderList = useMemo(() => {
         if (dataSource && dataSource?.length > 0) {
@@ -407,22 +511,8 @@ const Select: React.FC<ISelectProps> = ({
         );
     }, [dataSource, listProps, renderSelectItem, keyExtractor]);
 
-    return (
-        <View style={[containerClass, style]}>
-            {label && <Text style={labelClass}>{label}</Text>}
-            <TouchableOpacity
-                style={[{height: inputHeight}, contentClass, styleContent]}
-                onPress={() => setOpenModal(true)}
-                disabled={disabled}
-                activeOpacity={0.5}>
-                {renderContent}
-                <Icon
-                    name={iconName}
-                    size={16}
-                    color={!_.isEmpty(value) ? undefined : 'gray'}
-                />
-            </TouchableOpacity>
-            {error && <InputErrorView error={error} className={errorClass} />}
+    const renderModal = useMemo(() => {
+        return (
             <Modal
                 open={openModal}
                 onClose={() => {
@@ -432,17 +522,17 @@ const Select: React.FC<ISelectProps> = ({
                 showHeader
                 title={label}
                 leftIcon="close"
-                customRight={renderClearButton() as any}
+                customRight={renderClearButton}
                 classNameHeader="border-bottom"
                 className="px-0"
                 swipeable={false}
+                animationIn="slideInUp"
                 {...modalProps}>
                 <View style={styleTransformer('h-100 position-relative px-3')}>
                     {showSearch && (
                         <InputSearch
                             useLightColor
                             className="w-100 my-2"
-                            variant="outline"
                             {...inputSearchProps}
                             onChangeText={handleChangeTextSearch}
                         />
@@ -457,7 +547,7 @@ const Select: React.FC<ISelectProps> = ({
                         className="position-absolute bottom-0 w-100 left-0 right-0"
                         style={{zIndex: 10}}
                         height={buttonSelectHeight}
-                        onPress={() => handlePressSelect()}
+                        onPress={handlePressSelect}
                         styleLabel={
                             Platform.OS === 'android'
                                 ? {
@@ -474,6 +564,25 @@ const Select: React.FC<ISelectProps> = ({
                     </Button>
                 )}
             </Modal>
+        );
+    }, [
+        openModal,
+        modalProps,
+        showSearch,
+        quickSelect,
+        multiple,
+        buttonSelectProps,
+        inputSearchProps,
+        buttonSelectHeight,
+        handlePressSelect,
+    ]);
+
+    return (
+        <View style={[containerClass, style]}>
+            {label && isOutSideLabel ? renderLabel : null}
+            {renderInput}
+            {error && <InputErrorView error={error} className={errorClass} />}
+            {openModal ? renderModal : null}
         </View>
     );
 };

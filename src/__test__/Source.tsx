@@ -18,13 +18,13 @@ import TestTabStepper from './testTab/TestTabStepper';
 import TestView from './testView/TestView';
 
 const DATA_SOURCE: ITabViewProps['dataSource'] = [
-    {key: 'testBenchmarks', label: 'Benchmarks', component: <TestBenchmark />},
     {key: 'testStyle', label: 'Style', component: <TestStyle />},
-    {key: 'testItems', label: 'Items', component: <TestItems />},
     {key: 'testInput', label: 'Input', component: <TestInput />},
-    {key: 'testView', label: 'View', component: <TestView />},
     {key: 'testSelect', label: 'Select', component: <TestSelect />},
     {key: 'testButton', label: 'Button', component: <TestButton />},
+    {key: 'testBenchmarks', label: 'Benchmarks', component: <TestBenchmark />},
+    {key: 'testItems', label: 'Items', component: <TestItems />},
+    {key: 'testView', label: 'View', component: <TestView />},
     {key: 'testImage', label: 'Image', component: <TestImages />},
     {key: 'testAvatar', label: 'Avatar', component: <TestAvatar />},
     {key: 'testHeader', label: 'Header', component: <TestHeader />},

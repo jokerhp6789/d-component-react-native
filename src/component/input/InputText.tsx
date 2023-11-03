@@ -183,7 +183,7 @@ const InputText: React.ForwardRefRenderFunction<
             styleTransformer(
                 `h4`,
                 {
-                    [`ml-2 mt-2 h5 text-${colorFocus}`]: isInSideLabel,
+                    [`ml-2 mt-1 h5 text-${colorFocus}`]: isInSideLabel,
                     'mb-1': hasBorder && !isInSideLabel,
                     'font-weight-bold': focusing,
                 },

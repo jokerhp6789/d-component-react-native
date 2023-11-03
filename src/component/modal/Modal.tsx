@@ -197,6 +197,10 @@ const Modal: React.FC<IModalProps> = ({
         return onBackdropPress;
     };
 
+    if (!open) {
+        return null;
+    }
+
     return (
         <RNModal
             onSwipeMove={onClose}

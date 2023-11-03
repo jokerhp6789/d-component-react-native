@@ -68,6 +68,22 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     quickRemove
                     // quickSelect
                 />
+
+                <Select
+                    showSearch
+                    searchOffline
+                    labelPosition="inside"
+                    keySearchOffline={['label']}
+                    valueType="string"
+                    label="Select Label Inside"
+                    placeholder="Label Inside"
+                    className="my-2"
+                    dataSource={SELECT_DATA}
+                    getLabel={item => item?.label}
+                    quickSelect
+                    value={selectValue}
+                    onChange={v => setSelectValue(v)}
+                />
             </View>
         </ScrollView>
     );

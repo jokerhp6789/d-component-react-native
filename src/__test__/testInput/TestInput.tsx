@@ -237,7 +237,7 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
         mode="datetime"
         androidVariant="nativeAndroid"
       /> */}
-            <InputComment user={{avatar: '', name: 'Test'}} useAnimation />
+            {/* <InputComment user={{avatar: '', name: 'Test'}} useAnimation /> */}
         </ScrollView>
     );
 };

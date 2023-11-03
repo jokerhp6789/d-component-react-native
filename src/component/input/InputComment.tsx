@@ -22,8 +22,9 @@ import Avatar, {IAvatarProps} from '../avatar/Avatar';
 import {IUserBasic} from '../avatar/AvatarName';
 import TouchableOpacity from '../view/TouchableOpacity';
 import InputText, {IInputTextMethod, IInputTextProps} from './InputText';
+import {ThemeProps} from '../../interface/iTheme';
 
-export interface IInputCommentProps {
+export interface IInputCommentProps extends ThemeProps {
     user?: IUserBasic;
     className?: string;
     classNameInputWrapper?: string;
@@ -73,13 +74,12 @@ const InputComment: React.ForwardRefRenderFunction<
         classNameWrapper,
     );
     const containerClass = styleTransformer(
-        'w-100 border-bottom shadow',
+        'w-100 border-bottom shadow bg-white',
         {
-            'position-absolute bottom-0': positon === 'bottom',
+            'absolute bottom-0': positon === 'bottom',
         },
         className,
     );
-
     const useKeyboardState = useKeyboard(
         false,
         useAnimation

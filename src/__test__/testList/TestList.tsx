@@ -44,7 +44,7 @@ const TestList: React.FC<ITestListProps> = ({id}) => {
     const renderList = () => {
         return (
             <AwesomeList
-                useFlashList
+                // useFlashList
                 showsVerticalScrollIndicator={false}
                 renderItem={renderItem}
                 ItemSeparatorComponent={() => <Divider color="green" />}
@@ -61,6 +61,7 @@ const TestList: React.FC<ITestListProps> = ({id}) => {
                     height: '100%',
                     // position:"relative"
                 }}
+                flashListProps={{estimatedItemSize: 50}}
             />
         );
     };

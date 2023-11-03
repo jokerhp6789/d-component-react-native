@@ -12,7 +12,7 @@ const DReactNative = () => {
                     <View
                         key={i}
                         style={styleTransformer(
-                            'border-1 p-1 border-red w-[30] h-[30]',
+                            'border-1 p-1 border-red w-[30] h-[30] justify-center items-center',
                         )}>
                         <Text>{i}</Text>
                     </View>

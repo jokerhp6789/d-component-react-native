@@ -4,10 +4,10 @@ import StyleStateContext, {
     IStyleStateContext,
 } from '../../context/StyleContext';
 import {ThemeProps} from '../../interface/iTheme';
-import {getStyleWithTheme} from '../../style/style';
+import {IStyleTransformerProps, getStyleWithTheme} from '../../style/style';
 
 export interface ISafeAreaViewProps extends ViewProps, ThemeProps {
-    className?: string;
+    className?: IStyleTransformerProps;
     children?: any;
 }
 

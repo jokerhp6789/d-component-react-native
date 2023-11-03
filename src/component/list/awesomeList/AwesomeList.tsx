@@ -14,7 +14,7 @@ import {
     View,
     ViewStyle,
 } from 'react-native';
-import StyleContext, { IStyleStateContext } from '../../../context/StyleContext';
+import StyleContext, {IStyleStateContext} from '../../../context/StyleContext';
 import {ThemeProps} from '../../../interface/iTheme';
 import {
     getThemeBackgroundColor,
@@ -72,7 +72,7 @@ export interface IAwesomeListProps<T>
     hideFooterInErrorMode?: boolean;
 
     useFlashList?: boolean;
-    flashListProps?: FlashListProps<any>;
+    flashListProps?: Partial<FlashListProps<any>>;
 }
 
 class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
@@ -293,12 +293,14 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
     }
 
     onEndReached() {
+        console.log('onEndReached');
         if (
             this.noMoreData ||
             !this?.props?.isPaging ||
             this.state.data.length === 0 ||
             this.state.pagingMode === AwesomeListMode.PROGRESS
         ) {
+            console.log('onEndReached return');
             return;
         }
 
@@ -393,6 +395,44 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         );
     };
 
+    renderFooterList = () => {
+        const {
+            renderFooterComponent,
+            hideFooterInEmptyMode,
+            hideFooterInErrorMode,
+            hideFooterInEmptyErrorMode,
+        } = this.props;
+        const {emptyMode} = this.state;
+        if (hideFooterInEmptyMode && emptyMode === AwesomeListMode.EMPTY) {
+            return null;
+        }
+        if (hideFooterInErrorMode && emptyMode === AwesomeListMode.ERROR) {
+            return null;
+        }
+        if (
+            hideFooterInEmptyErrorMode &&
+            (emptyMode === AwesomeListMode.ERROR ||
+                emptyMode === AwesomeListMode.EMPTY)
+        ) {
+            return null;
+        }
+        if (renderFooterComponent) {
+            if (typeof renderFooterComponent === 'function') {
+                return renderFooterComponent({
+                    loading: this.state.refreshing,
+                    emptyMode,
+                }) as any;
+            }
+            return renderFooterComponent as any;
+        }
+        return (
+            <PagingView
+                mode={this.state.pagingMode}
+                retry={() => this.onRetry()}
+            />
+        );
+    };
+
     renderList = () => {
         const {
             listStyle,
@@ -444,43 +484,9 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
                     renderItem={renderItem as any}
                     refreshing={this.state.refreshing}
                     onRefresh={() => this.onRefresh()}
-                    onEndReached={this.onEndReached as any}
-                    ListFooterComponent={() => {
-                        if (
-                            hideFooterInEmptyMode &&
-                            emptyMode === AwesomeListMode.EMPTY
-                        ) {
-                            return null;
-                        }
-                        if (
-                            hideFooterInErrorMode &&
-                            emptyMode === AwesomeListMode.ERROR
-                        ) {
-                            return null;
-                        }
-                        if (
-                            hideFooterInEmptyErrorMode &&
-                            (emptyMode === AwesomeListMode.ERROR ||
-                                emptyMode === AwesomeListMode.EMPTY)
-                        ) {
-                            return null;
-                        }
-                        if (renderFooterComponent) {
-                            if (typeof renderFooterComponent === 'function') {
-                                return renderFooterComponent({
-                                    loading: this.state.refreshing,
-                                    emptyMode,
-                                }) as any;
-                            }
-                            return renderFooterComponent as any;
-                        }
-                        return (
-                            <PagingView
-                                mode={this.state.pagingMode}
-                                retry={() => this.onRetry()}
-                            />
-                        );
-                    }}
+                    //@ts-ignore
+                    onEndReached={() => this.onEndReached() as any}
+                    ListFooterComponent={this.renderFooterList}
                     onEndReachedThreshold={0.5}
                     numColumns={numColumns}
                     {...(rest || ({} as any))}
@@ -500,42 +506,7 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
                 refreshing={this.state.refreshing}
                 onRefresh={() => this.onRefresh()}
                 onEndReached={() => this.onEndReached()}
-                ListFooterComponent={() => {
-                    if (
-                        hideFooterInEmptyMode &&
-                        emptyMode === AwesomeListMode.EMPTY
-                    ) {
-                        return null;
-                    }
-                    if (
-                        hideFooterInErrorMode &&
-                        emptyMode === AwesomeListMode.ERROR
-                    ) {
-                        return null;
-                    }
-                    if (
-                        hideFooterInEmptyErrorMode &&
-                        (emptyMode === AwesomeListMode.ERROR ||
-                            emptyMode === AwesomeListMode.EMPTY)
-                    ) {
-                        return null;
-                    }
-                    if (renderFooterComponent) {
-                        if (typeof renderFooterComponent === 'function') {
-                            return renderFooterComponent({
-                                loading: this.state.refreshing,
-                                emptyMode,
-                            }) as any;
-                        }
-                        return renderFooterComponent as any;
-                    }
-                    return (
-                        <PagingView
-                            mode={this.state.pagingMode}
-                            retry={() => this.onRetry()}
-                        />
-                    );
-                }}
+                ListFooterComponent={this.renderFooterList}
                 onEndReachedThreshold={0.5}
                 numColumns={numColumns}
                 {...rest}

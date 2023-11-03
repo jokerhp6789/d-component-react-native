@@ -95,7 +95,7 @@ const App = () => {
                 edges={['top']}>
                 <ProgressComponent ref={progressRef} />
                 {renderMainView()}
-                {/* <InputComment /> */}
+                {/* <InputComment user={{}} useAnimation /> */}
                 {/* <TestModal onPress={() => setOpenModal(true)} /> */}
                 <Modal
                     open={openModal}
