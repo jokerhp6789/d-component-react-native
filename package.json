@@ -1,6 +1,6 @@
 {
     "name": "d-component-react-native",
-    "version": "0.1.66",
+    "version": "0.1.67",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
     "files": [
