@@ -8,13 +8,13 @@ import {
     TextStyle,
     ViewStyle,
 } from 'react-native';
-import {Colors} from '..';
 import {ThemeProps} from '../interface/iTheme';
 import Configs from './config/_config';
 import {getColorValue} from './modifier';
 import {StyleMap} from './data/styleData';
 import Cache from './cache/cache';
 import {BORDER_WIDTH_VARIATIONS} from './theme/_border';
+import Colors from './color/_color';
 
 const StyleCache = new Cache();
 const {dark, light} = Colors;

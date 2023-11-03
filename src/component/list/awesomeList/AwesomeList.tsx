@@ -2,34 +2,33 @@
 /* eslint-disable react/sort-comp */
 /* eslint-disable nonblock-statement-body-position */
 /* eslint-disable no-underscore-dangle */
+import {FlashList, FlashListProps} from '@shopify/flash-list';
 import _ from 'lodash';
 import React, {Component} from 'react';
 import {
     FlatList,
-    SectionList,
-    ViewStyle,
     FlatListProps,
+    SectionList,
     SectionListProps,
     StyleProp,
     View,
+    ViewStyle,
 } from 'react-native';
-import {FlashList, FlashListProps} from '@shopify/flash-list';
+import StyleContext, { IStyleStateContext } from '../../../context/StyleContext';
 import {ThemeProps} from '../../../interface/iTheme';
+import {
+    getThemeBackgroundColor,
+    IStyleTransformerProps,
+    styleTransformer,
+} from '../../../style/style';
 import Text from '../../text/Text';
 import AwesomeListMode from './AwesomeListMode';
 import AwesomeListStyle from './AwesomeListStyle';
 import {isArray, isString} from './AwesomeListUtils';
 import EmptyView from './EmptyView';
 import PagingView from './PagingView';
-import {
-    getThemeBackgroundColor,
-    IStyleTransformerProps,
-    styleTransformer,
-} from '../../../style/style';
-import {Colors, Configs, IStyleStateContext, StyleContext} from '../../..';
 
 const DEFAULT_PAGE_SIZE = 20;
-const {dark, light} = Colors;
 
 export interface IPaginationProps {
     pageIndex: number;

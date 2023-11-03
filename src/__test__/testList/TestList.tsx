@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
-import {FlatList} from 'react-native';
-import {Divider, Image} from '../..';
+import Image from '../../component/image/Image';
+import Divider from '../../component/items/Divider';
 import AwesomeList from '../../component/list/awesomeList/AwesomeList';
 import AwesomeListMode from '../../component/list/awesomeList/AwesomeListMode';
 import Text from '../../component/text/Text';
