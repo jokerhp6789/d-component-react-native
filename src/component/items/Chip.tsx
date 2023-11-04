@@ -1,11 +1,11 @@
 import React, {useMemo} from 'react';
 import Text from '../text/Text';
-import View from '../view/View';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getColorValue} from '../../style/modifier';
 import {isDark} from '../../style/color/_color';
 import Icon from '../icon/Icon';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
+import { View } from 'react-native';
 
 export interface IChipProps {
     label?: string;

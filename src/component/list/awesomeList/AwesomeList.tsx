@@ -117,10 +117,10 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         super(props);
         this.state = {
             data: [],
-            refreshing: true,
+            sections: [],
+            refreshing: false,
             emptyMode: AwesomeListMode.PROGRESS,
             pagingMode: AwesomeListMode.HIDDEN,
-            sections: [],
         };
 
         this.DEFAULT_PAGING_DATA = {
@@ -293,14 +293,12 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
     }
 
     onEndReached() {
-        console.log('onEndReached');
         if (
             this.noMoreData ||
             !this?.props?.isPaging ||
             this.state.data.length === 0 ||
             this.state.pagingMode === AwesomeListMode.PROGRESS
         ) {
-            console.log('onEndReached return');
             return;
         }
 
@@ -315,7 +313,6 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
             (!this.state.data || this.state.data.length === 0) &&
             !this.originData
         ) {
-            console.log('Cannot apply filter case the data is empty');
             return;
         }
         if (!this.originData) {
@@ -360,7 +357,6 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
 
     removeFilter() {
         if (!this.originData) {
-            console.log('You have not apply any filter data');
             return;
         }
         let sections = [];
