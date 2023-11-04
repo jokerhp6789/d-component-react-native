@@ -72,7 +72,9 @@ export type {
     IPaginationProps,
 } from './component/list/awesomeList/AwesomeList';
 export {default as AwesomeList} from './component/list/awesomeList/AwesomeList';
+export type {default as AwesomeListModeType} from './component/list/awesomeList/AwesomeListMode';
 export {default as AwesomeListMode} from './component/list/awesomeList/AwesomeListMode';
+export type {IEmptyViewProps} from './component/list/awesomeList/EmptyView';
 export {default as EmptyView} from './component/list/awesomeList/EmptyView';
 export type {ISectionItem} from './component/list/awesomeList/AwesomeListUtils';
 export {
