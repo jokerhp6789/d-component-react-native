@@ -140,7 +140,7 @@ const Button: React.FC<IButtonProps> = ({
             return disableColorDarkMode;
         }
         return getColorValue(colorDarkMode);
-    }, [variant, color, isDarkMode, loading, disabled]);
+    }, [variant, color, isDarkMode, loading, disabled, colorDarkMode]);
 
     const buttonHeight = useMemo(() => {
         let result: number | string = 10;
@@ -292,7 +292,7 @@ const Button: React.FC<IButtonProps> = ({
 
     return (
         <TouchableOpacity
-            style={[buttonStyle, wrapperClass]}
+            style={[wrapperClass, buttonStyle]}
             disabled={disabled || loading}
             colorDarkMode={buttonDarkModeBg}
             activeOpacity={activeOpacity || 0.85}

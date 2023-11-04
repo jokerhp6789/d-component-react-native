@@ -400,7 +400,11 @@ export const getStyleWithTheme = (
     styleProps: any,
     options?: ThemeProps & {isDarkMode?: boolean},
 ): StyleProp<ViewStyle> => {
-    const {autoSwitchColor: autoSwitchColorProps} = options || {};
+    const {
+        autoSwitchColor: autoSwitchColorProps,
+        colorDarkMode: colorDarkModeProps,
+        isDarkMode,
+    } = options || {};
     const {generalConfig} = Configs;
     const {autoSwitchColor: autoSwitchColorConfig} = generalConfig || {};
     const tranStyle = getStyleProps(rest);
@@ -419,8 +423,8 @@ export const getStyleWithTheme = (
     if (styleProps) {
         listStyle.push(styleProps);
     }
-    if (backgroundColor && autoSwitchColor) {
-        listStyle.push({backgroundColor});
+    if (colorDarkModeProps && autoSwitchColor && isDarkMode) {
+        listStyle.push({backgroundColor: getColorValue(colorDarkModeProps)});
     }
     return listStyle?.length ? [StyleSheet.flatten(listStyle)] : [];
 };
