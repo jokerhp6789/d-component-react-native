@@ -83,6 +83,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     quickSelect
                     value={selectValue}
                     onChange={v => setSelectValue(v)}
+                    error="123"
                 />
             </View>
         </ScrollView>

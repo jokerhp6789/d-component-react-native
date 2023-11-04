@@ -542,8 +542,9 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
             <View
                 style={[
                     AwesomeListStyle.containerStyle,
-                    {minHeight: 100, minWidth: 100, backgroundColor},
+                    {minHeight: 100, minWidth: 100},
                     style,
+                    {backgroundColor},
                     styleTransformer(className),
                 ]}>
                 {this.renderList()}

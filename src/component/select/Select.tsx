@@ -34,6 +34,7 @@ import AwesomeList, {
 import Modal, {IModalProps} from '../modal/Modal';
 import Text from '../text/Text';
 import {ColorKeyType} from '../../style/constant/AppColors';
+import Colors from '../../style/color/_color';
 
 export interface ISelectSourceProps extends IPaginationProps {
     search?: string;
@@ -174,6 +175,7 @@ const Select: React.FC<ISelectProps> = ({
         {
             'mb-1': hasBorder && !isInSideLabel,
             [`ml-2 mt-1 h5 text-${colorFocus}`]: isInSideLabel,
+            'text-error': !!error,
             //   "font-weight-bold": focusing,
         },
         `${classNameLabel}`,
@@ -185,6 +187,7 @@ const Select: React.FC<ISelectProps> = ({
         'flex-center-y pr-1 pl-2': isOutSideLabel,
         'rounded-1': variant === 'rounded',
         [`border border-${colorFocus}`]: isInSideLabel && !!value?.length,
+        'border-error': !!error,
     });
     const errorClass = styleTransformer(
         'mt-1',
@@ -451,7 +454,7 @@ const Select: React.FC<ISelectProps> = ({
                 {isOutSideLabel ? renderIcon() : null}
                 {isInSideLabel && !!value?.length
                     ? renderIcon({
-                          color: colorFocus,
+                          color: !!error ? (Colors.error as any) : colorFocus,
                           classNameWrapper: [
                               'absolute right-0 top-5 bottom-5 justify-center ',
                               {},
@@ -526,9 +529,12 @@ const Select: React.FC<ISelectProps> = ({
                 classNameHeader="border-bottom"
                 className="px-0"
                 swipeable={false}
-                animationIn="slideInUp"
+                animationIn="slideInRight"
                 {...modalProps}>
-                <View style={styleTransformer('h-100 position-relative px-3')}>
+                <View
+                    style={styleTransformer(
+                        'h-100 position-relative px-3 pt-2',
+                    )}>
                     {showSearch && (
                         <InputSearch
                             useLightColor

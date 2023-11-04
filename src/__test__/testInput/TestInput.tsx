@@ -26,7 +26,7 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
 
     return (
         <ScrollView
-            className="w-100 bg-muted"
+            className="w-100 bg-muted mt-3"
             showsVerticalScrollIndicator={false}>
             <Button
                 onPress={() => {
@@ -225,6 +225,17 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
                 onPressIcon={() => {}}
                 useKeyboardAvoidingView
                 // error="123"
+            />
+            <InputText
+                labelPosition="inside"
+                variant="pill"
+                iconName="visibility"
+                className="my-2"
+                label="Input Pill"
+                placeholder="Input Pill"
+                onPressIcon={() => {}}
+                value={inputTextValue}
+                onChangeText={setInputTextValue}
             />
             {/* <DatePicker
         modal

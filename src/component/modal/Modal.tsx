@@ -111,7 +111,7 @@ const Modal: React.FC<IModalProps> = ({
         {'flex-1': size === 'fullscreen'},
         classNameContainer,
     );
-    const contentClass = styleTransformer('px-3 py-2', className);
+    const contentClass = styleTransformer('', className);
     const headerClass = styleTransformer('', classNameHeader);
     const footerClass = styleTransformer(
         'flex-center-y justify-content-between px-3 py-2',

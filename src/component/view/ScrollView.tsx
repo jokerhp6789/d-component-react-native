@@ -1,4 +1,4 @@
-import React, {forwardRef, useContext} from 'react';
+import React, {forwardRef, useContext, useMemo} from 'react';
 import {ScrollViewProps, ScrollView as ScrollViewRN} from 'react-native';
 import StyleStateContext, {
     IStyleStateContext,
@@ -20,11 +20,15 @@ const ScrollView: React.ForwardRefRenderFunction<
     const {colorSchema} =
         useContext<IStyleStateContext>(StyleStateContext) || {};
     const isDarkMode = colorSchema === 'dark';
-    const listStyle = getStyleWithTheme(rest, style, {
-        useLightColor,
-        colorDarkMode,
-        isDarkMode,
-    });
+    const listStyle = useMemo(
+        () =>
+            getStyleWithTheme(rest, style, {
+                useLightColor,
+                colorDarkMode,
+                isDarkMode,
+            }),
+        [rest?.className, style, useLightColor, colorDarkMode, isDarkMode],
+    );
     return (
         <ScrollViewRN {...rest} style={listStyle}>
             {children}

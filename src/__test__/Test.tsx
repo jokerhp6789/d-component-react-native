@@ -54,12 +54,12 @@ const App = () => {
                 variant="standard"
                 dataSource={DATA_SOURCE}
                 renderTabView={renderTabView}
-                className="px-3"
+                // className="px-3"
                 classNameLabel="flex-center-y"
                 scrollEnabled
                 colorIndicator="pink"
                 colorActiveLabelText="pink"
-                style={{backgroundColor: AppColors.muted}}
+                // style={{backgroundColor: AppColors.muted}}
                 renderLabelSuffix={({route}) => {
                     if (route.key === 'testInput') {
                         return <Badge size="xx-large" className="m ml-5" />;
@@ -75,8 +75,8 @@ const App = () => {
         tabIndex,
         jumpTo,
     }) => {
-        if (Math.abs(tabIndex - DATA_SOURCE.indexOf(route)) > 2) {
-            return <View />;
+        if (Math.abs(tabIndex - DATA_SOURCE.indexOf(route)) > 0) {
+            return <View className='' />;
         }
         const foundItem = DATA_SOURCE.find((i: any) => i?.key === route.key);
         return (foundItem && foundItem?.component) || <View />;
