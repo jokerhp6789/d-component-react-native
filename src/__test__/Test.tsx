@@ -54,12 +54,11 @@ const App = () => {
                 variant="standard"
                 dataSource={DATA_SOURCE}
                 renderTabView={renderTabView}
-                // className="px-3"
+                className="bg-muted"
                 classNameLabel="flex-center-y"
                 scrollEnabled
                 colorIndicator="pink"
                 colorActiveLabelText="pink"
-                // style={{backgroundColor: AppColors.muted}}
                 renderLabelSuffix={({route}) => {
                     if (route.key === 'testInput') {
                         return <Badge size="xx-large" className="m ml-5" />;

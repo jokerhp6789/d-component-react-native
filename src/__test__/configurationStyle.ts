@@ -59,4 +59,6 @@ Configs.loadConfigs({
     inputConfig: {variant: 'rounded'},
     buttonConfig: {shape: 'rounded', variant: 'outline'},
     generalConfig: {autoSwitchColor: true},
+    awesomeListConfig: {useFlashList: true},
+    selectConfig: {listProps: {useFlashList: false}},
 });

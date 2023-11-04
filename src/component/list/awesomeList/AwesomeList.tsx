@@ -477,7 +477,6 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         }
 
         if (useFlashList) {
-            console.log('use flash list');
             return (
                 <FlashList
                     style={[{flex: 1}, listStyle]}

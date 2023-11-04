@@ -24,6 +24,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     valueType="string"
                     label="Select"
                     placeholder="Placeholder"
+                    classNameContent="bg-light"
                     className="my-2"
                     dataSource={SELECT_DATA}
                     getLabel={item => item?.label}
@@ -66,12 +67,14 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     onChange={v => setSingleValue(v)}
                     multiple
                     quickRemove
+                    // listProps={{useFlashList: false}}
                     // quickSelect
                 />
 
                 <Select
                     showSearch
                     searchOffline
+                    classNameContent="bg-white"
                     labelPosition="inside"
                     keySearchOffline={['label']}
                     valueType="string"

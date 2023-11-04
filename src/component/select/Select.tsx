@@ -122,6 +122,7 @@ const Select: React.FC<ISelectProps> = ({
     placeholder,
     iconName = 'keyboard-arrow-right',
     className,
+    classNameContent,
     classNameLabel,
     classNameError,
     color,
@@ -159,9 +160,11 @@ const Select: React.FC<ISelectProps> = ({
     valueType = 'object',
 }) => {
     const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
-    const {inputConfig} = Configs;
+    const {inputConfig, selectConfig} = Configs;
     const {variant: variantConfig, labelPosition: labelPositionConfig} =
         inputConfig || {};
+    const {modalProps: modalPropsConfig, listProps: listPropsConfig} =
+        selectConfig || {};
     const variant = variantProps || variantConfig || 'standard';
     const labelPosition: InputLabelPositionType =
         labelPositionProp || labelPositionConfig || 'outside';
@@ -180,15 +183,19 @@ const Select: React.FC<ISelectProps> = ({
         },
         `${classNameLabel}`,
     );
-    const contentClass = styleTransformer('', {
-        'border-bottom': variant === 'standard',
-        'pl-1 py-1': !!multiple,
-        border: hasBorder,
-        'flex-center-y pr-1 pl-2': isOutSideLabel,
-        'rounded-1': variant === 'rounded',
-        [`border border-${colorFocus}`]: isInSideLabel && !!value?.length,
-        'border-error': !!error,
-    });
+    const contentClass = styleTransformer(
+        '',
+        {
+            'border-bottom': variant === 'standard',
+            'pl-1 py-1': !!multiple,
+            border: hasBorder,
+            'flex-center-y pr-1 pl-2': isOutSideLabel,
+            'rounded-1': variant === 'rounded',
+            [`border border-${colorFocus}`]: isInSideLabel && !!value?.length,
+            'border-error': !!error,
+        },
+        classNameContent,
+    );
     const errorClass = styleTransformer(
         'mt-1',
         {
@@ -334,7 +341,13 @@ const Select: React.FC<ISelectProps> = ({
                 </TouchableOpacity>
             );
         },
-        [handleSelectItem, checkSelectedItem, customSelectItem, checkboxProps],
+        [
+            handleSelectItem,
+            checkSelectedItem,
+            customSelectItem,
+            checkboxProps,
+            value,
+        ],
     );
 
     const renderClearButton = useMemo(() => {
@@ -475,25 +488,29 @@ const Select: React.FC<ISelectProps> = ({
     ]);
 
     const renderList = useMemo(() => {
+        const awesomeListProps: Partial<IAwesomeListProps<any>> = {
+            isPaging,
+            renderItem: renderSelectItem,
+            keyExtractor,
+            showsVerticalScrollIndicator: false,
+            ListFooterComponent: <View style={{height: 200}} />,
+            ...(listPropsConfig || {}),
+            ...(listProps || {}),
+        };
         if (dataSource && dataSource?.length > 0) {
             return (
                 <AwesomeList
+                    {...awesomeListProps}
                     ref={listRef}
-                    isPaging={isPaging}
                     source={() => Promise.resolve()}
                     transformer={res => getResultFromSearch(dataSource)}
-                    renderItem={renderSelectItem}
-                    keyExtractor={keyExtractor}
-                    ListFooterComponent={<View style={{height: 200}} />}
-                    showsVerticalScrollIndicator={false}
-                    {...listProps}
                 />
             );
         }
         return (
             <AwesomeList
+                {...awesomeListProps}
                 ref={listRef}
-                isPaging={isPaging}
                 source={paging => {
                     const payload: ISelectSourceProps = {...paging};
                     if (textSearch) {
@@ -505,14 +522,16 @@ const Select: React.FC<ISelectProps> = ({
                     const data = transformer && transformer(res);
                     return getResultFromSearch(data);
                 }}
-                renderItem={renderSelectItem}
-                keyExtractor={keyExtractor}
-                ListFooterComponent={<View style={{height: 200}} />}
-                showsVerticalScrollIndicator={false}
-                {...listProps}
             />
         );
-    }, [dataSource, listProps, renderSelectItem, keyExtractor]);
+    }, [
+        dataSource,
+        listProps,
+        listPropsConfig,
+        renderSelectItem,
+        keyExtractor,
+        value,
+    ]);
 
     const renderModal = useMemo(() => {
         return (
