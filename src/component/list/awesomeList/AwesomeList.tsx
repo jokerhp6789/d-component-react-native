@@ -27,6 +27,7 @@ import AwesomeListStyle from './AwesomeListStyle';
 import {isArray, isString} from './AwesomeListUtils';
 import EmptyView from './EmptyView';
 import PagingView from './PagingView';
+import Configs from '../../../style/config/_config';
 
 const DEFAULT_PAGE_SIZE = 20;
 
@@ -100,7 +101,6 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         numColumns: 1,
         pageSize: DEFAULT_PAGE_SIZE,
         hideFooterInEmptyErrorMode: true,
-        useFlashList: false,
     };
 
     DEFAULT_PAGING_DATA: {pageIndex: number; pageSize: any};
@@ -447,11 +447,15 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
             hideFooterInEmptyMode,
             hideFooterInErrorMode,
             hideFooterInEmptyErrorMode,
-            useFlashList,
+            useFlashList: useFlashListProps,
             flashListProps = {},
             ...rest
         } = this.props;
-        const {emptyMode} = this.state;
+        const {awesomeListConfig} = Configs;
+        const useFlashList =
+            typeof useFlashListProps === 'boolean'
+                ? useFlashListProps
+                : awesomeListConfig?.useFlashList;
         if (this.isSectionsList()) {
             return (
                 <SectionList
@@ -473,6 +477,7 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         }
 
         if (useFlashList) {
+            console.log('use flash list');
             return (
                 <FlashList
                     style={[{flex: 1}, listStyle]}

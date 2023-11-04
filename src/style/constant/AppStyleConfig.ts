@@ -1,5 +1,6 @@
 import {IButtonProps} from '../../component/button/Button';
 import {IInputTextProps} from '../../component/input/InputText';
+import {IAwesomeListProps} from '../../component/list/awesomeList/AwesomeList';
 import {IModalProps} from '../../component/modal/Modal';
 import {ISelectProps} from '../../component/select/Select';
 import {ITextProps} from '../../component/text/Text';
@@ -24,6 +25,7 @@ export interface IDefaultStyleConfig {
         | 'color'
     >;
     modalConfig?: Pick<IModalProps, 'theme'>;
+    awesomeListConfig?: Pick<IAwesomeListProps<any>, 'useFlashList'>;
     generalConfig?: IGeneralStyleConfig;
 }
 
