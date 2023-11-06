@@ -74,6 +74,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                 <Select
                     showSearch
                     searchOffline
+                    quickSelect
                     classNameContent="bg-white"
                     labelPosition="inside"
                     keySearchOffline={['label']}
@@ -83,7 +84,6 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     className="my-2"
                     dataSource={SELECT_DATA}
                     getLabel={item => item?.label}
-                    quickSelect
                     value={selectValue}
                     onChange={v => setSelectValue(v)}
                     error="123"
