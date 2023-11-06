@@ -452,7 +452,7 @@ const InputText: React.ForwardRefRenderFunction<
         <WrapperElement
             key={label}
             onPress={onPress}
-            activeOpacity={0.1}
+            activeOpacity={0.9}
             {...containerProps}
             style={[
                 containerClass,

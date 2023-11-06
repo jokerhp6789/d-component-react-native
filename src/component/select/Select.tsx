@@ -11,6 +11,7 @@ import {
     Platform,
     StyleProp,
     TouchableOpacity,
+    TouchableOpacityProps,
     View,
     ViewStyle,
 } from 'react-native';
@@ -74,6 +75,7 @@ export interface ISelectProps
     // single select and array of string for multiple select
     value?: any;
     source?: (props: ISelectSourceProps) => any;
+    onPress?: () => void;
     onChange?: (props: any) => any;
     getLabel?: (props: any) => any;
     getValue?: (props: any) => any;
@@ -108,6 +110,7 @@ export interface ISelectProps
     buttonSelectProps?: Partial<IButtonProps>;
     modalProps?: Partial<IModalProps>;
     checkboxProps?: Partial<ICheckBoxProps>;
+    containerProps?: Partial<TouchableOpacityProps>;
 }
 
 const Select: React.FC<ISelectProps> = ({
@@ -133,6 +136,7 @@ const Select: React.FC<ISelectProps> = ({
     styleList,
     value,
     onChange,
+    onPress,
     getLabel = item => item?.name,
     getValue = item => item?.id,
     getDisplayValue,
@@ -156,6 +160,7 @@ const Select: React.FC<ISelectProps> = ({
     modalProps = {},
     buttonSelectProps = {},
     checkboxProps = {},
+    containerProps = {},
     dataSource = [],
     valueType = 'object',
 }) => {
@@ -608,13 +613,27 @@ const Select: React.FC<ISelectProps> = ({
         handlePressSelect,
     ]);
 
+    const WrapperElement: typeof TouchableOpacity = onPress
+        ? TouchableOpacity
+        : (View as any);
+
     return (
-        <View style={[containerClass, style]}>
+        <WrapperElement
+            activeOpacity={0.9}
+            {...containerProps}
+            style={[
+                containerClass,
+                {
+                    pointerEvents: onPress ? 'box-only' : undefined,
+                },
+                style,
+            ]}
+            onPress={onPress}>
             {label && isOutSideLabel ? renderLabel : null}
             {renderInput}
             {error && <InputErrorView error={error} className={errorClass} />}
             {openModal ? renderModal : null}
-        </View>
+        </WrapperElement>
     );
 };
 
