@@ -16,6 +16,8 @@ import {
     TextInputProps,
     TextStyle,
     ViewStyle,
+    TouchableOpacity,
+    TouchableOpacityProps,
 } from 'react-native';
 import StyleStateContext from '../../context/StyleContext';
 import useKeyBoard from '../../hooks/useKeyboard';
@@ -64,6 +66,8 @@ export interface IInputTextProps extends TextInputProps, ThemeProps {
     offsetSpaceKeyboard?: number;
     iconProps?: Partial<IIconProps>;
     prefixIconProps?: Partial<IIconProps>;
+    containerProps?: Partial<TouchableOpacityProps>;
+    onPress?: () => any;
     onPressIcon?: (props?: any) => any;
     onPressPrefixIcon?: (props?: any) => any;
     renderPrefixIcon?:
@@ -141,6 +145,7 @@ const InputText: React.ForwardRefRenderFunction<
         iconSize = 20,
         onBlur,
         onFocus,
+        onPress,
         onPressIcon,
         onPressPrefixIcon,
         colorDarkMode,
@@ -149,6 +154,7 @@ const InputText: React.ForwardRefRenderFunction<
         offsetSpaceKeyboard,
         iconProps = {},
         prefixIconProps = {},
+        containerProps = {},
         renderPrefixIcon,
         renderSuffixIcon,
         ...rest
@@ -405,6 +411,23 @@ const InputText: React.ForwardRefRenderFunction<
         );
     }, [labelPosition, prefixIconView, suffixIconView, inputView]);
 
+    const mainView = (
+        <View style={wrapperClass}>
+            {label && isInSideLabel && !!rest?.value ? labelView : null}
+            {isOutSideLabel ? prefixIconView : null}
+            {isOutSideLabel ? inputView : null}
+            {isOutSideLabel ? suffixIconView : null}
+            {inputIcons}
+        </View>
+    );
+
+    const errorView = useMemo(() => {
+        if (isEmpty(error) || typeof error !== 'string') {
+            return null;
+        }
+        return <InputErrorView error={error} className={errorClass} />;
+    }, [error, errorClass]);
+
     const content = (
         <View
             key={label}
@@ -416,20 +439,34 @@ const InputText: React.ForwardRefRenderFunction<
                 style,
             ]}>
             {label && isOutSideLabel ? labelView : null}
-            <View style={wrapperClass}>
-                {label && isInSideLabel && !!rest?.value ? labelView : null}
-                {isOutSideLabel ? prefixIconView : null}
-                {isOutSideLabel ? inputView : null}
-                {isOutSideLabel ? suffixIconView : null}
-                {inputIcons}
-            </View>
-            {!isEmpty(error) && typeof error === 'string' && (
-                <InputErrorView error={error} className={errorClass} />
-            )}
+            {mainView}
+            {errorView}
         </View>
     );
 
-    return content;
+    const WrapperElement: typeof TouchableOpacity = onPress
+        ? TouchableOpacity
+        : (View as any);
+
+    return (
+        <WrapperElement
+            key={label}
+            onPress={onPress}
+            activeOpacity={0.1}
+            {...containerProps}
+            style={[
+                containerClass,
+                {
+                    paddingBottom: bottomPadding,
+                    pointerEvents: onPress ? 'box-only' : undefined,
+                },
+                style,
+            ]}>
+            {label && isOutSideLabel ? labelView : null}
+            {mainView}
+            {errorView}
+        </WrapperElement>
+    );
 };
 
 export default React.forwardRef(InputText);

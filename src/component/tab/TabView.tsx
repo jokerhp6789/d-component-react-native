@@ -176,11 +176,11 @@ function TabView(
     const containerBg = {
         backgroundColor: isDarkMode
             ? backgroundColorDarkMode
-                ? backgroundColorDarkMode
+                ? getColorValue(backgroundColorDarkMode)
                 : autoSwitchColor
-                ? colorDarkMode || Colors.dark
+                ? getColorValue(colorDarkMode || Colors.dark)
                 : 'undefined'
-            : backgroundColor,
+            : getColorValue(backgroundColor),
     };
 
     useImperativeHandle(ref, () => ({

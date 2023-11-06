@@ -26,7 +26,8 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
 
     return (
         <ScrollView
-            className="w-100 bg-muted mt-3"
+            className="w-100  bg-muted"
+            colorDarkMode="dark"
             showsVerticalScrollIndicator={false}>
             <Button
                 onPress={() => {
@@ -36,6 +37,7 @@ const TestInput: React.FC<ITestInputProps> = ({id}) => {
             </Button>
             <InputText
                 ref={inputDefault}
+                onPress={() => {}}
                 className="my-2"
                 label="Input Default"
                 color="red"

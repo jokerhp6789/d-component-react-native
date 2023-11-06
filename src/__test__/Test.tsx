@@ -54,7 +54,9 @@ const App = () => {
                 variant="standard"
                 dataSource={DATA_SOURCE}
                 renderTabView={renderTabView}
-                className="bg-muted"
+                className="px-3 pt-3"
+                backgroundColorDarkMode="dark"
+                backgroundColor="muted"
                 classNameLabel="flex-center-y"
                 scrollEnabled
                 colorIndicator="pink"
@@ -75,7 +77,7 @@ const App = () => {
         jumpTo,
     }) => {
         if (Math.abs(tabIndex - DATA_SOURCE.indexOf(route)) > 0) {
-            return <View className='' />;
+            return <View className="" />;
         }
         const foundItem = DATA_SOURCE.find((i: any) => i?.key === route.key);
         return (foundItem && foundItem?.component) || <View />;

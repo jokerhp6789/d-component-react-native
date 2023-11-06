@@ -1,4 +1,4 @@
-import _, {filter, some} from 'lodash';
+import _, {filter, isEmpty, some} from 'lodash';
 import React, {
     ElementRef,
     useCallback,
@@ -183,6 +183,10 @@ const Select: React.FC<ISelectProps> = ({
         },
         `${classNameLabel}`,
     );
+    const hasValue = useMemo(() => {
+        return !isEmpty(value);
+    }, [value]);
+
     const contentClass = styleTransformer(
         '',
         {
@@ -191,7 +195,7 @@ const Select: React.FC<ISelectProps> = ({
             border: hasBorder,
             'flex-center-y pr-1 pl-2': isOutSideLabel,
             'rounded-1': variant === 'rounded',
-            [`border border-${colorFocus}`]: isInSideLabel && !!value?.length,
+            [`border border-${colorFocus}`]: isInSideLabel && hasValue,
             'border-error': !!error,
         },
         classNameContent,
@@ -450,7 +454,7 @@ const Select: React.FC<ISelectProps> = ({
                     minHeight: multiple ? height : undefined,
                 })}>
                 {renderContent}
-                {!!value?.length ? null : renderIcon()}
+                {hasValue ? null : renderIcon()}
             </View>
         );
     }, [labelPosition, isOutSideLabel, renderContent, renderIcon]);
@@ -462,10 +466,10 @@ const Select: React.FC<ISelectProps> = ({
                 onPress={() => setOpenModal(true)}
                 disabled={disabled}
                 activeOpacity={0.5}>
-                {label && isInSideLabel && !!value?.length ? renderLabel : null}
+                {label && isInSideLabel && hasValue ? renderLabel : null}
                 {isOutSideLabel ? renderContent : null}
                 {isOutSideLabel ? renderIcon() : null}
-                {isInSideLabel && !!value?.length
+                {isInSideLabel && hasValue
                     ? renderIcon({
                           color: !!error ? (Colors.error as any) : colorFocus,
                           classNameWrapper: [
@@ -549,6 +553,7 @@ const Select: React.FC<ISelectProps> = ({
                 className="px-0"
                 swipeable={false}
                 animationIn="slideInRight"
+                {...modalPropsConfig}
                 {...modalProps}>
                 <View
                     style={styleTransformer(
@@ -592,6 +597,7 @@ const Select: React.FC<ISelectProps> = ({
         );
     }, [
         openModal,
+        modalPropsConfig,
         modalProps,
         showSearch,
         quickSelect,
