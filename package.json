@@ -87,6 +87,7 @@
         "react-native-vector-icons": "8.1.0",
         "react-navigation": "^3.13.0",
         "react-test-renderer": "18.2.0",
+        "reanimated-bottom-sheet": "^1.0.0-alpha.22",
         "twrnc": "^3.6.4",
         "typescript": "4.8.4"
     },

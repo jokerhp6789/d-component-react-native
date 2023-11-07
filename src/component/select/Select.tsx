@@ -7,6 +7,10 @@ import React, {
     useRef,
     useState,
 } from 'react';
+import BottomSheet, {
+    BottomSheetBackdrop,
+    BottomSheetModal,
+} from '@gorhom/bottom-sheet';
 import {
     Platform,
     StyleProp,
@@ -165,6 +169,7 @@ const Select: React.FC<ISelectProps> = ({
     valueType = 'object',
 }) => {
     const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
+    const bottomSheetRef = useRef<ElementRef<typeof BottomSheetModal>>(null);
     const {inputConfig, selectConfig} = Configs;
     const {variant: variantConfig, labelPosition: labelPositionConfig} =
         inputConfig || {};
@@ -468,7 +473,10 @@ const Select: React.FC<ISelectProps> = ({
         return (
             <TouchableOpacity
                 style={[{height: inputHeight}, contentClass, styleContent]}
-                onPress={() => setOpenModal(true)}
+                onPress={() => {
+                    // setOpenModal(true);
+                    bottomSheetRef.current?.present();
+                }}
                 disabled={disabled}
                 activeOpacity={0.5}>
                 {label && isInSideLabel && hasValue ? renderLabel : null}
@@ -542,6 +550,56 @@ const Select: React.FC<ISelectProps> = ({
         value,
     ]);
 
+    const renderContentModal = (
+        <View style={styleTransformer('h-100 position-relative px-3 pt-2')}>
+            {showSearch && (
+                <InputSearch
+                    useLightColor
+                    className="w-100 my-2"
+                    {...inputSearchProps}
+                    onChangeText={handleChangeTextSearch}
+                />
+            )}
+            {renderList}
+        </View>
+    );
+
+    const renderButtonSelect = useMemo(() => {
+        if (!(quickSelect && !multiple)) {
+            return (
+                <Button
+                    shape="square"
+                    color="primary"
+                    variant="standard"
+                    className="position-absolute bottom-0 w-100 left-0 right-0"
+                    style={{zIndex: 10}}
+                    height={buttonSelectHeight}
+                    onPress={handlePressSelect}
+                    styleLabel={
+                        Platform.OS === 'android'
+                            ? {
+                                  height: 110,
+                                  paddingVertical: 20,
+                              }
+                            : {
+                                  height: 80,
+                                  paddingVertical: 25,
+                              }
+                    }
+                    {...buttonSelectProps}>
+                    {selectText}
+                </Button>
+            );
+        }
+        return null;
+    }, [
+        quickSelect,
+        multiple,
+        buttonSelectHeight,
+        buttonSelectProps,
+        selectText,
+    ]);
+
     const renderModal = useMemo(() => {
         return (
             <Modal
@@ -560,44 +618,8 @@ const Select: React.FC<ISelectProps> = ({
                 animationIn="slideInRight"
                 {...modalPropsConfig}
                 {...modalProps}>
-                <View
-                    style={styleTransformer(
-                        'h-100 position-relative px-3 pt-2',
-                    )}>
-                    {showSearch && (
-                        <InputSearch
-                            useLightColor
-                            className="w-100 my-2"
-                            {...inputSearchProps}
-                            onChangeText={handleChangeTextSearch}
-                        />
-                    )}
-                    {renderList}
-                </View>
-                {!(quickSelect && !multiple) && (
-                    <Button
-                        shape="square"
-                        color="primary"
-                        variant="standard"
-                        className="position-absolute bottom-0 w-100 left-0 right-0"
-                        style={{zIndex: 10}}
-                        height={buttonSelectHeight}
-                        onPress={handlePressSelect}
-                        styleLabel={
-                            Platform.OS === 'android'
-                                ? {
-                                      height: 110,
-                                      paddingVertical: 20,
-                                  }
-                                : {
-                                      height: 80,
-                                      paddingVertical: 25,
-                                  }
-                        }
-                        {...buttonSelectProps}>
-                        {selectText}
-                    </Button>
-                )}
+                {renderContentModal}
+                {renderButtonSelect}
             </Modal>
         );
     }, [
@@ -612,6 +634,20 @@ const Select: React.FC<ISelectProps> = ({
         buttonSelectHeight,
         handlePressSelect,
     ]);
+
+    const renderBottomSheet = useMemo(() => {
+        const snapPoints = ['25%', '50%', '75%'];
+        return (
+            <BottomSheetModal
+                backdropComponent={BottomSheetBackdrop}
+                ref={bottomSheetRef}
+                snapPoints={snapPoints}
+                enablePanDownToClose>
+                {renderContentModal}
+                {renderButtonSelect}
+            </BottomSheetModal>
+        );
+    }, [bottomSheetRef]);
 
     const WrapperElement: typeof TouchableOpacity = onPress
         ? TouchableOpacity
@@ -633,6 +669,7 @@ const Select: React.FC<ISelectProps> = ({
             {renderInput}
             {error && <InputErrorView error={error} className={errorClass} />}
             {openModal ? renderModal : null}
+            {renderBottomSheet}
         </WrapperElement>
     );
 };

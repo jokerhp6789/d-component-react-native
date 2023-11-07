@@ -16,7 +16,10 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import BottomSheet, {
+    BottomSheetBackdrop,
+    BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StatusBar, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -102,26 +105,26 @@ const App = () => {
     return (
         <StyleStateContext.Provider
             value={{locale: 'th', useFontToLocale: true, colorSchema}}>
-            <SafeAreaView
-                style={{
-                    flex: 1,
-                    backgroundColor: isDarkMode
-                        ? AppColors.dark
-                        : AppColors.light,
-                }}
-                edges={['top']}>
-                <ProgressComponent ref={progressRef} />
-                <Button
-                    onPress={() => {
-                        // bottomSheetRef.current?.expand();
-                        setOpenModal(!openModal);
-                    }}>
-                    Open Bottom Sheet
-                </Button>
-                {renderMainView()}
-                {/* <InputComment user={{}} useAnimation /> */}
-                {/* <TestModal onPress={() => setOpenModal(true)} /> */}
-                {/* <Modal
+            <BottomSheetModalProvider>
+                <SafeAreaView
+                    style={{
+                        flex: 1,
+                        backgroundColor: isDarkMode
+                            ? AppColors.dark
+                            : AppColors.light,
+                    }}
+                    edges={['top']}>
+                    <ProgressComponent ref={progressRef} />
+                    <Button
+                        onPress={() => {
+                            bottomSheetRef.current?.snapToIndex(1);
+                        }}>
+                        Open Bottom Sheet
+                    </Button>
+                    {renderMainView()}
+                    {/* <InputComment user={{}} useAnimation /> */}
+                    {/* <TestModal onPress={() => setOpenModal(true)} /> */}
+                    {/* <Modal
                     open={openModal}
                     onClose={() => setOpenModal(false)}
                     size="fullscreen"
@@ -130,7 +133,6 @@ const App = () => {
                     showFooter>
                     {renderMainView()}
                 </Modal> */}
-                {openModal && (
                     <BottomSheet
                         backdropComponent={BottomSheetBackdrop}
                         ref={bottomSheetRef}
@@ -141,8 +143,8 @@ const App = () => {
                             <Text>Awesome 🎉</Text>
                         </View>
                     </BottomSheet>
-                )}
-            </SafeAreaView>
+                </SafeAreaView>
+            </BottomSheetModalProvider>
         </StyleStateContext.Provider>
     );
 };
