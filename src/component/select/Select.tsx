@@ -40,6 +40,9 @@ import Modal, {IModalProps} from '../modal/Modal';
 import Text from '../text/Text';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import Colors from '../../style/color/_color';
+import {type} from 'os';
+
+export type PopupVariantType = 'modal' | 'bottom-sheet';
 
 export interface ISelectSourceProps extends IPaginationProps {
     search?: string;
@@ -53,6 +56,7 @@ export interface ISelectProps
         >
     > {
     variant?: InputVariantType;
+    popupVariant?: PopupVariantType;
     label?: any;
     labelPosition?: InputLabelPositionType;
     placeholder?: string;
@@ -119,6 +123,7 @@ export interface ISelectProps
 
 const Select: React.FC<ISelectProps> = ({
     variant: variantProps,
+    popupVariant: popupVariantProps = 'modal',
     buttonSelectHeight = Platform.OS === 'android' ? 110 : 85,
     height = Sizes.inputHeight,
     label,
@@ -170,18 +175,26 @@ const Select: React.FC<ISelectProps> = ({
 }) => {
     const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
     const bottomSheetRef = useRef<ElementRef<typeof BottomSheetModal>>(null);
+
     const {inputConfig, selectConfig} = Configs;
     const {variant: variantConfig, labelPosition: labelPositionConfig} =
         inputConfig || {};
     const {modalProps: modalPropsConfig, listProps: listPropsConfig} =
         selectConfig || {};
     const variant = variantProps || variantConfig || 'standard';
+    const popupVariant = popupVariantProps;
+
     const labelPosition: InputLabelPositionType =
         labelPositionProp || labelPositionConfig || 'outside';
     const isOutSideLabel = labelPosition === 'outside';
     const isInSideLabel = labelPosition === 'inside';
+
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
+    const hasValue = useMemo(() => {
+        return !isEmpty(value);
+    }, [value]);
+
     const containerClass = styleTransformer(`w-100`, className);
     const labelClass = styleTransformer(
         `h4`,
@@ -193,10 +206,6 @@ const Select: React.FC<ISelectProps> = ({
         },
         `${classNameLabel}`,
     );
-    const hasValue = useMemo(() => {
-        return !isEmpty(value);
-    }, [value]);
-
     const contentClass = styleTransformer(
         '',
         {
@@ -267,7 +276,7 @@ const Select: React.FC<ISelectProps> = ({
         const updateValue = valueType === 'object' ? item : getValue(item);
         if (quickSelect && !multiple) {
             onChange && onChange(updateValue);
-            return setOpenModal(false);
+            return onClosePopup();
         }
         if (multiple) {
             let arrayClone = [...(selectingValue || [])];
@@ -326,6 +335,30 @@ const Select: React.FC<ISelectProps> = ({
         return data;
     };
 
+    const onClosePopup = () => {
+        if (popupVariant === 'modal') {
+            setOpenModal(false);
+        } else if (popupVariant === 'bottom-sheet') {
+            closeBottomSheet();
+        }
+    };
+
+    const onOpenPopup = () => {
+        if (popupVariant === 'modal') {
+            setOpenModal(true);
+        } else if (popupVariant === 'bottom-sheet') {
+            openBottomSheet();
+        }
+    };
+
+    const openBottomSheet = () => {
+        bottomSheetRef.current && bottomSheetRef.current.expand();
+    };
+
+    const closeBottomSheet = () => {
+        bottomSheetRef.current && bottomSheetRef.current.close();
+    };
+
     const renderSelectItem = useCallback(
         ({item, index}: any) => {
             const selected = checkSelectedItem(item);
@@ -343,7 +376,7 @@ const Select: React.FC<ISelectProps> = ({
 
             return (
                 <TouchableOpacity
-                    activeOpacity={0.85}
+                    activeOpacity={0.8}
                     onPress={() => handleSelectItem(item, selected)}
                     style={selectItemClass}>
                     <View style={styleTransformer('flex-1')}>{content}</View>
@@ -355,13 +388,7 @@ const Select: React.FC<ISelectProps> = ({
                 </TouchableOpacity>
             );
         },
-        [
-            handleSelectItem,
-            checkSelectedItem,
-            customSelectItem,
-            checkboxProps,
-            value,
-        ],
+        [selectingValue, checkboxProps, handleSelectItem],
     );
 
     const renderClearButton = useMemo(() => {
@@ -474,8 +501,7 @@ const Select: React.FC<ISelectProps> = ({
             <TouchableOpacity
                 style={[{height: inputHeight}, contentClass, styleContent]}
                 onPress={() => {
-                    // setOpenModal(true);
-                    bottomSheetRef.current?.present();
+                    onOpenPopup();
                 }}
                 disabled={disabled}
                 activeOpacity={0.5}>
@@ -499,6 +525,7 @@ const Select: React.FC<ISelectProps> = ({
         inputHeight,
         contentClass,
         renderContent,
+        bottomSheetRef,
         styleContent,
         iconName,
         value,
@@ -518,6 +545,7 @@ const Select: React.FC<ISelectProps> = ({
             return (
                 <AwesomeList
                     {...awesomeListProps}
+                    useFlashList={false}
                     ref={listRef}
                     source={() => Promise.resolve()}
                     transformer={res => getResultFromSearch(dataSource)}
@@ -527,6 +555,7 @@ const Select: React.FC<ISelectProps> = ({
         return (
             <AwesomeList
                 {...awesomeListProps}
+                useFlashList={false}
                 ref={listRef}
                 source={paging => {
                     const payload: ISelectSourceProps = {...paging};
@@ -544,10 +573,11 @@ const Select: React.FC<ISelectProps> = ({
     }, [
         dataSource,
         listProps,
+        value,
         listPropsConfig,
+        selectingValue,
         renderSelectItem,
         keyExtractor,
-        value,
     ]);
 
     const renderContentModal = (
@@ -569,6 +599,7 @@ const Select: React.FC<ISelectProps> = ({
             return (
                 <Button
                     shape="square"
+                    activeOpacity={0.95}
                     color="primary"
                     variant="standard"
                     className="position-absolute bottom-0 w-100 left-0 right-0"
@@ -625,29 +656,23 @@ const Select: React.FC<ISelectProps> = ({
     }, [
         openModal,
         modalPropsConfig,
+        renderClearButton,
+        renderContentModal,
+        renderButtonSelect,
         modalProps,
-        showSearch,
-        quickSelect,
-        multiple,
-        buttonSelectProps,
-        inputSearchProps,
-        buttonSelectHeight,
-        handlePressSelect,
     ]);
 
-    const renderBottomSheet = useMemo(() => {
-        const snapPoints = ['25%', '50%', '75%'];
-        return (
-            <BottomSheetModal
-                backdropComponent={BottomSheetBackdrop}
-                ref={bottomSheetRef}
-                snapPoints={snapPoints}
-                enablePanDownToClose>
-                {renderContentModal}
-                {renderButtonSelect}
-            </BottomSheetModal>
-        );
-    }, [bottomSheetRef]);
+    const snapPoints = ['75%'];
+    const renderBottomSheet = (
+        <BottomSheetModal
+            ref={bottomSheetRef}
+            snapPoints={snapPoints}
+            backdropComponent={BottomSheetBackdrop}
+            enablePanDownToClose>
+            {renderContentModal}
+            {renderButtonSelect}
+        </BottomSheetModal>
+    );
 
     const WrapperElement: typeof TouchableOpacity = onPress
         ? TouchableOpacity
@@ -668,8 +693,8 @@ const Select: React.FC<ISelectProps> = ({
             {label && isOutSideLabel ? renderLabel : null}
             {renderInput}
             {error && <InputErrorView error={error} className={errorClass} />}
-            {openModal ? renderModal : null}
-            {renderBottomSheet}
+            {openModal && popupVariant === 'modal' ? renderModal : null}
+            {popupVariant === 'bottom-sheet' ? renderBottomSheet : null}
         </WrapperElement>
     );
 };

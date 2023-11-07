@@ -53,6 +53,14 @@ export const SELECT_DATA = [
   { id: "color9", label: "swatchColor" },
   { id: "color10", label: "swatchColor" },
   { id: "color11", label: "swatchColor" },
+  { id: "color12", label: "swatchFat" },
+  { id: "color13", label: "swatchThin" },
+  { id: "color14", label: "swatchColor" },
+  { id: "color15", label: "swatchColor" },
+  { id: "color16", label: "swatchColor" },
+  { id: "color17", label: "swatchColor" },
+  { id: "color18", label: "swatchColor" },
+  { id: "color19", label: "swatchColor" },
 ];
 
 export const DELIVERY_STATUS_LIST = [

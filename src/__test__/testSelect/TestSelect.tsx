@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Header from '../../component/header/Header';
 import Select from '../../component/select/Select';
 import ScrollView from '../../component/view/ScrollView';
 import View from '../../component/view/View';
+import StringUtils from '../../utils/StringUtils';
 import {SELECT_DATA} from '../data/TestConstant';
 
 export interface ITestSelectProps {
@@ -12,23 +13,33 @@ export interface ITestSelectProps {
 const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
     const [selectValue, setSelectValue] = useState();
     const [singleValue, setSingleValue] = useState();
+    const data = useMemo(
+        () =>
+            new Array(50).fill(0).map(i => {
+                return {
+                    id: StringUtils.getUniqueID(),
+                    label: StringUtils.generateDummyText(undefined, 10),
+                };
+            }),
+        [],
+    );
 
     return (
         <ScrollView className="py-0 w-100">
             <View className="flex-1 bg- h-100 w-100">
                 <Select
-                    variant="standard"
                     showSearch
+                    quickSelect
                     searchOffline
+                    variant="standard"
                     keySearchOffline={['label']}
                     valueType="string"
                     label="Select"
                     placeholder="Placeholder"
                     classNameContent="bg-light"
                     className="my-2"
-                    dataSource={SELECT_DATA}
+                    dataSource={data}
                     getLabel={item => item?.label}
-                    quickSelect
                     value={selectValue}
                     onChange={v => setSelectValue(v)}
                     modalProps={{
@@ -41,14 +52,16 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                 <Select
                     showSearch
                     searchOffline
+                    quickSelect
+                    popupVariant="bottom-sheet"
                     keySearchOffline={['label']}
+                    classNameContent="bg-white"
                     valueType="string"
                     label="Select"
                     placeholder="Placeholder"
                     className="my-2"
-                    dataSource={SELECT_DATA}
+                    dataSource={data}
                     getLabel={item => item?.label}
-                    quickSelect
                     value={selectValue}
                     onChange={v => setSelectValue(v)}
                 />
@@ -61,7 +74,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     placeholder="Placeholder"
                     variant="outline"
                     className="my-2"
-                    transformer={res => SELECT_DATA}
+                    transformer={res => data}
                     getLabel={item => item?.label}
                     value={singleValue}
                     onChange={v => setSingleValue(v)}

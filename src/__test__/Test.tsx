@@ -125,14 +125,14 @@ const App = () => {
                     {/* <InputComment user={{}} useAnimation /> */}
                     {/* <TestModal onPress={() => setOpenModal(true)} /> */}
                     {/* <Modal
-                    open={openModal}
-                    onClose={() => setOpenModal(false)}
-                    size="fullscreen"
-                    className="flex-1"
-                    showHeader
-                    showFooter>
-                    {renderMainView()}
-                </Modal> */}
+                        open={openModal}
+                        onClose={() => setOpenModal(false)}
+                        size="fullscreen"
+                        className="flex-1"
+                        showHeader
+                        showFooter>
+                        {renderMainView()}
+                    </Modal>
                     <BottomSheet
                         backdropComponent={BottomSheetBackdrop}
                         ref={bottomSheetRef}
@@ -141,8 +141,8 @@ const App = () => {
                         onChange={handleSheetChanges}>
                         <View style={styleTransformer('')}>
                             <Text>Awesome 🎉</Text>
-                        </View>
-                    </BottomSheet>
+                        </View>˝
+                    </BottomSheet> */}
                 </SafeAreaView>
             </BottomSheetModalProvider>
         </StyleStateContext.Provider>
