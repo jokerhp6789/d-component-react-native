@@ -46,16 +46,19 @@ const Text: React.FC<ITextProps> = ({
         ...fontClass.h4,
         color: isDarkMode && autoSwitchColor ? white : black,
     };
-    const listStyle = [defaultStyle, transStyle, style];
+    const listStyle = [defaultStyle, transStyle];
     const color = colorProp || colorConfig;
     const colorDarkMode = colorDarkModeProp || colorDarkModeConfig;
     if (color) {
         const colorValue = getColorValue(color);
         listStyle.push({color: colorValue});
     }
-    if (isDarkMode && colorDarkMode) {
+    if (isDarkMode && colorDarkMode && autoSwitchColor) {
         const color = getColorValue(colorDarkMode);
         listStyle.push({color});
+    }
+    if (style) {
+        listStyle.push(style);
     }
     const flattenStyle = StyleSheet.flatten<TextStyle>(listStyle);
     const hasBoldStyle =

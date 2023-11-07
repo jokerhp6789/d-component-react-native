@@ -27,7 +27,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
     return (
         <ScrollView className="py-0 w-100">
             <View className="flex-1 bg- h-100 w-100">
-                <Select
+                {/* <Select
                     showSearch
                     quickSelect
                     searchOffline
@@ -37,6 +37,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     label="Select"
                     placeholder="Placeholder"
                     classNameContent="bg-light"
+                    classNameTextContent="text-dark"
                     className="my-2"
                     dataSource={data}
                     getLabel={item => item?.label}
@@ -48,7 +49,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                             <Header {...props} title="Checking" />
                         ),
                     }}
-                />
+                /> */}
                 <Select
                     showSearch
                     searchOffline
@@ -56,6 +57,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     popupVariant="bottom-sheet"
                     keySearchOffline={['label']}
                     classNameContent="bg-white"
+                    classNameTextContent="text-dark"
                     valueType="string"
                     label="Select"
                     placeholder="Placeholder"
@@ -74,6 +76,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     placeholder="Placeholder"
                     variant="outline"
                     className="my-2"
+                    popupVariant="bottom-sheet"
                     transformer={res => data}
                     getLabel={item => item?.label}
                     value={singleValue}

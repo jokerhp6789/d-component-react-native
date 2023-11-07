@@ -7,13 +7,10 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import BottomSheet, {
-    BottomSheetBackdrop,
-    BottomSheetModal,
-} from '@gorhom/bottom-sheet';
 import {
     Platform,
     StyleProp,
+    StyleSheet,
     TouchableOpacity,
     TouchableOpacityProps,
     View,
@@ -41,6 +38,7 @@ import Text from '../text/Text';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import Colors from '../../style/color/_color';
 import {type} from 'os';
+import BottomSheetModal from '../modal/BottomSheetModal';
 
 export type PopupVariantType = 'modal' | 'bottom-sheet';
 
@@ -72,6 +70,7 @@ export interface ISelectProps
     className?: IStyleTransformerProps;
     classNameLabel?: IStyleTransformerProps;
     classNameContent?: IStyleTransformerProps;
+    classNameTextContent?: IStyleTransformerProps;
     classNameError?: IStyleTransformerProps;
     iconName?: string;
     style?: StyleProp<ViewStyle>;
@@ -134,9 +133,10 @@ const Select: React.FC<ISelectProps> = ({
     placeholder,
     iconName = 'keyboard-arrow-right',
     className,
-    classNameContent,
     classNameLabel,
     classNameError,
+    classNameContent,
+    classNameTextContent,
     color,
     colorDark,
     colorFocus = 'primary',
@@ -299,7 +299,7 @@ const Select: React.FC<ISelectProps> = ({
 
     const handlePressSelect = () => {
         onChange && onChange(selectingValue);
-        setOpenModal(false);
+        onClosePopup();
     };
 
     const getLabelFromValue = (value: any) => {
@@ -336,23 +336,17 @@ const Select: React.FC<ISelectProps> = ({
     };
 
     const onClosePopup = () => {
-        if (popupVariant === 'modal') {
-            setOpenModal(false);
-        } else if (popupVariant === 'bottom-sheet') {
-            closeBottomSheet();
-        }
+        setOpenModal(false);
+        closeBottomSheet();
     };
 
     const onOpenPopup = () => {
-        if (popupVariant === 'modal') {
-            setOpenModal(true);
-        } else if (popupVariant === 'bottom-sheet') {
-            openBottomSheet();
-        }
+        setOpenModal(true);
+        openBottomSheet();
     };
 
     const openBottomSheet = () => {
-        bottomSheetRef.current && bottomSheetRef.current.expand();
+        bottomSheetRef.current && bottomSheetRef.current.present();
     };
 
     const closeBottomSheet = () => {
@@ -422,7 +416,7 @@ const Select: React.FC<ISelectProps> = ({
         if (_.isEmpty(value)) {
             if (placeholder) {
                 return (
-                    <Text className="text-grey flex-1 h4">{placeholder}</Text>
+                    <Text className={'text-grey flex-1 h4'}>{placeholder}</Text>
                 );
             }
         }
@@ -454,7 +448,13 @@ const Select: React.FC<ISelectProps> = ({
         const label = getDisplayValue
             ? getDisplayValue(value)
             : getLabelFromValue(value);
-        return <Text className="flex-1 h4">{label}</Text>;
+        return (
+            <Text
+                className={'flex-1 h4'}
+                style={styleTransformer(classNameTextContent)}>
+                {label}
+            </Text>
+        );
     }, [
         value,
         placeholder,
@@ -576,6 +576,7 @@ const Select: React.FC<ISelectProps> = ({
         value,
         listPropsConfig,
         selectingValue,
+        transformer,
         renderSelectItem,
         keyExtractor,
     ]);
@@ -662,23 +663,21 @@ const Select: React.FC<ISelectProps> = ({
         modalProps,
     ]);
 
-    const snapPoints = ['75%'];
-    const renderBottomSheet = (
-        <BottomSheetModal
-            ref={bottomSheetRef}
-            snapPoints={snapPoints}
-            backdropComponent={BottomSheetBackdrop}
-            enablePanDownToClose>
-            {renderContentModal}
-            {renderButtonSelect}
-        </BottomSheetModal>
+    const renderBottomSheet = useMemo(
+        () => (
+            <BottomSheetModal bottomSheetRef={bottomSheetRef}>
+                {renderContentModal}
+                {renderButtonSelect}
+            </BottomSheetModal>
+        ),
+        [renderContentModal, renderButtonSelect, selectingValue],
     );
 
     const WrapperElement: typeof TouchableOpacity = onPress
         ? TouchableOpacity
         : (View as any);
 
-    return (
+    const content = (
         <WrapperElement
             activeOpacity={0.9}
             {...containerProps}
@@ -697,6 +696,8 @@ const Select: React.FC<ISelectProps> = ({
             {popupVariant === 'bottom-sheet' ? renderBottomSheet : null}
         </WrapperElement>
     );
+
+    return content;
 };
 
 export default Select;
