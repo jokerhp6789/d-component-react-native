@@ -17,6 +17,7 @@ import React, {
     useState,
 } from 'react';
 import BottomSheet, {
+    BottomSheetModal,
     BottomSheetBackdrop,
     BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
@@ -51,7 +52,7 @@ const App = () => {
     const isDarkMode = useColorScheme() === 'dark';
     const [openModal, setOpenModal] = useState(false);
 
-    const bottomSheetRef = useRef<ElementRef<typeof BottomSheet>>(null);
+    const bottomSheetRef = useRef<ElementRef<typeof BottomSheetModal>>(null);
     const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
     const handleSheetChanges = useCallback((index: number) => {
         console.log('handleSheetChanges', index);
@@ -117,7 +118,7 @@ const App = () => {
                     <ProgressComponent ref={progressRef} />
                     <Button
                         onPress={() => {
-                            bottomSheetRef.current?.snapToIndex(1);
+                            bottomSheetRef.current?.present();
                         }}>
                         Open Bottom Sheet
                     </Button>
@@ -151,7 +152,7 @@ const App = () => {
                     {renderMainView()}
                     {/* <InputComment user={{}} useAnimation /> */}
                     {/* <TestModal onPress={() => setOpenModal(true)} /> */}
-                    {/* <Modal
+                    <Modal
                         open={openModal}
                         onClose={() => setOpenModal(false)}
                         size="fullscreen"
@@ -160,7 +161,7 @@ const App = () => {
                         showFooter>
                         {renderMainView()}
                     </Modal>
-                    <BottomSheet
+                    <BottomSheetModal
                         backdropComponent={BottomSheetBackdrop}
                         ref={bottomSheetRef}
                         snapPoints={snapPoints}
@@ -168,8 +169,8 @@ const App = () => {
                         onChange={handleSheetChanges}>
                         <View style={styleTransformer('')}>
                             <Text>Awesome 🎉</Text>
-                        </View>˝
-                    </BottomSheet> */}
+                        </View>
+                    </BottomSheetModal>
                 </SafeAreaView>
             </BottomSheetModalProvider>
         </StyleStateContext.Provider>
