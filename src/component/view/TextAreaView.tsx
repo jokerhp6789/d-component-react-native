@@ -1,12 +1,13 @@
 import React, {useMemo, useState} from 'react';
 import {TextStyle, ViewStyle} from 'react-native';
 import {ThemeProps} from '../../interface/iTheme';
+import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Modal, {IModalProps} from '../modal/Modal';
 import Text, {ITextProps} from '../text/Text';
 import TouchableOpacity from './TouchableOpacity';
 import View from './View';
 
-export interface IViewTextAreaProps extends ThemeProps {
+export interface ITextAreaViewProps extends ThemeProps {
     children: string;
     style?: ViewStyle;
     styleContent?: TextStyle;
@@ -15,16 +16,17 @@ export interface IViewTextAreaProps extends ThemeProps {
     showMoreText?: string;
     showLessText?: string;
     limitedLength?: number;
-    className?: string;
-    classNameContent?: string;
-    classNameShowMore?: string;
-    classNameShowLess?: string;
+    className?: IStyleTransformerProps;
+    classNameContent?: IStyleTransformerProps;
+    classNameShowMore?: IStyleTransformerProps;
+    classNameShowLess?: IStyleTransformerProps;
     textContentProps?: ITextProps;
     modalProps?: IModalProps;
     variant?: 'modal' | 'expand';
+    pressToContract?: boolean;
 }
 
-const ViewTextArea: React.FC<IViewTextAreaProps> = ({
+const TextAreaView: React.FC<ITextAreaViewProps> = ({
     children,
     style,
     styleContent = {},
@@ -40,14 +42,11 @@ const ViewTextArea: React.FC<IViewTextAreaProps> = ({
     showLessText = 'Show Less',
     showMoreText = 'Show More',
     variant = 'modal',
+    pressToContract = true,
     colorDarkMode,
     useLightColor,
     ...rest
 }) => {
-    if (typeof children !== 'string') {
-        throw Error('children is not string!');
-    }
-
     const textStyle = 'h4';
 
     const isOverFollow = useMemo(() => {
@@ -87,13 +86,23 @@ const ViewTextArea: React.FC<IViewTextAreaProps> = ({
         return false;
     }, [isOverFollow, showFullMessage]);
 
+    if (typeof children !== 'string') {
+        throw Error('children is not string!');
+    }
+
     return (
         <React.Fragment>
-            <View
-                style={style}
+            <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => {
+                    if (showFullMessage && variant === 'expand') {
+                        setShowFullMessage(false);
+                    }
+                }}
                 className={className}
+                useLightColor={useLightColor}
                 colorDarkMode={colorDarkMode}
-                useLightColor={useLightColor}>
+                style={[style]}>
                 <Text
                     className={`${textStyle} ${classNameContent}`}
                     style={{...styleContent}}
@@ -126,7 +135,7 @@ const ViewTextArea: React.FC<IViewTextAreaProps> = ({
                         </TouchableOpacity>
                     )}
                 </Text>
-            </View>
+            </TouchableOpacity>
             {showFullMessage && variant === 'modal' && (
                 <Modal
                     onClose={() => setShowFullMessage(false)}
@@ -134,6 +143,7 @@ const ViewTextArea: React.FC<IViewTextAreaProps> = ({
                     showFooter
                     useScrollView
                     showSaveButton={false}
+                    className="px-3"
                     classNameFooter="justify-content-end"
                     {...modalProps}
                     open={showFullMessage}>
@@ -146,4 +156,4 @@ const ViewTextArea: React.FC<IViewTextAreaProps> = ({
     );
 };
 
-export default ViewTextArea;
+export default TextAreaView;

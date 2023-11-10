@@ -8,37 +8,21 @@
  * @format
  */
 
-import React, {
-    ElementRef,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
-import BottomSheet, {
-    BottomSheetModal,
-    BottomSheetBackdrop,
-    BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
-import switchTheme from 'react-native-theme-switch-animation';
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
+import React, {ElementRef, Fragment, useEffect, useRef, useState} from 'react';
+import {Appearance, useColorScheme} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, Appearance, useColorScheme} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import switchTheme from 'react-native-theme-switch-animation';
+import {AppColors, Button} from '..';
 import Badge from '../component/items/Badge';
 import Modal from '../component/modal/Modal';
+import ProgressComponent from '../component/progress/ProgressComponent';
+import ProgressController from '../component/progress/ProgressController';
 import TabView, {ITabViewProps} from '../component/tab/TabView';
-import Text from '../component/text/Text';
 import View from '../component/view/View';
 import StyleStateContext from '../context/StyleContext';
 import './configurationStyle';
 import DATA_SOURCE from './Source';
-import TestModal from './testModal/TestModal';
-import {AppColors, Button} from '..';
-import InputComment from '../component/input/InputComment';
-import ProgressComponent from '../component/progress/ProgressComponent';
-import ProgressController from '../component/progress/ProgressController';
-import {styleTransformer} from '../style/style';
 
 interface ITestData {
     id: string;
@@ -51,16 +35,6 @@ const App = () => {
     const progressRef = useRef<ElementRef<typeof ProgressComponent>>(null);
     const isDarkMode = useColorScheme() === 'dark';
     const [openModal, setOpenModal] = useState(false);
-
-    const bottomSheetRef = useRef<ElementRef<typeof BottomSheetModal>>(null);
-    const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
-    const handleSheetChanges = useCallback((index: number) => {
-        console.log('handleSheetChanges', index);
-    }, []);
-
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    };
 
     useEffect(() => {
         if (progressRef.current) {
@@ -103,6 +77,40 @@ const App = () => {
         return (foundItem && foundItem?.component) || <View />;
     };
 
+    const renderSwitchTheme = () => {
+        return (
+            <Fragment>
+                <Button
+                    label="Switch Theme"
+                    onPress={(e: any) => {
+                        e.currentTarget.measure(
+                            (x1, y1, width, height, px, py) => {
+                                switchTheme({
+                                    switchThemeFunction: () => {
+                                        Appearance.setColorScheme(
+                                            colorSchema === 'light'
+                                                ? 'dark'
+                                                : 'light',
+                                        );
+                                    },
+                                    animationConfig: {
+                                        type: 'circular',
+                                        duration: 900,
+                                        startingPoint: {
+                                            cy: py + height / 2,
+                                            cx: px + width / 2,
+                                        },
+                                    },
+                                });
+                            },
+                        );
+                    }}
+                />
+                <View className="h-[100] bg-red" colorDarkMode="green" />
+            </Fragment>
+        );
+    };
+
     return (
         <StyleStateContext.Provider
             value={{locale: 'th', useFontToLocale: true, colorSchema}}>
@@ -115,41 +123,12 @@ const App = () => {
                             : AppColors.light,
                     }}
                     edges={['top']}>
-                    <ProgressComponent ref={progressRef} />
-                    <Button
-                        onPress={() => {
-                            bottomSheetRef.current?.present();
-                        }}>
-                        Open Bottom Sheet
-                    </Button>
-                    <Button
-                        label="Switch Theme"
-                        onPress={(e: any) => {
-                            e.currentTarget.measure(
-                                (x1, y1, width, height, px, py) => {
-                                    switchTheme({
-                                        switchThemeFunction: () => {
-                                            Appearance.setColorScheme(
-                                                colorSchema === 'light'
-                                                    ? 'dark'
-                                                    : 'light',
-                                            ); 
-                                        },
-                                        animationConfig: {
-                                            type: 'circular',
-                                            duration: 900,
-                                            startingPoint: {
-                                                cy: py + height / 2,
-                                                cx: px + width / 2,
-                                            },
-                                        },
-                                    });
-                                },
-                            );
-                        }}
+                    <ProgressComponent
+                        /* @ts-ignore */
+                        ref={ref => (progressRef.current = ref)}
                     />
-                    <View className="h-[100] bg-red" colorDarkMode="green" />
                     {renderMainView()}
+                    {/* {renderSwitchTheme()} */}
                     {/* <InputComment user={{}} useAnimation /> */}
                     {/* <TestModal onPress={() => setOpenModal(true)} /> */}
                     <Modal
@@ -161,16 +140,6 @@ const App = () => {
                         showFooter>
                         {renderMainView()}
                     </Modal>
-                    <BottomSheetModal
-                        backdropComponent={BottomSheetBackdrop}
-                        ref={bottomSheetRef}
-                        snapPoints={snapPoints}
-                        enablePanDownToClose
-                        onChange={handleSheetChanges}>
-                        <View style={styleTransformer('')}>
-                            <Text>Awesome 🎉</Text>
-                        </View>
-                    </BottomSheetModal>
                 </SafeAreaView>
             </BottomSheetModalProvider>
         </StyleStateContext.Provider>

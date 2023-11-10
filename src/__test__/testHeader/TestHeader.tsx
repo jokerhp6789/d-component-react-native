@@ -20,6 +20,7 @@ const TestHeader: React.FC<ITestHeaderProps> = ({ id }) => {
 
       <Header
         title="Theme Dark"
+        classNameTitle="font-weight-bold"
         onLeftPress={() => {}}
         onRightPress={() => {}}
         className="my-3"

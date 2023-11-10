@@ -2,6 +2,7 @@ import React from 'react';
 import {ITabViewProps} from '../component/tab/TabView';
 import TestAvatar from './testAvatar/TestAvatar';
 import TestBenchmark from './testBenchmark/TestBenchmark';
+import TestBottomSheet from './testBottomSheet/TestBottomSheet';
 import TestButton from './testButton/TestButton';
 import TestCalendar from './testCalendar/TestCalendar';
 import TestForm from './testForm/TestForm';
@@ -18,6 +19,11 @@ import TestTabStepper from './testTab/TestTabStepper';
 import TestView from './testView/TestView';
 
 const DATA_SOURCE: ITabViewProps['dataSource'] = [
+    {
+        key: 'testBottomSheet',
+        label: 'Bottom Sheet',
+        component: <TestBottomSheet />,
+    },
     {key: 'testStyle', label: 'Style', component: <TestStyle />},
     {key: 'testInput', label: 'Input', component: <TestInput />},
     {key: 'testSelect', label: 'Select', component: <TestSelect />},

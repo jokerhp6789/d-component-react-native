@@ -61,6 +61,7 @@ const Text: React.FC<ITextProps> = ({
         listStyle.push(style);
     }
     const flattenStyle = StyleSheet.flatten<TextStyle>(listStyle);
+
     const hasBoldStyle =
         split((rest as any)?.['className'], ' ').includes('font-weight-bold') ||
         ['500', '600', '700', '800', '900', 'bold'].includes(
@@ -90,6 +91,7 @@ const Text: React.FC<ITextProps> = ({
         }
         return res;
     }, [locale, useFontToLocale, hasBoldStyle]);
+
     if (localeFont) {
         listStyle.push({fontFamily: localeFont});
     }

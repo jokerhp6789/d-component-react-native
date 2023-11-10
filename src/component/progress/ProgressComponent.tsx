@@ -1,20 +1,20 @@
 /* eslint-disable class-methods-use-this */
+import _ from 'lodash';
 import React, {Component} from 'react';
 import {
-    TouchableOpacity,
     Dimensions,
-    StyleSheet,
-    View,
-    Text,
-    ActivityIndicator,
-    Platform,
     Modal,
+    Platform,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import _ from 'lodash';
-import AppSizes from '../../style/constant/AppSizes';
 import AppColors from '../../style/constant/AppColors';
+import AppSizes from '../../style/constant/AppSizes';
+import Loading, {ILoadingProps} from '../view/Loading';
 
-const {width, height} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const DefaultConfig = {
     maxWidthPercentage: 0.8,
@@ -100,6 +100,13 @@ enum LoadingState {
     LOADING = 'LOADING',
 }
 
+export interface IProgressTextContent {
+    cancelText?: string;
+    errorText?: string;
+    retryText?: string;
+    loadingText?: string;
+}
+
 export interface IProgressFunctionProps {
     method: (props?: any, paging?: any, index?: any) => any;
     params: any;
@@ -121,7 +128,9 @@ export interface IProgressTaskProps {
 }
 
 export interface IProgressComponentProps {
-    loadingView?: ((props?: any) => React.ReactNode) | React.ReactNode;
+    customLoadingView?: ((props?: any) => React.ReactNode) | React.ReactNode;
+    textContent?: IProgressTextContent;
+    loadingProps?: Partial<ILoadingProps>;
 }
 
 export interface IProgressComponentState extends Partial<IProgressTaskProps> {
@@ -249,20 +258,23 @@ class ProgressComponent extends Component<
     }
 
     renderLoadingView() {
-        const {loadingView} = this.props;
-        if (loadingView) {
-            if (typeof loadingView === 'function') {
-                return loadingView();
+        const {customLoadingView, textContent, loadingProps} = this.props;
+        if (customLoadingView) {
+            if (typeof customLoadingView === 'function') {
+                return customLoadingView();
             }
-            return loadingView;
+            return customLoadingView;
         }
+
+        const {loadingText} = textContent || {};
+
         return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator />
-                <Text style={[styles.textLoading, {color: 'white'}]}>
-                    Loading...
-                </Text>
-            </View>
+            <Loading
+                style={styles.loadingContainer}
+                styleText={[styles.textLoading, {color: 'white'}]}
+                loadingText={loadingText || 'Loading...'}
+                {...(loadingProps || {})}
+            />
         );
     }
 
@@ -276,9 +288,13 @@ class ProgressComponent extends Component<
 
     render() {
         const {error, loadingState} = this.state;
+
         if (loadingState === LoadingState.INIT) {
             return null;
         }
+
+        const {textContent} = this.props;
+        const {cancelText, retryText} = textContent || {};
         return (
             <Modal visible transparent>
                 <View style={styles.container}>
@@ -299,14 +315,16 @@ class ProgressComponent extends Component<
                                 <TouchableOpacity
                                     style={styles.buttonStyle}
                                     onPress={() => this.retry()}>
-                                    <Text style={styles.buttonText}>Retry</Text>
+                                    <Text style={styles.buttonText}>
+                                        {retryText ? retryText : 'Retry'}
+                                    </Text>
                                 </TouchableOpacity>
                                 {this.renderVerticalDivider()}
                                 <TouchableOpacity
                                     style={styles.buttonStyle}
                                     onPress={() => this.cancel()}>
                                     <Text style={styles.buttonText}>
-                                        Cancel
+                                        {cancelText ? cancelText : 'Cancel'}
                                     </Text>
                                 </TouchableOpacity>
                             </View>

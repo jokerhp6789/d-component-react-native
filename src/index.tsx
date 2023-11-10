@@ -60,8 +60,13 @@ export type {
 } from './component/view/TouchableOpacity';
 export {default as TouchableOpacity} from './component/view/TouchableOpacity';
 
-export type {IViewTextAreaProps} from './component/view/ViewTextArea';
-export {default as ViewTextArea} from './component/view/ViewTextArea';
+export type {ITextAreaViewProps as IViewTextAreaProps} from './component/view/TextAreaView';
+export type {ITextAreaViewProps} from './component/view/TextAreaView';
+export {default as ViewTextArea} from './component/view/TextAreaView';
+export {default as TextAreaView} from './component/view/TextAreaView';
+
+export type {ILoadingProps} from './component/view/Loading';
+export {default as Loading} from './component/view/Loading';
 
 /* ----------------------------------------
 // List

@@ -7,6 +7,7 @@ import Text from '../../component/text/Text';
 import View from '../../component/view/View';
 import images from '../testImage/Images';
 import ProgressBar from '../../component/items/ProgressBar';
+import Loading from '../../component/view/Loading';
 
 export interface ITestItemsProps {
     [key: string]: any;
@@ -23,9 +24,11 @@ const TestItems: React.FC<ITestItemsProps> = ({id}) => {
             </View>
         );
     };
+
     return (
-        <ScrollView className="my-4 w-100">
+        <ScrollView className="my-4 w-100" showsVerticalScrollIndicator={false}>
             <Text className="label font-weight-bold">Badge</Text>
+            <Loading loadingText="Loading..." />
             {renderRow(
                 'Size: xx-small Position: top-right',
                 <Badge

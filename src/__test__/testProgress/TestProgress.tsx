@@ -15,13 +15,15 @@ const TestProgress: React.FC<ITestProgressProps> = ({id}) => {
         return true;
     };
 
-    const sleep = (ms: number) =>
-        new Promise(resolve => setTimeout(resolve, ms));
+    const sleep = (ms: number) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    };
 
     return (
         <View className="w-100 flex-1">
             <Button
                 onPress={() => {
+                    console.log("GET IN HERE")
                     ProgressController.show(
                         {
                             method: sleep,

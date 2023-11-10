@@ -9,7 +9,7 @@ import Text from "../../component/text/Text";
 import ScrollView from "../../component/view/ScrollView";
 import TouchableOpacity from "../../component/view/TouchableOpacity";
 import View from "../../component/view/View";
-import ViewTextArea from "../../component/view/ViewTextArea";
+import TextAreaView from "../../component/view/TextAreaView";
 
 export interface ITestViewProps {
   [key: string]: any;
@@ -23,16 +23,16 @@ const TestView: React.FC<ITestViewProps> = ({ id }) => {
 
   return (
     <ScrollView className="my-4 w-100">
-      <ViewTextArea limitedLength={100} variant="expand">
+      <TextAreaView limitedLength={100} variant="expand">
         Technology lookup Find out what websites are built with Instantly reveal
         the technology stack any website, such as CMS, ecommerce platform or
         payment processor, as well as company and contact details.
-      </ViewTextArea>
-      <ViewTextArea limitedLength={100} variant="modal">
+      </TextAreaView>
+      <TextAreaView limitedLength={100} variant="modal">
         Technology lookup Find out what websites are built with Instantly reveal
         the technology stack any website, such as CMS, ecommerce platform or
         payment processor, as well as company and contact details.
-      </ViewTextArea>
+      </TextAreaView>
     </ScrollView>
   );
 };

@@ -7,12 +7,12 @@ import StyleStateContext, {
     IStyleStateContext,
 } from '../../context/StyleContext';
 import {ThemeProps} from '../../interface/iTheme';
-import {getStyleWithTheme} from '../../style/style';
+import {getStyleWithTheme, IStyleTransformerProps} from '../../style/style';
 
 export interface ITouchableOpacityProps
     extends TouchableOpacityProps,
         ThemeProps {
-    className?: string;
+    className?: IStyleTransformerProps;
     children?: any;
 }
 

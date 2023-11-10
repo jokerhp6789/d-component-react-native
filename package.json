@@ -33,6 +33,7 @@
         "@babel/preset-env": "^7.20.0",
         "@babel/preset-react": "^7.10.1",
         "@babel/runtime": "^7.20.0",
+        "@devvie/bottom-sheet": "^0.1.2",
         "@gorhom/bottom-sheet": "^4",
         "@react-native-community/eslint-config": "^2.0.0",
         "@react-native/eslint-config": "^0.72.2",
