@@ -20,14 +20,14 @@ import BottomSheet, {
     BottomSheetBackdrop,
     BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
+import switchTheme from 'react-native-theme-switch-animation';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {StatusBar, useColorScheme} from 'react-native';
+import {StatusBar, Appearance, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Badge from '../component/items/Badge';
 import Modal from '../component/modal/Modal';
 import TabView, {ITabViewProps} from '../component/tab/TabView';
 import Text from '../component/text/Text';
-// import SafeAreaView from '../component/view/SafeAreaView';
 import View from '../component/view/View';
 import StyleStateContext from '../context/StyleContext';
 import './configurationStyle';
@@ -121,6 +121,33 @@ const App = () => {
                         }}>
                         Open Bottom Sheet
                     </Button>
+                    <Button
+                        label="Switch Theme"
+                        onPress={(e: any) => {
+                            e.currentTarget.measure(
+                                (x1, y1, width, height, px, py) => {
+                                    switchTheme({
+                                        switchThemeFunction: () => {
+                                            Appearance.setColorScheme(
+                                                colorSchema === 'light'
+                                                    ? 'dark'
+                                                    : 'light',
+                                            ); 
+                                        },
+                                        animationConfig: {
+                                            type: 'circular',
+                                            duration: 900,
+                                            startingPoint: {
+                                                cy: py + height / 2,
+                                                cx: px + width / 2,
+                                            },
+                                        },
+                                    });
+                                },
+                            );
+                        }}
+                    />
+                    <View className="h-[100] bg-red" colorDarkMode="green" />
                     {renderMainView()}
                     {/* <InputComment user={{}} useAnimation /> */}
                     {/* <TestModal onPress={() => setOpenModal(true)} /> */}
