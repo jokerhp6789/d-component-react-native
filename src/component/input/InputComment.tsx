@@ -17,7 +17,7 @@ import {
     View,
 } from 'react-native';
 import useKeyboard, {IUseKeyboard} from '../../hooks/useKeyboard';
-import {styleTransformer} from '../../style/style';
+import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Avatar, {IAvatarProps} from '../avatar/Avatar';
 import {IUserBasic} from '../avatar/AvatarName';
 import TouchableOpacity from '../view/TouchableOpacity';
@@ -26,13 +26,13 @@ import {ThemeProps} from '../../interface/iTheme';
 
 export interface IInputCommentProps extends ThemeProps {
     user?: IUserBasic;
-    className?: string;
-    classNameInputWrapper?: string;
-    classNameInput?: string;
+    className?: IStyleTransformerProps;
+    classNameInputWrapper?: IStyleTransformerProps;
+    classNameInput?: IStyleTransformerProps;
     style?: StyleProp<ViewStyle>;
     styleContentWrapper?: StyleProp<ViewStyle>;
     positon?: 'bottom' | 'top' | 'free';
-    placeholder?: string;
+    placeholder?: IStyleTransformerProps;
     onSubmit?: (value: any) => any;
     onPressUser?: (props?: any) => any;
     getPaddingBottom?: (props?: IUseKeyboard) => number;

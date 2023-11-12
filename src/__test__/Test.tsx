@@ -10,26 +10,28 @@
 
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import React, {ElementRef, Fragment, useEffect, useRef, useState} from 'react';
-import {Appearance, useColorScheme} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import switchTheme from 'react-native-theme-switch-animation';
-import {AppColors, Button} from '..';
+import {NavigationContainer} from '@react-navigation/native';
+import BottomSheet, {BottomSheetBackdrop} from '@gorhom/bottom-sheet';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import {StatusBar, useColorScheme} from 'react-native';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Badge from '../component/items/Badge';
 import Modal from '../component/modal/Modal';
-import ProgressComponent from '../component/progress/ProgressComponent';
-import ProgressController from '../component/progress/ProgressController';
 import TabView, {ITabViewProps} from '../component/tab/TabView';
 import View from '../component/view/View';
 import StyleStateContext from '../context/StyleContext';
 import './configurationStyle';
 import DATA_SOURCE from './Source';
+import TestModal from './testModal/TestModal';
+import {AppColors, Button} from '..';
+import InputComment from '../component/input/InputComment';
+import ProgressComponent from '../component/progress/ProgressComponent';
+import ProgressController from '../component/progress/ProgressController';
+import {styleTransformer} from '../style/style';
+import Routes from './testRoutes/TestRoutes';
 
-interface ITestData {
-    id: string;
-    info: any;
-}
-
-const App = () => {
+const App = (props: any) => {
     const colorSchema = useColorScheme();
 
     const progressRef = useRef<ElementRef<typeof ProgressComponent>>(null);
@@ -43,6 +45,7 @@ const App = () => {
     }, [progressRef]);
 
     const renderMainView = () => {
+        return <Routes {...props} />;
         return (
             <TabView
                 variant="standard"
@@ -112,9 +115,9 @@ const App = () => {
     };
 
     return (
-        <StyleStateContext.Provider
-            value={{locale: 'th', useFontToLocale: true, colorSchema}}>
-            <BottomSheetModalProvider>
+        <SafeAreaProvider>
+            <StyleStateContext.Provider
+                value={{locale: 'th', useFontToLocale: true, colorSchema}}>
                 <SafeAreaView
                     style={{
                         flex: 1,
@@ -122,27 +125,42 @@ const App = () => {
                             ? AppColors.dark
                             : AppColors.light,
                     }}
-                    edges={['top']}>
-                    <ProgressComponent
-                        /* @ts-ignore */
-                        ref={ref => (progressRef.current = ref)}
-                    />
-                    {renderMainView()}
-                    {/* {renderSwitchTheme()} */}
-                    {/* <InputComment user={{}} useAnimation /> */}
-                    {/* <TestModal onPress={() => setOpenModal(true)} /> */}
-                    <Modal
-                        open={openModal}
-                        onClose={() => setOpenModal(false)}
-                        size="fullscreen"
-                        className="flex-1"
-                        showHeader
-                        showFooter>
+                    edges={['top', 'bottom']}>
+                    <NavigationContainer>
+                        <ProgressComponent ref={progressRef} />
+                        {/* <Button
+                        onPress={() => {
+                            // bottomSheetRef.current?.expand();
+                            setOpenModal(!openModal);
+                        }}>
+                        Open Bottom Sheet
+                    </Button> */}
                         {renderMainView()}
-                    </Modal>
+                        {/* <InputComment user={{}} useAnimation /> */}
+                        {/* <TestModal onPress={() => setOpenModal(true)} /> */}
+                        {/* <Modal
+                    open={openModal}
+                    onClose={() => setOpenModal(false)}
+                    size="fullscreen"
+                    className="flex-1"
+                    showHeader
+                    showFooter>
+                    {renderMainView()}
+                </Modal> */}
+                        {/* <BottomSheet
+                            backdropComponent={BottomSheetBackdrop}
+                            ref={bottomSheetRef}
+                            snapPoints={snapPoints}
+                            enablePanDownToClose
+                            onChange={handleSheetChanges}>
+                            <View style={styleTransformer('')}>
+                                <Text>Awesome 🎉</Text>
+                            </View>
+                        </BottomSheet> */}
+                    </NavigationContainer>
                 </SafeAreaView>
-            </BottomSheetModalProvider>
-        </StyleStateContext.Provider>
+            </StyleStateContext.Provider>
+        </SafeAreaProvider>
     );
 };
 
