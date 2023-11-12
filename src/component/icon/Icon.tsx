@@ -1,9 +1,13 @@
 import React, {useContext, useMemo} from 'react';
+import IconFeature from 'react-native-vector-icons/Feather';
 import IconAntDesign from 'react-native-vector-icons/AntDesign';
 import IconEntypo from 'react-native-vector-icons/Entypo';
 import IconEvilIcons from 'react-native-vector-icons/EvilIcons';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5Pro from 'react-native-vector-icons/FontAwesome5Pro';
+// import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+// import FontAwesome6Pro from 'react-native-vector-icons/FontAwesome6Pro';
 import IconFoundation from 'react-native-vector-icons/Foundation';
 import {IconProps} from 'react-native-vector-icons/Icon';
 import IconIonicons from 'react-native-vector-icons/Ionicons';
@@ -32,6 +36,7 @@ export declare type IconType =
     | 'simple-line-icon'
     | 'zocial'
     | 'font-awesome'
+    | 'feather'
     | 'octicon'
     | 'ionicon'
     | 'foundation'
@@ -39,7 +44,9 @@ export declare type IconType =
     | 'entypo'
     | 'antdesign'
     | 'font-awesome-5'
-    | 'font-awesome-5-pro';
+    | 'font-awesome-5-pro'
+    | 'font-awesome-6'
+    | 'font-awesome-6-pro';
 
 export interface IIconProps
     extends Omit<IconProps, 'color'>,
@@ -89,40 +96,49 @@ const Icon: React.FC<IIconProps> = ({
     let icon = <IconMaterialIcons {...props} />;
     switch (type) {
         case 'material-community':
-            <IconMaterialCommunityIcons {...props} />;
+            icon = <IconMaterialCommunityIcons {...props} />;
             break;
         case 'simple-line-icon':
-            <IconSimpleLineIcons {...props} />;
+            icon = <IconSimpleLineIcons {...props} />;
             break;
         case 'zocial':
-            <IconZocial {...props} />;
+            icon = <IconZocial {...props} />;
             break;
         case 'font-awesome':
-            <IconFontAwesome {...props} />;
+            icon = <IconFontAwesome {...props} />;
             break;
         case 'octicon':
-            <IconOcticons {...props} />;
+            icon = <IconOcticons {...props} />;
             break;
         case 'ionicon':
-            <IconIonicons {...props} />;
+            icon = <IconIonicons {...props} />;
             break;
         case 'foundation':
-            <IconFoundation {...props} />;
+            icon = <IconFoundation {...props} />;
+            break;
+        case 'feather':
+            icon = <IconFeature {...props} />;
             break;
         case 'evilicon':
-            <IconEvilIcons {...props} />;
+            icon = <IconEvilIcons {...props} />;
             break;
         case 'entypo':
-            <IconEntypo {...props} />;
+            icon = <IconEntypo {...props} />;
             break;
         case 'antdesign':
-            <IconAntDesign {...props} />;
+            icon = <IconAntDesign {...props} />;
             break;
         case 'font-awesome-5':
-            <FontAwesome5 {...props} />;
+            icon = <FontAwesome5 {...props} />;
             break;
-        // case "font-awesome-5-pro":
-        //     <FontFontAwesome5Pro {...props} />;
+        case 'font-awesome-5-pro':
+            icon = <FontAwesome5Pro {...props} />;
+            break;
+        // case 'font-awesome-6':
+        //     icon = <FontAwesome6 {...props} />;
+        // break;
+        // case 'font-awesome-6-pro':
+        //     icon = <FontAwesome6Pro {...props} />;
         //     break;
         default:
             icon = <IconMaterialIcons {...props} />;
