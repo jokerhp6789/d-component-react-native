@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {ScrollView, ScrollViewProps, View} from 'react-native';
 import RNModal, {ModalProps} from 'react-native-modal';
 import {Configs, IStyleTransformerProps} from '../..';
 import {ThemeProps} from '../../interface/iTheme';
-import {getStyleProps, styleTransformer} from '../../style/style';
+import {styleTransformer} from '../../style/style';
 import Button, {IButtonProps} from '../button/Button';
 import Header, {IHeaderProps} from '../header/Header';
 import SafeAreaView from '../view/SafeAreaView';
@@ -40,8 +40,10 @@ export interface IModalProps
 
     onClose?: (props?: any) => void;
     onSave?: (props?: any) => void;
-    customHeader?: ((props?: Partial<IHeaderProps>) => Element) | Element;
-    customFooter?: ((props?: any) => Element) | Element;
+    customHeader?:
+        | ((props?: Partial<IHeaderProps>) => React.ReactNode)
+        | ReactNode;
+    customFooter?: ((props?: any) => ReactNode) | ReactNode;
 }
 
 const Modal: React.FC<IModalProps> = ({
@@ -223,7 +225,7 @@ const Modal: React.FC<IModalProps> = ({
                 className={containerClass}
                 useLightColor={useLightColor}
                 colorDarkMode={colorDarkMode}>
-                {showHeader && renderHeader()}
+                {showHeader || customHeader ? renderHeader() : null}
                 {renderMainView()}
                 {showFooter && renderFooter()}
             </SafeAreaView>

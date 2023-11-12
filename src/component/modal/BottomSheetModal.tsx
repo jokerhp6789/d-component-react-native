@@ -12,7 +12,7 @@ export interface IBottomSheetModalProps extends BottomSheetModalProps {
 const BottomSheetModal: React.FC<IBottomSheetModalProps> = ({
     children,
     bottomSheetRef,
-    snapPoints = ['80%'],
+    snapPoints = ['85%'],
     ...rest
 }) => {
     const renderBackdrop = useCallback((props: any) => {

@@ -10,7 +10,6 @@ import React, {
 import {
     Platform,
     StyleProp,
-    StyleSheet,
     TouchableOpacity,
     TouchableOpacityProps,
     View,
@@ -37,8 +36,8 @@ import Modal, {IModalProps} from '../modal/Modal';
 import Text from '../text/Text';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import Colors from '../../style/color/_color';
-import {type} from 'os';
 import BottomSheetModal from '../modal/BottomSheetModal';
+import Header, {IHeaderProps} from '../header/Header';
 
 export type PopupVariantType = 'modal' | 'bottom-sheet';
 
@@ -115,7 +114,9 @@ export interface ISelectProps
     chipProps?: Partial<IChipProps>;
     iconProps?: Partial<IIconProps>;
     buttonSelectProps?: Partial<IButtonProps>;
+    buttonClearProps?: Partial<IButtonProps>;
     modalProps?: Partial<IModalProps>;
+    popupHeaderProps?: Partial<IHeaderProps>;
     checkboxProps?: Partial<ICheckBoxProps>;
     containerProps?: Partial<TouchableOpacityProps>;
 }
@@ -137,12 +138,9 @@ const Select: React.FC<ISelectProps> = ({
     classNameError,
     classNameContent,
     classNameTextContent,
-    color,
-    colorDark,
     colorFocus = 'primary',
     style,
     styleContent,
-    styleList,
     value,
     onChange,
     onPress,
@@ -168,6 +166,8 @@ const Select: React.FC<ISelectProps> = ({
     iconProps = {},
     modalProps = {},
     buttonSelectProps = {},
+    buttonClearProps = {},
+    popupHeaderProps = {},
     checkboxProps = {},
     containerProps = {},
     dataSource = [],
@@ -276,7 +276,7 @@ const Select: React.FC<ISelectProps> = ({
         const updateValue = valueType === 'object' ? item : getValue(item);
         if (quickSelect && !multiple) {
             onChange && onChange(updateValue);
-            return onClosePopup();
+            return closePopup();
         }
         if (multiple) {
             let arrayClone = [...(selectingValue || [])];
@@ -299,7 +299,7 @@ const Select: React.FC<ISelectProps> = ({
 
     const handlePressSelect = () => {
         onChange && onChange(selectingValue);
-        onClosePopup();
+        closePopup();
     };
 
     const getLabelFromValue = (value: any) => {
@@ -335,12 +335,12 @@ const Select: React.FC<ISelectProps> = ({
         return data;
     };
 
-    const onClosePopup = () => {
+    const closePopup = () => {
         setOpenModal(false);
         closeBottomSheet();
     };
 
-    const onOpenPopup = () => {
+    const openPopup = () => {
         setOpenModal(true);
         openBottomSheet();
     };
@@ -370,6 +370,7 @@ const Select: React.FC<ISelectProps> = ({
 
             return (
                 <TouchableOpacity
+                    key={`${item?.id}_${selected}`}
                     activeOpacity={0.8}
                     onPress={() => handleSelectItem(item, selected)}
                     style={selectItemClass}>
@@ -390,11 +391,13 @@ const Select: React.FC<ISelectProps> = ({
             return (
                 <Button
                     variant="trans"
-                    classNameLabel="h5"
+                    iconSize={24}
+                    classNameLabel="h4"
+                    color="black"
                     className="px-0 align-self-end"
                     iconName="refresh"
-                    height={20}
-                    onPress={() => setSelectingValue([])}>
+                    onPress={() => setSelectingValue([])}
+                    {...(buttonClearProps || {})}>
                     {clearText}
                 </Button>
             );
@@ -402,9 +405,10 @@ const Select: React.FC<ISelectProps> = ({
         return <View style={styleTransformer('width-[30]')} />;
     }, [
         multiple,
+        clearText,
         selectingValue,
         showClearButton,
-        clearText,
+        buttonClearProps,
         setSelectingValue,
     ]);
 
@@ -501,7 +505,7 @@ const Select: React.FC<ISelectProps> = ({
             <TouchableOpacity
                 style={[{height: inputHeight}, contentClass, styleContent]}
                 onPress={() => {
-                    onOpenPopup();
+                    openPopup();
                 }}
                 disabled={disabled}
                 activeOpacity={0.5}>
@@ -538,14 +542,15 @@ const Select: React.FC<ISelectProps> = ({
             keyExtractor,
             showsVerticalScrollIndicator: false,
             ListFooterComponent: <View style={{height: 200}} />,
+            flashListProps: {extraData: [selectingValue]},
             ...(listPropsConfig || {}),
             ...(listProps || {}),
         };
         if (dataSource && dataSource?.length > 0) {
             return (
                 <AwesomeList
-                    {...awesomeListProps}
                     useFlashList={false}
+                    {...awesomeListProps}
                     ref={listRef}
                     source={() => Promise.resolve()}
                     transformer={res => getResultFromSearch(dataSource)}
@@ -554,8 +559,8 @@ const Select: React.FC<ISelectProps> = ({
         }
         return (
             <AwesomeList
-                {...awesomeListProps}
                 useFlashList={false}
+                {...awesomeListProps}
                 ref={listRef}
                 source={paging => {
                     const payload: ISelectSourceProps = {...paging};
@@ -614,8 +619,8 @@ const Select: React.FC<ISelectProps> = ({
                                   paddingVertical: 20,
                               }
                             : {
-                                  height: 80,
-                                  paddingVertical: 25,
+                                  height: 50,
+                                  paddingVertical: 10,
                               }
                     }
                     {...buttonSelectProps}>
@@ -632,6 +637,21 @@ const Select: React.FC<ISelectProps> = ({
         selectText,
     ]);
 
+    const renderHeader = useMemo(() => {
+        return (
+            <Header
+                title={label}
+                leftIcon="close"
+                onLeftPress={() => {
+                    closePopup();
+                }}
+                iconLeftProps={{color: 'dark'}}
+                customRight={renderClearButton}
+                {...popupHeaderProps}
+            />
+        );
+    }, [label, renderClearButton]);
+
     const renderModal = useMemo(() => {
         return (
             <Modal
@@ -640,14 +660,15 @@ const Select: React.FC<ISelectProps> = ({
                     setOpenModal(false);
                     setTextSearch('');
                 }}
+                // header related props
                 showHeader
                 title={label}
                 leftIcon="close"
                 customRight={renderClearButton}
-                classNameHeader="border-bottom"
-                className="px-0"
+                
                 swipeable={false}
                 animationIn="slideInRight"
+                customHeader={renderHeader}
                 {...modalPropsConfig}
                 {...modalProps}>
                 {renderContentModal}
@@ -656,6 +677,7 @@ const Select: React.FC<ISelectProps> = ({
         );
     }, [
         openModal,
+        renderHeader,
         modalPropsConfig,
         renderClearButton,
         renderContentModal,
@@ -666,6 +688,7 @@ const Select: React.FC<ISelectProps> = ({
     const renderBottomSheet = useMemo(
         () => (
             <BottomSheetModal bottomSheetRef={bottomSheetRef}>
+                {renderHeader}
                 {renderContentModal}
                 {renderButtonSelect}
             </BottomSheetModal>

@@ -72,6 +72,7 @@ export type TCommonStacksParamList = {
     testTabBarScreen: undefined;
     testTabStepperScreen: undefined;
     testFormScreen: undefined;
+    testBottomSheet: undefined;
 };
 export type TCommonStacksScreenProps<T extends keyof TCommonStacksParamList> =
     NativeStackScreenProps<TCommonStacksParamList, T>;

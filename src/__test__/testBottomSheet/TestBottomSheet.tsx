@@ -1,16 +1,11 @@
-import React, {ElementRef, useCallback, useMemo, useRef} from 'react';
-import GBottomSheet, {
-    BottomSheetModal,
-    BottomSheetBackdrop,
-    BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
 import DBottomSheet, {BottomSheetMethods} from '@devvie/bottom-sheet';
+import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
+import React, {ElementRef, useCallback, useMemo, useRef} from 'react';
+import {Text} from 'react-native';
+import {SafeAreaView} from '../../../dist';
 import Button from '../../component/button/Button';
-import ProgressController from '../../component/progress/ProgressController';
 import View from '../../component/view/View';
 import {styleTransformer} from '../../style/style';
-import {Text} from 'react-native';
-import { SafeAreaView } from '../../../dist';
 
 export interface ITestBottomSheetProps {
     [key: string]: any;
@@ -51,7 +46,7 @@ const TestBottomSheet: React.FC<ITestBottomSheetProps> = ({id}) => {
                     <Text>Awesome 🎉</Text>
                 </View>
             </BottomSheetModal>
-            <DBottomSheet ref={sheetRef}  closeOnDragDown>
+            <DBottomSheet ref={sheetRef} closeOnDragDown>
                 <Text>
                     The smart 😎, tiny 📦, and flexible 🎗 bottom sheet your app
                     craves 🚀

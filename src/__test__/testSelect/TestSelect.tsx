@@ -27,7 +27,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
     return (
         <ScrollView className="py-0 w-100">
             <View className="flex-1 bg- h-100 w-100">
-                {/* <Select
+                <Select
                     showSearch
                     quickSelect
                     searchOffline
@@ -43,13 +43,7 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     getLabel={item => item?.label}
                     value={selectValue}
                     onChange={v => setSelectValue(v)}
-                    modalProps={{
-                        theme: 'primary',
-                        customHeader: props => (
-                            <Header {...props} title="Checking" />
-                        ),
-                    }}
-                /> */}
+                />
                 <Select
                     showSearch
                     searchOffline
@@ -81,7 +75,6 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     getLabel={item => item?.label}
                     value={singleValue}
                     onChange={v => setSingleValue(v)}
-                    multiple
                     quickRemove
                     // listProps={{useFlashList: false}}
                     // quickSelect
@@ -91,6 +84,29 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     showSearch
                     searchOffline
                     quickSelect
+                    multiple
+                    popupVariant="bottom-sheet"
+                    listProps={{useFlashList: true}}
+                    classNameContent="bg-white"
+                    labelPosition="inside"
+                    keySearchOffline={['label']}
+                    valueType="string"
+                    label="Multiselect Popup Bottom Sheet"
+                    placeholder="Label Inside"
+                    className="my-2"
+                    dataSource={SELECT_DATA}
+                    getLabel={item => item?.label}
+                    value={selectValue}
+                    onChange={v => setSelectValue(v)}
+                    error="123"
+                />
+                <Select
+                    showSearch
+                    searchOffline
+                    quickSelect
+                    multiple
+                    // popupVariant="bottom-sheet"
+                    listProps={{useFlashList: true}}
                     classNameContent="bg-white"
                     labelPosition="inside"
                     keySearchOffline={['label']}

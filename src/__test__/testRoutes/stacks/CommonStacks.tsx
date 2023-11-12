@@ -17,6 +17,7 @@ import TestProgress from '../../testProgress/TestProgress';
 import TestTabBar from '../../testTab/TestTabBar';
 import TestTabStepper from '../../testTab/TestTabStepper';
 import TestForm from '../../testForm/TestForm';
+import TestBottomSheet from '../../testBottomSheet/TestBottomSheet';
 
 export function commonStacksCreator<T extends typeof HomeTabStack>(Stack: T) {
     return (
@@ -46,6 +47,7 @@ export function commonStacksCreator<T extends typeof HomeTabStack>(Stack: T) {
                 component={TestTabStepper}
             />
             <Stack.Screen name="testFormScreen" component={TestForm} />
+            <Stack.Screen name="testBottomSheet" component={TestBottomSheet} />
         </Stack.Group>
     );
 }

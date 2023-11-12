@@ -1,11 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {Appearance, useColorScheme} from 'react-native';
-import ScrollView from '../../component/view/ScrollView';
+import React, {Fragment, useEffect, useState} from 'react';
+import {
+    Appearance,
+    ScrollView,
+    useColorScheme,
+    View as RNView,
+} from 'react-native';
+import switchTheme from 'react-native-theme-switch-animation';
 import View from '../../component/view/View';
 import Text from '../../component/text/Text';
 import {map} from 'lodash';
 import {Switch} from 'react-native';
 import {styleTransformer} from '../../style/style';
+import Button from '../../component/button/Button';
 
 export interface ITestStyleProps {
     [key: string]: any;
@@ -23,8 +29,45 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
         }
     }, [useSystemTheme]);
 
+    const renderSwitchTheme = () => {
+        return (
+            <RNView style={[{flex: 1, marginVertical: 20}]}>
+                <Button
+                    label="Switch Theme"
+                    onPress={(e: any) => {
+                        e.currentTarget.measure(
+                            (x1, y1, width, height, px, py) => {
+                                switchTheme({
+                                    switchThemeFunction: () => {
+                                        Appearance.setColorScheme(
+                                            appScheme === 'light'
+                                                ? 'dark'
+                                                : 'light',
+                                        );
+                                    },
+                                    animationConfig: {
+                                        type: 'circular',
+                                        duration: 900,
+                                        startingPoint: {
+                                            cy: py + height / 2,
+                                            cx: px + width / 2,
+                                        },
+                                    },
+                                });
+                            },
+                        );
+                    }}
+                />
+                <View className="h-[100] bg-red" colorDarkMode="green" />
+            </RNView>
+        );
+    };
+
     return (
-        <ScrollView className="w-100 relative" overScrollMode="always">
+        <ScrollView
+            style={styleTransformer('w-100 relative')}
+            overScrollMode="always">
+            {renderSwitchTheme()}
             <View className="justify-content-center align-center bg-[rgba(12,12,12,0.3)] max-width-[250] p-[30]">
                 <View className="width-[60] height-[60]  border-dashed border-primary my-3" />
                 <Text
