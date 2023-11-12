@@ -34,7 +34,7 @@ const App = (props: any) => {
         if (progressRef.current) {
             ProgressController.initialize(progressRef.current);
         }
-    }, [progressRef]);
+    }, [progressRef.current]);
 
     const renderMainView = () => {
         return <Routes {...props} />;
@@ -78,8 +78,8 @@ const App = (props: any) => {
                 value={{locale: 'th', useFontToLocale: true, colorSchema}}>
                 <BottomSheetModalProvider>
                     <NavigationContainer>
-                        <ProgressComponent ref={progressRef} />
                         {renderMainView()}
+                        <ProgressComponent ref={progressRef} />
                     </NavigationContainer>
                 </BottomSheetModalProvider>
             </StyleStateContext.Provider>
