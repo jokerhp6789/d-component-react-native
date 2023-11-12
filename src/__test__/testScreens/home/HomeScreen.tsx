@@ -3,12 +3,13 @@ import {View} from 'react-native';
 import Button from '../../../component/button/Button';
 import Text from '../../../component/text/Text';
 import {THomeScreenProps} from '../../testRoutes/navigator/IScreenProps';
+import Layout from '../../testLayout/Layout';
 
 export interface IHomeScreenProps extends THomeScreenProps {}
 
 const HomeScreen: React.FC<IHomeScreenProps> = ({navigation, route}) => {
     return (
-        <View>
+        <Layout className="px-4">
             <Text>Home Screen</Text>
             <Button
                 onPress={() => {
@@ -16,7 +17,7 @@ const HomeScreen: React.FC<IHomeScreenProps> = ({navigation, route}) => {
                 }}>
                 Go To Style Screen
             </Button>
-        </View>
+        </Layout>
     );
 };
 

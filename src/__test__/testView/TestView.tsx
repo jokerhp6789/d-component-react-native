@@ -1,40 +1,31 @@
-import React, { ElementRef, useRef, useState } from "react";
-import DatePicker from "react-native-date-picker";
-import CheckBox from "../../component/checkbox/CheckBox";
-import InputDate from "../../component/input/InputDate";
-import InputDateRange from "../../component/input/InputDateRange";
-import InputSearch from "../../component/input/InputSearch";
-import InputText from "../../component/input/InputText";
-import Text from "../../component/text/Text";
-import ScrollView from "../../component/view/ScrollView";
-import TouchableOpacity from "../../component/view/TouchableOpacity";
-import View from "../../component/view/View";
-import TextAreaView from "../../component/view/TextAreaView";
+import React from 'react';
+import ScrollView from '../../component/view/ScrollView';
+import TextAreaView from '../../component/view/TextAreaView';
+import Layout from '../testLayout/Layout';
 
 export interface ITestViewProps {
-  [key: string]: any;
+    [key: string]: any;
 }
 
-const TestView: React.FC<ITestViewProps> = ({ id }) => {
-  const dateRef = useRef<ElementRef<typeof DatePicker>>(null);
-  const [openDateModal, setOpenDateModal] = useState(false);
-  const [date, setDate] = useState<any>();
-  const [dateRange, setDateRange] = useState<any[]>([]);
-
-  return (
-    <ScrollView className="my-4 w-100">
-      <TextAreaView limitedLength={100} variant="expand">
-        Technology lookup Find out what websites are built with Instantly reveal
-        the technology stack any website, such as CMS, ecommerce platform or
-        payment processor, as well as company and contact details.
-      </TextAreaView>
-      <TextAreaView limitedLength={100} variant="modal">
-        Technology lookup Find out what websites are built with Instantly reveal
-        the technology stack any website, such as CMS, ecommerce platform or
-        payment processor, as well as company and contact details.
-      </TextAreaView>
-    </ScrollView>
-  );
+const TestView: React.FC<ITestViewProps> = ({id}) => {
+    return (
+        <Layout>
+            <ScrollView className="my-3 px-4 w-100">
+                <TextAreaView limitedLength={100} variant="expand">
+                    Technology lookup Find out what websites are built with
+                    Instantly reveal the technology stack any website, such as
+                    CMS, ecommerce platform or payment processor, as well as
+                    company and contact details.
+                </TextAreaView>
+                <TextAreaView limitedLength={100} variant="modal">
+                    Technology lookup Find out what websites are built with
+                    Instantly reveal the technology stack any website, such as
+                    CMS, ecommerce platform or payment processor, as well as
+                    company and contact details.
+                </TextAreaView>
+            </ScrollView>
+        </Layout>
+    );
 };
 
 export default TestView;

@@ -8,6 +8,7 @@ import View from '../../component/view/View';
 import images from '../testImage/Images';
 import ProgressBar from '../../component/items/ProgressBar';
 import Loading from '../../component/view/Loading';
+import Layout from '../testLayout/Layout';
 
 export interface ITestItemsProps {
     [key: string]: any;
@@ -26,110 +27,114 @@ const TestItems: React.FC<ITestItemsProps> = ({id}) => {
     };
 
     return (
-        <ScrollView className="my-4 w-100" showsVerticalScrollIndicator={false}>
-            <Text className="label font-weight-bold">Badge</Text>
-            <Loading loadingText="Loading..." />
-            {renderRow(
-                'Size: xx-small Position: top-right',
-                <Badge
-                    size="xx-large"
-                    variant="icon"
-                    width={30}
-                    height={30}
-                    styleBadge={{right: -10}}>
-                    <Avatar
-                        avatar={images.birthdayCake}
-                        size="medium"
-                        className="my-2"
-                    />
-                </Badge>,
-            )}
-            {renderRow(
-                'Size xx-small Position: top-right',
-                <Badge size="xx-small">
-                    <Icon name="filter" className="my-2" />
-                </Badge>,
-            )}
-            {renderRow(
-                'Size x-small Position: top-right',
-                <Badge size="small" styleBadge={{right: -3}}>
-                    <Icon name="filter" className="my-2" />
-                </Badge>,
-            )}
-            {renderRow(
-                'Size x-small Position: bottom-left',
-                <Badge size="small" position="bottom-left">
-                    <Icon name="filter" className="my-2" />
-                </Badge>,
-            )}
-            {renderRow(
-                'Size medium Position: top-right Variant: label',
-                <Badge
-                    size="xx-large"
-                    position="top-right"
-                    variant="label"
-                    label="+99"
-                    color="secondary"
-                    shape="rounded"
-                    width={20}
-                    showBorder={false}>
-                    <Icon name="filter" className="my-2" />
-                </Badge>,
-            )}
-            {renderRow(
-                'Size medium Position: top-right Variant: label',
-                <Badge
-                    size="xx-large"
-                    position="top-right"
-                    variant="label"
-                    shape="pill"
-                    label="+9"
-                    color="secondary"
-                    width={25}>
-                    <Icon name="filter" className="my-2" />
-                </Badge>,
-            )}
-            <Text className="label font-weight-bold">Icon</Text>
-            {renderRow(
-                'Pressable Icon',
-                <Icon
-                    name="bag-check-outline"
-                    type="ionicon"
-                    onPress={() => {}}
-                    size={25}
-                />,
-            )}
-            {renderRow(
-                'Progress Bar',
-                <ProgressBar
-                    trailColor={'#252525' as any}
-                    size="x-large"
-                    height={15}
-                    percent={0.25}
-                    rounded={false}
-                />,
-            )}
-            {renderRow(
-                'Check Box',
-                <CheckBox
-                    checked={checked}
-                    onChange={() => setChecked(!checked)}
-                    size={40}
-                    iconSize={30}
-                    classNameBox="rounded-1"
-                />,
-            )}
-            {renderRow(
-                'Check Box',
-                <CheckBox
-                    pressEnable={false}
-                    disabled
-                    checked={checked}
-                    onChange={() => setChecked(!checked)}
-                    variant="radio"
-                />,
-            )}
-        </ScrollView>
+        <Layout>
+            <ScrollView
+                className="mt-3 px-4 w-100"
+                showsVerticalScrollIndicator={false}>
+                <Text className="label font-weight-bold">Badge</Text>
+                <Loading loadingText="Loading..." />
+                {renderRow(
+                    'Size: xx-small Position: top-right',
+                    <Badge
+                        size="xx-large"
+                        variant="icon"
+                        width={30}
+                        height={30}
+                        styleBadge={{right: -10}}>
+                        <Avatar
+                            avatar={images.birthdayCake}
+                            size="medium"
+                            className="my-2"
+                        />
+                    </Badge>,
+                )}
+                {renderRow(
+                    'Size xx-small Position: top-right',
+                    <Badge size="xx-small">
+                        <Icon name="filter" className="my-2" />
+                    </Badge>,
+                )}
+                {renderRow(
+                    'Size x-small Position: top-right',
+                    <Badge size="small" styleBadge={{right: -3}}>
+                        <Icon name="filter" className="my-2" />
+                    </Badge>,
+                )}
+                {renderRow(
+                    'Size x-small Position: bottom-left',
+                    <Badge size="small" position="bottom-left">
+                        <Icon name="filter" className="my-2" />
+                    </Badge>,
+                )}
+                {renderRow(
+                    'Size medium Position: top-right Variant: label',
+                    <Badge
+                        size="xx-large"
+                        position="top-right"
+                        variant="label"
+                        label="+99"
+                        color="secondary"
+                        shape="rounded"
+                        width={20}
+                        showBorder={false}>
+                        <Icon name="filter" className="my-2" />
+                    </Badge>,
+                )}
+                {renderRow(
+                    'Size medium Position: top-right Variant: label',
+                    <Badge
+                        size="xx-large"
+                        position="top-right"
+                        variant="label"
+                        shape="pill"
+                        label="+9"
+                        color="secondary"
+                        width={25}>
+                        <Icon name="filter" className="my-2" />
+                    </Badge>,
+                )}
+                <Text className="label font-weight-bold">Icon</Text>
+                {renderRow(
+                    'Pressable Icon',
+                    <Icon
+                        name="bag-check-outline"
+                        type="ionicon"
+                        onPress={() => {}}
+                        size={25}
+                    />,
+                )}
+                {renderRow(
+                    'Progress Bar',
+                    <ProgressBar
+                        trailColor={'#252525' as any}
+                        size="x-large"
+                        height={15}
+                        percent={0.25}
+                        rounded={false}
+                    />,
+                )}
+                {renderRow(
+                    'Check Box',
+                    <CheckBox
+                        checked={checked}
+                        onChange={() => setChecked(!checked)}
+                        size={40}
+                        iconSize={30}
+                        classNameBox="rounded-1"
+                    />,
+                )}
+                {renderRow(
+                    'Check Box',
+                    <CheckBox
+                        pressEnable={false}
+                        disabled
+                        checked={checked}
+                        onChange={() => setChecked(!checked)}
+                        variant="radio"
+                    />,
+                )}
+            </ScrollView>
+        </Layout>
     );
 };
 

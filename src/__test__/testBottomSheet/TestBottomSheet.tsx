@@ -1,11 +1,14 @@
 import DBottomSheet, {BottomSheetMethods} from '@devvie/bottom-sheet';
-import {BottomSheetBackdrop, BottomSheetModal} from '@gorhom/bottom-sheet';
+import BottomSheet, {
+    BottomSheetBackdrop,
+    BottomSheetModal,
+} from '@gorhom/bottom-sheet';
 import React, {ElementRef, useCallback, useMemo, useRef} from 'react';
 import {Text} from 'react-native';
-import {SafeAreaView} from '../../../dist';
 import Button from '../../component/button/Button';
 import View from '../../component/view/View';
 import {styleTransformer} from '../../style/style';
+import Layout from '../testLayout/Layout';
 
 export interface ITestBottomSheetProps {
     [key: string]: any;
@@ -21,7 +24,7 @@ const TestBottomSheet: React.FC<ITestBottomSheetProps> = ({id}) => {
     }, []);
 
     return (
-        <SafeAreaView className="w-100 flex-1">
+        <Layout className="w-100 flex-1">
             <Button
                 className="mt-3"
                 onPress={() => {
@@ -52,7 +55,7 @@ const TestBottomSheet: React.FC<ITestBottomSheetProps> = ({id}) => {
                     craves 🚀
                 </Text>
             </DBottomSheet>
-        </SafeAreaView>
+        </Layout>
     );
 };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../../component/button/Button';
 import ProgressController from '../../component/progress/ProgressController';
 import View from '../../component/view/View';
+import Layout from '../testLayout/Layout';
 
 export interface ITestProgressProps {
     [key: string]: any;
@@ -16,14 +17,14 @@ const TestProgress: React.FC<ITestProgressProps> = ({id}) => {
     };
 
     const sleep = (ms: number) => {
+        console.log('GET IN HERE');
         return new Promise(resolve => setTimeout(resolve, ms));
     };
 
     return (
-        <View className="w-100 flex-1">
+        <Layout className="px-4 pt-3">
             <Button
                 onPress={() => {
-                    console.log("GET IN HERE")
                     ProgressController.show(
                         {
                             method: sleep,
@@ -34,7 +35,7 @@ const TestProgress: React.FC<ITestProgressProps> = ({id}) => {
                 }}>
                 On Progress
             </Button>
-        </View>
+        </Layout>
     );
 };
 

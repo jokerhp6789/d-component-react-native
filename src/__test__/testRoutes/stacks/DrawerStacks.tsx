@@ -20,7 +20,7 @@ const DrawerStacks: React.FC<IDrawerStacksProps> = ({navigation}) => {
             screenOptions={{
                 headerStyle: {},
                 headerShown: false,
-                headerStatusBarHeight: 0,
+                // headerStatusBarHeight: 0,
                 // headerBackground: () => {
                 //     return (
                 //         <View style={{backgroundColor: 'green', height: 50}} />
@@ -29,7 +29,7 @@ const DrawerStacks: React.FC<IDrawerStacksProps> = ({navigation}) => {
                 // header: () => <Header />,
                 drawerContentContainerStyle: {
                     paddingBottom: 100,
-                    paddingTop: 0,
+                    paddingTop: 75,
                 },
             }}>
             <DrawerScreen name="homeTab" component={TabStacks} />

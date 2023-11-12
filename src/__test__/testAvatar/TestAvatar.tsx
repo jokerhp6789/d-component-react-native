@@ -3,8 +3,9 @@ import Avatar from '../../component/avatar/Avatar';
 import View from '../../component/view/View';
 import images from '../testImage/Images';
 import AvatarName from '../../component/avatar/AvatarName';
-import ScrollView from '../../component/view/ScrollView';
 import {styleTransformer} from '../../style/style';
+import Layout from '../testLayout/Layout';
+import {ScrollView} from 'react-native';
 
 export interface ITestAvatarProps {
     [key: string]: any;
@@ -13,8 +14,8 @@ export interface ITestAvatarProps {
 const TestAvatar: React.FC<ITestAvatarProps> = ({id}) => {
     const imageType = typeof images.birthdayCake;
     return (
-        <ScrollView className="w-100">
-            <View>
+        <Layout>
+            <ScrollView style={styleTransformer('w-100 px-4 mt-3')}>
                 <Avatar
                     text="T"
                     size="xx-small"
@@ -35,8 +36,6 @@ const TestAvatar: React.FC<ITestAvatarProps> = ({id}) => {
                 <Avatar text="T" size="large" className="my-2" />
                 <Avatar text="T" size="x-large" className="my-2" />
                 <Avatar text="T" size="xx-large" className="my-2" />
-            </View>
-            <View>
                 <Avatar
                     avatar={images.birthdayCake}
                     size={40}
@@ -80,8 +79,6 @@ const TestAvatar: React.FC<ITestAvatarProps> = ({id}) => {
                     className="my-2"
                     variant="rounded"
                 />
-            </View>
-            <View>
                 <AvatarName
                     user={{fullName: 'Trung', avatar: images.birthdayCake}}
                     size="xx-small"
@@ -129,8 +126,9 @@ const TestAvatar: React.FC<ITestAvatarProps> = ({id}) => {
                     size="xx-large"
                     className="my-2"
                 />
-            </View>
-        </ScrollView>
+                <View className="h-[200]" />
+            </ScrollView>
+        </Layout>
     );
 };
 

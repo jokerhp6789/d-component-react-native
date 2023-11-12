@@ -7,7 +7,7 @@ import Configs from '../style/config/_config';
 import {Platform} from 'react-native';
 
 Colors.loadColors({
-    primary: '#F234FA' as any,
+    primary: '#E95504' as any,
     inputColorDark: 'yellow',
 });
 //@ts-ignore

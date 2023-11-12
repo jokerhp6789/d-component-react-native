@@ -6,6 +6,7 @@ import AwesomeListMode from '../../component/list/awesomeList/AwesomeListMode';
 import Text from '../../component/text/Text';
 import View from '../../component/view/View';
 import images from '../testImage/Images';
+import Layout from '../testLayout/Layout';
 
 export interface ITestListProps {
     [key: string]: any;
@@ -66,7 +67,7 @@ const TestList: React.FC<ITestListProps> = ({id}) => {
         );
     };
 
-    return <View style={{flex: 1, width: '100%'}}>{renderList()}</View>;
+    return <Layout className="px-4">{renderList()}</Layout>;
 };
 
 export default TestList;

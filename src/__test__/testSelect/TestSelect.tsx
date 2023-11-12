@@ -5,6 +5,7 @@ import ScrollView from '../../component/view/ScrollView';
 import View from '../../component/view/View';
 import StringUtils from '../../utils/StringUtils';
 import {SELECT_DATA} from '../data/TestConstant';
+import Layout from '../testLayout/Layout';
 
 export interface ITestSelectProps {
     [key: string]: any;
@@ -25,8 +26,8 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
     );
 
     return (
-        <ScrollView className="py-0 w-100">
-            <View className="flex-1 bg- h-100 w-100">
+        <Layout>
+            <ScrollView className="mt-3 px-4 w-100">
                 <Select
                     showSearch
                     quickSelect
@@ -120,8 +121,8 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     onChange={v => setSelectValue(v)}
                     error="123"
                 />
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </Layout>
     );
 };
 

@@ -18,12 +18,38 @@ import TestTabBar from '../../testTab/TestTabBar';
 import TestTabStepper from '../../testTab/TestTabStepper';
 import TestForm from '../../testForm/TestForm';
 import TestBottomSheet from '../../testBottomSheet/TestBottomSheet';
+import Text from '../../../component/text/Text';
+import {join} from 'lodash';
 
 export function commonStacksCreator<T extends typeof HomeTabStack>(Stack: T) {
     return (
         <Stack.Group
             screenOptions={{
                 ...DEFAULT_HEADER,
+                headerTitle: ({children}) => {
+                    let result =
+                        typeof children === 'string'
+                            ? children.split(/(?=[A-Z])/)
+                            : 'Screen';
+
+                    if (Array.isArray(result) && result.length) {
+                        result = join(
+                            result.map(word => {
+                                return (
+                                    word.charAt(0)?.toUpperCase() +
+                                    word.slice(1)
+                                );
+                            }),
+                            ' ',
+                        );
+                    }
+
+                    return (
+                        <Text className="h3 font-weight-bold text-primary">
+                            {result}
+                        </Text>
+                    );
+                },
             }}>
             <Stack.Screen name="testStyleScreen" component={TestStyle} />
             <Stack.Screen name="testInputScreen" component={TestInput} />

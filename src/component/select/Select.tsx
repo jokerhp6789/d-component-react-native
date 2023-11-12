@@ -665,7 +665,6 @@ const Select: React.FC<ISelectProps> = ({
                 title={label}
                 leftIcon="close"
                 customRight={renderClearButton}
-                
                 swipeable={false}
                 animationIn="slideInRight"
                 customHeader={renderHeader}

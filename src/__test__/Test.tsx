@@ -72,27 +72,17 @@ const App = (props: any) => {
         return (foundItem && foundItem?.component) || <View />;
     };
 
-
     return (
         <SafeAreaProvider>
-            <BottomSheetModalProvider>
-                <StyleStateContext.Provider
-                    value={{locale: 'th', useFontToLocale: true, colorSchema}}>
-                    <SafeAreaView
-                        style={{
-                            flex: 1,
-                            backgroundColor: isDarkMode
-                                ? AppColors.dark
-                                : AppColors.light,
-                        }}
-                        edges={['top', 'bottom']}>
-                        <NavigationContainer>
-                            <ProgressComponent ref={progressRef} />
-                            {renderMainView()}
-                        </NavigationContainer>
-                    </SafeAreaView>
-                </StyleStateContext.Provider>
-            </BottomSheetModalProvider>
+            <StyleStateContext.Provider
+                value={{locale: 'th', useFontToLocale: true, colorSchema}}>
+                <BottomSheetModalProvider>
+                    <NavigationContainer>
+                        <ProgressComponent ref={progressRef} />
+                        {renderMainView()}
+                    </NavigationContainer>
+                </BottomSheetModalProvider>
+            </StyleStateContext.Provider>
         </SafeAreaProvider>
     );
 };
