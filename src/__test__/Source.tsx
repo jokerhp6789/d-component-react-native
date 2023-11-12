@@ -17,8 +17,20 @@ import TestStyle from './testStyle/TestStyle';
 import TestTabBar from './testTab/TestTabBar';
 import TestTabStepper from './testTab/TestTabStepper';
 import TestView from './testView/TestView';
+import TestAwesomeBuilder from './testAwesomeBuilder/TestAwesomeBuilder';
+import TestGestureHandler from './testGestureHandler/TestGestureHandler';
 
 const DATA_SOURCE: ITabViewProps['dataSource'] = [
+    {
+        key: 'awesomeBuilder',
+        label: 'Awesome Builder',
+        component: <TestAwesomeBuilder />,
+    },
+    {
+        key: 'testGestureHandler',
+        label: 'TestGestureHandler',
+        component: <TestGestureHandler />,
+    },
     {
         key: 'testBottomSheet',
         label: 'Bottom Sheet',
