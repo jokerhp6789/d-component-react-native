@@ -17,7 +17,6 @@ const TestProgress: React.FC<ITestProgressProps> = ({id}) => {
     };
 
     const sleep = (ms: number) => {
-        console.log('GET IN HERE');
         return new Promise(resolve => setTimeout(resolve, ms));
     };
 
