@@ -32,7 +32,7 @@ export interface IInputCommentProps extends ThemeProps {
     style?: StyleProp<ViewStyle>;
     styleContentWrapper?: StyleProp<ViewStyle>;
     positon?: 'bottom' | 'top' | 'free';
-    placeholder?: IStyleTransformerProps;
+    placeholder?: string;
     onSubmit?: (value: any) => any;
     onPressUser?: (props?: any) => any;
     getPaddingBottom?: (props?: IUseKeyboard) => number;
