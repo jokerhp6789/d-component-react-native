@@ -68,6 +68,9 @@ export {default as TextAreaView} from './component/view/TextAreaView';
 export type {ILoadingProps} from './component/view/Loading';
 export {default as Loading} from './component/view/Loading';
 
+export type {ICollapseViewProps} from './component/view/CollapseView';
+export {default as CollapseView} from './component/view/CollapseView';
+
 /* ----------------------------------------
 // List
 // ---------------------------------------- */

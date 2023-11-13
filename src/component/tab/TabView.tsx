@@ -38,6 +38,7 @@ export interface ITabViewRoute extends Route {
     label?: string;
     render?: (props?: any) => any;
     component?: React.ReactNode;
+    [key: string]: any;
 }
 
 export interface IRenderTabViewProps<T> extends SceneRendererProps {

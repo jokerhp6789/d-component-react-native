@@ -21,29 +21,28 @@ import TestBottomSheet from '../../testBottomSheet/TestBottomSheet';
 import Text from '../../../component/text/Text';
 import {join} from 'lodash';
 
+export const getDataItemTitle = (children: any) => {
+    let result =
+        typeof children === 'string' ? children.split(/(?=[A-Z])/) : 'Screen';
+
+    if (Array.isArray(result) && result.length) {
+        result = join(
+            result.map(word => {
+                return word.charAt(0)?.toUpperCase() + word.slice(1);
+            }),
+            ' ',
+        );
+    }
+    return result;
+};
+
 export function commonStacksCreator<T extends typeof HomeTabStack>(Stack: T) {
     return (
         <Stack.Group
             screenOptions={{
                 ...DEFAULT_HEADER,
                 headerTitle: ({children}) => {
-                    let result =
-                        typeof children === 'string'
-                            ? children.split(/(?=[A-Z])/)
-                            : 'Screen';
-
-                    if (Array.isArray(result) && result.length) {
-                        result = join(
-                            result.map(word => {
-                                return (
-                                    word.charAt(0)?.toUpperCase() +
-                                    word.slice(1)
-                                );
-                            }),
-                            ' ',
-                        );
-                    }
-
+                    const result = getDataItemTitle(children);
                     return (
                         <Text className="h3 font-weight-bold text-primary">
                             {result}
