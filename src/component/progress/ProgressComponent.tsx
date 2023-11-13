@@ -6,12 +6,12 @@ import {
     Modal,
     Platform,
     StyleSheet,
-    Text,
     TouchableOpacity,
     View,
 } from 'react-native';
 import AppColors from '../../style/constant/AppColors';
 import AppSizes from '../../style/constant/AppSizes';
+import Text from '../text/Text';
 import Loading, {ILoadingProps} from '../view/Loading';
 
 const {height} = Dimensions.get('window');
@@ -120,6 +120,13 @@ export interface IResponseAPI {
     [key: string]: any;
 }
 
+export interface IErrorData {
+    error?: any;
+    message?: any;
+    status?: any;
+    [key: string]: any;
+}
+
 export interface IProgressTaskProps {
     promiseFunction: Array<IProgressFunctionProps> | IProgressFunctionProps;
     onSuccess?: (res?: Array<IResponseAPI> | IResponseAPI) => any;
@@ -130,7 +137,8 @@ export interface IProgressTaskProps {
 export interface IProgressComponentProps {
     customLoadingView?: ((props?: any) => React.ReactNode) | React.ReactNode;
     textContent?: IProgressTextContent;
-    loadingProps?: Partial<ILoadingProps>;
+    loadingProps?: Partial<any>;
+    getErrors?: (props?: any) => null | IErrorData;
 }
 
 export interface IProgressComponentState extends Partial<IProgressTaskProps> {
@@ -235,6 +243,15 @@ class ProgressComponent extends Component<
             const task = Promise.all(promiseAll);
             task.then((result: any) => {
                 if (result) {
+                    const {getErrors} = this.props || {};
+                    if (getErrors) {
+                        const error = getErrors(
+                            isArrayFunc ? result : result?.[0],
+                        );
+                        if (error && error?.message) {
+                            return this.setError(error);
+                        }
+                    }
                     this.dismiss();
                     if (onSuccess) {
                         onSuccess(isArrayFunc ? result : result?.[0]);
