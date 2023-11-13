@@ -11,7 +11,10 @@ export interface IGeneralStyleConfig extends ThemeProps {}
 export interface IDefaultStyleConfig {
     textConfig?: Pick<ITextProps, 'color' | 'colorDarkMode'>;
     inputConfig?: Pick<IInputTextProps, 'variant' | 'labelPosition'>;
-    selectConfig?: Pick<ISelectProps, 'modalProps' | 'listProps'>;
+    selectConfig?: Pick<
+        ISelectProps,
+        'modalProps' | 'listProps' | 'popupHeaderProps' | 'popupVariant'
+    >;
     buttonConfig?: Pick<
         IButtonProps,
         | 'variant'

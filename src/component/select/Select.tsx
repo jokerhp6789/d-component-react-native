@@ -15,6 +15,7 @@ import {
     View,
     ViewStyle,
 } from 'react-native';
+import {BottomSheetModal as RnBottomSheetModal} from '@gorhom/bottom-sheet';
 import Configs from '../../style/config/_config';
 import Sizes from '../../style/size/_size';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
@@ -123,7 +124,7 @@ export interface ISelectProps
 
 const Select: React.FC<ISelectProps> = ({
     variant: variantProps,
-    popupVariant: popupVariantProps = 'modal',
+    popupVariant: popupVariantProps,
     buttonSelectHeight = Platform.OS === 'android' ? 110 : 85,
     height = Sizes.inputHeight,
     label,
@@ -174,15 +175,19 @@ const Select: React.FC<ISelectProps> = ({
     valueType = 'object',
 }) => {
     const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
-    const bottomSheetRef = useRef<ElementRef<typeof BottomSheetModal>>(null);
+    const bottomSheetRef = useRef<ElementRef<typeof RnBottomSheetModal>>(null);
 
     const {inputConfig, selectConfig} = Configs;
     const {variant: variantConfig, labelPosition: labelPositionConfig} =
         inputConfig || {};
-    const {modalProps: modalPropsConfig, listProps: listPropsConfig} =
-        selectConfig || {};
+    const {
+        modalProps: modalPropsConfig,
+        listProps: listPropsConfig,
+        popupHeaderProps: popupHeaderPropsConfig,
+        popupVariant: popupVariantConfig,
+    } = selectConfig || {};
     const variant = variantProps || variantConfig || 'standard';
-    const popupVariant = popupVariantProps;
+    const popupVariant = popupVariantProps || popupVariantConfig || 'modal';
 
     const labelPosition: InputLabelPositionType =
         labelPositionProp || labelPositionConfig || 'outside';
@@ -647,10 +652,11 @@ const Select: React.FC<ISelectProps> = ({
                 }}
                 iconLeftProps={{color: 'dark'}}
                 customRight={renderClearButton}
-                {...popupHeaderProps}
+                {...(popupHeaderPropsConfig || {})}
+                {...(popupHeaderProps || {})}
             />
         );
-    }, [label, renderClearButton]);
+    }, [label, popupHeaderProps, popupHeaderPropsConfig, renderClearButton]);
 
     const renderModal = useMemo(() => {
         return (
