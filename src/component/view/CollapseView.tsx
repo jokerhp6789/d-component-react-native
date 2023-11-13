@@ -1,11 +1,11 @@
 import React, {useMemo, useState} from 'react';
 import {LayoutAnimation, TouchableOpacity, View} from 'react-native';
-import {styleTransformer} from '../../style/style';
+import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Icon, {IIconProps} from '../icon/Icon';
 import Text from '../text/Text';
 
 export interface ICollapseViewProps {
-    className?: string;
+    className?: IStyleTransformerProps;
     title?: string;
     children?: any;
     onPress?: any;
