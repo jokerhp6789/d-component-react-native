@@ -5,6 +5,7 @@ import {
     useColorScheme,
     View as RNView,
 } from 'react-native';
+import {ReactNativeZoomableView} from '@openspacelabs/react-native-zoomable-view';
 import switchTheme from 'react-native-theme-switch-animation';
 import View from '../../component/view/View';
 import Text from '../../component/text/Text';
@@ -70,19 +71,24 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
             <ScrollView
                 style={styleTransformer('px-4')}
                 overScrollMode="always">
-                {renderSwitchTheme()}
-                <View className="justify-content-center align-center bg-[rgba(12,12,12,0.3)] max-width-[250] p-[30]">
-                    <View className="width-[60] height-[60]  border-dashed border-primary my-3" />
-                    <Text
-                        className={styleTransformer(
-                            'h5 label font-weight-bold border-[20] border-green',
-                        )}
-                        style={{fontWeight: '800'}}>
-                        width-50 height-50 border-dashed border-primary my-3
-                        width-50 height-50 border-dashed border-primary my-3
-                        width-50 height-50 border-dashed border-primary my-3
-                    </Text>
-                </View>
+                <ReactNativeZoomableView
+                    maxZoom={20}
+                    style={styleTransformer('border')}>
+                    {renderSwitchTheme()}
+                    <View className="justify-content-center align-center bg-[rgba(12,12,12,0.3)] max-width-[250] p-[30]">
+                        <View className="width-[60] height-[60]  border-dashed border-primary my-3" />
+                        <Text
+                            className={styleTransformer(
+                                'h5 label font-weight-bold border-[20] border-green',
+                            )}
+                            style={{fontWeight: '800'}}>
+                            width-50 height-50 border-dashed border-primary my-3
+                            width-50 height-50 border-dashed border-primary my-3
+                            width-50 height-50 border-dashed border-primary my-3
+                        </Text>
+                    </View>
+                </ReactNativeZoomableView>
+
                 <View
                     style={{gap: 10}}
                     className="bg-green flex-row my-3 max-h-10">

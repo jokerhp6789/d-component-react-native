@@ -10,11 +10,9 @@
 
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {NavigationContainer} from '@react-navigation/native';
-import React, {ElementRef, Fragment, useEffect, useRef, useState} from 'react';
+import React, {ElementRef, useEffect, useRef} from 'react';
 import {useColorScheme} from 'react-native';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import switchTheme from 'react-native-theme-switch-animation';
-import {AppColors, Button} from '..';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Badge from '../component/items/Badge';
 import ProgressComponent from '../component/progress/ProgressComponent';
 import ProgressController from '../component/progress/ProgressController';
@@ -77,9 +75,12 @@ const App = (props: any) => {
             <StyleStateContext.Provider
                 value={{locale: 'th', useFontToLocale: true, colorSchema}}>
                 <BottomSheetModalProvider>
-                    <NavigationContainer>
+                    <NavigationContainer onReady={() => {}}>
                         {renderMainView()}
-                        <ProgressComponent ref={progressRef} />
+                        <ProgressComponent
+                            //@ts-ignore
+                            ref={ref => (progressRef.current = ref)}
+                        />
                     </NavigationContainer>
                 </BottomSheetModalProvider>
             </StyleStateContext.Provider>
