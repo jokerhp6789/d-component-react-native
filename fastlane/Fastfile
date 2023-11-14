@@ -1,0 +1,43 @@
+platform :android do
+    desc 'Build the Android application.'
+    lane :build do
+        gradle(task: 'clean', project_dir: 'android/')
+        gradle(task: 'assemble', build_type: 'release', project_dir: 'android/')
+
+    end
+
+    lane :beta do
+        build
+        appcenter_upload(
+            api_token: "c8226d6e87c32d1964c298aec6eddef97509f361",
+            owner_name: "jokerhp6789",
+            owner_type: "user", # Default is user - set to organization for appcenter organizations
+            app_name: "d-component-react-native-android",
+            file: "android/app/build/outputs/apk/release/app-release.apk",
+            notify_testers: true # Set to false if you don't want to notify testers of your new release (default: `false`)
+        )
+    end
+end
+
+platform :ios do
+  desc "Push a new beta build to AppCenter"
+  lane :beta do
+    build_app(
+      workspace: "./ios/ChatInfinityXApp.xcworkspace", 
+      scheme: "ChatInfinityXApp",
+      clean: true,
+      export_method: "development",
+      include_bitcode: true,
+    )
+    increment_build_number(
+      xcodeproj: "./ios/ChatInfinityXApp.xcodeproj" # (optional, you must specify the path to your main Xcode project if it is not in the project root directory)
+    )
+    appcenter_upload(
+        api_token: "8890bd68564553cc4a1bd85d1a64a993133e4c8b",
+        owner_name: "jokerhp6789",
+        owner_type: "user", # Default is user - set to organization for appcenter organizations
+        app_name: "Chat-Infinity-X-iOS",
+        notify_testers: true # Set to false if you don't want to notify testers of your new release (default: `false`)
+    )
+  end
+end

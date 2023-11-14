@@ -22,6 +22,7 @@ import StyleStateContext from '../context/StyleContext';
 import DATA_SOURCE from './Source';
 import './configurationStyle';
 import Routes from './testRoutes/TestRoutes';
+import InitComponents from './InitComponents';
 
 const App = (props: any) => {
     const colorSchema = useColorScheme();
@@ -77,10 +78,7 @@ const App = (props: any) => {
                 <BottomSheetModalProvider>
                     <NavigationContainer onReady={() => {}}>
                         {renderMainView()}
-                        <ProgressComponent
-                            //@ts-ignore
-                            ref={ref => (progressRef.current = ref)}
-                        />
+                        <InitComponents />
                     </NavigationContainer>
                 </BottomSheetModalProvider>
             </StyleStateContext.Provider>
