@@ -76,7 +76,18 @@ export interface IAwesomeListProps<T>
     flashListProps?: Partial<FlashListProps<any>>;
 }
 
-class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
+export interface IAwesomeListState {
+    data: Array<any>;
+    sections: Array<any>;
+    refreshing?: boolean;
+    emptyMode: AwesomeListMode;
+    pagingMode: AwesomeListMode;
+}
+
+class AwesomeList<T> extends Component<
+    IAwesomeListProps<T>,
+    IAwesomeListState
+> {
     static contextType = StyleContext;
     static defaultProps: IAwesomeListProps<any> = {
         keyExtractor: (item: any) => {
@@ -263,7 +274,10 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
      */
 
     onRefresh() {
-        if (this.state.refreshing) {
+        if (
+            this.state.refreshing ||
+            this.state.emptyMode === AwesomeListMode.PROGRESS
+        ) {
             return;
         }
         this.setState(
@@ -418,7 +432,7 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
         if (renderFooterComponent) {
             if (typeof renderFooterComponent === 'function') {
                 return renderFooterComponent({
-                    loading: this.state.refreshing,
+                    loading: !!this.state.refreshing,
                     emptyMode,
                 }) as any;
             }
