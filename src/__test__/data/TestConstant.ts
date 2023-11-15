@@ -86,3 +86,16 @@ export const DELIVERY_STATUS_LIST = [
     color: "#8D8D8D",
   },
 ];
+
+
+export const SIMPLE_CHOICES = [
+    {
+        id: false,
+        label: 'disabled',
+    },
+    {
+        id: true,
+        label: 'enabled',
+    },
+];
+

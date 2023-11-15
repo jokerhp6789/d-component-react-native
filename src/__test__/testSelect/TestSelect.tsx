@@ -4,7 +4,7 @@ import Select from '../../component/select/Select';
 import ScrollView from '../../component/view/ScrollView';
 import View from '../../component/view/View';
 import StringUtils from '../../utils/StringUtils';
-import {SELECT_DATA} from '../data/TestConstant';
+import {SELECT_DATA, SIMPLE_CHOICES} from '../data/TestConstant';
 import Layout from '../testLayout/Layout';
 
 export interface ITestSelectProps {
@@ -67,16 +67,18 @@ const TestSelect: React.FC<ITestSelectProps> = ({id}) => {
                     // searchOffline
                     // keySearchOffline={["label"]}
                     // valueType="string"
-                    label="Select"
-                    placeholder="Placeholder"
+                    label="Select String Value"
+                    placeholder="Select String Value"
                     variant="outline"
                     className="my-2"
+                    valueType="string"
                     popupVariant="bottom-sheet"
                     transformer={res => data}
                     getLabel={item => item?.label}
                     value={singleValue}
                     onChange={v => setSingleValue(v)}
                     quickRemove
+                    dataSource={SIMPLE_CHOICES}
                     // listProps={{useFlashList: false}}
                     // quickSelect
                 />

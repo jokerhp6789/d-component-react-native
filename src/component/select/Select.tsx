@@ -76,9 +76,9 @@ export interface ISelectProps
     style?: StyleProp<ViewStyle>;
     styleContent?: StyleProp<ViewStyle>;
     styleList?: StyleProp<ViewStyle>;
-    // if valueType props === 'object' will be object for
+    // if valueType props === 'object' value will be object for
     // single select and array of obj for multiple select
-    // if valueType === string will be string for
+    // if valueType === string value will be string for
     // single select and array of string for multiple select
     value?: any;
     source?: (props: ISelectSourceProps) => any;
@@ -197,8 +197,9 @@ const Select: React.FC<ISelectProps> = ({
     const hasBorder =
         variant === 'outline' || variant === 'pill' || variant === 'rounded';
     const hasValue = useMemo(() => {
-        return !isEmpty(value);
+        return !isEmpty(value) || typeof value === 'boolean';
     }, [value]);
+    const isObjectValue = valueType === 'object';
 
     const containerClass = styleTransformer(`w-100`, className);
     const labelClass = styleTransformer(
@@ -233,7 +234,7 @@ const Select: React.FC<ISelectProps> = ({
     );
 
     const inputHeight = useMemo(() => {
-        if ((multiple && !_.isEmpty(value)) || isInSideLabel) {
+        if ((multiple && hasValue) || isInSideLabel) {
             return undefined;
         }
         return height;
@@ -242,7 +243,6 @@ const Select: React.FC<ISelectProps> = ({
     const [openModal, setOpenModal] = useState(false);
     const [textSearch, setTextSearch] = useState<string>();
     const [selectingValue, setSelectingValue] = useState<any>(value);
-
     useEffect(() => {
         setSelectingValue(value);
     }, [openModal]);
@@ -258,18 +258,16 @@ const Select: React.FC<ISelectProps> = ({
 
     const checkSelectedItem = (item: any): boolean => {
         let isSelected = false;
-        if (!_.isEmpty(selectingValue)) {
+        if (!_.isEmpty(selectingValue) || typeof selectingValue === 'boolean') {
             if (multiple && _.isArray(selectingValue)) {
-                const arrIds =
-                    valueType === 'object'
-                        ? selectingValue.map(i => getValue(i))
-                        : selectingValue;
+                const arrIds = isObjectValue
+                    ? selectingValue.map(i => getValue(i))
+                    : selectingValue;
                 isSelected = arrIds.includes(getValue(item));
             } else {
-                const v =
-                    valueType === 'object'
-                        ? getValue(selectingValue)
-                        : selectingValue;
+                const v = isObjectValue
+                    ? getValue(selectingValue)
+                    : selectingValue;
                 isSelected = v === getValue(item);
             }
         }
@@ -278,7 +276,7 @@ const Select: React.FC<ISelectProps> = ({
     };
 
     const handleSelectItem = (item: any, selected: boolean) => {
-        const updateValue = valueType === 'object' ? item : getValue(item);
+        const updateValue = isObjectValue ? item : getValue(item);
         if (quickSelect && !multiple) {
             onChange && onChange(updateValue);
             return closePopup();
@@ -287,7 +285,7 @@ const Select: React.FC<ISelectProps> = ({
             let arrayClone = [...(selectingValue || [])];
             if (selected) {
                 arrayClone = selectingValue.filter((i: any) =>
-                    valueType === 'object'
+                    isObjectValue
                         ? getValue(i) !== getValue(item)
                         : i !== getValue(item),
                 );
@@ -296,7 +294,7 @@ const Select: React.FC<ISelectProps> = ({
             }
             setSelectingValue(arrayClone);
         } else if (selected) {
-            setSelectingValue(valueType === 'object' ? {} : undefined);
+            setSelectingValue(isObjectValue ? {} : undefined);
         } else {
             setSelectingValue(updateValue);
         }
@@ -309,7 +307,7 @@ const Select: React.FC<ISelectProps> = ({
 
     const getLabelFromValue = (value: any) => {
         let label = getLabel(value);
-        if (valueType === 'string' && dataSource?.length > 0) {
+        if (!isObjectValue && dataSource?.length > 0) {
             const valueObj = dataSource.find(item => getValue(item) === value);
             if (valueObj) {
                 label = getLabel(valueObj);
@@ -388,7 +386,7 @@ const Select: React.FC<ISelectProps> = ({
                 </TouchableOpacity>
             );
         },
-        [selectingValue, checkboxProps, handleSelectItem],
+        [selectingValue, checkboxProps, handleSelectItem, valueType],
     );
 
     const renderClearButton = useMemo(() => {
@@ -422,7 +420,7 @@ const Select: React.FC<ISelectProps> = ({
     }, [label, labelClass]);
 
     const renderContent = useMemo(() => {
-        if (_.isEmpty(value)) {
+        if (!hasValue) {
             if (placeholder) {
                 return (
                     <Text className={'text-grey flex-1 h4'}>{placeholder}</Text>
@@ -480,7 +478,7 @@ const Select: React.FC<ISelectProps> = ({
                 <Icon
                     name={iconName}
                     size={16}
-                    color={!_.isEmpty(value) ? undefined : 'gray'}
+                    color={hasValue ? undefined : 'gray'}
                     {...iconProps}
                     {...(otherProps || {})}
                 />
@@ -503,7 +501,7 @@ const Select: React.FC<ISelectProps> = ({
                 {hasValue ? null : renderIcon()}
             </View>
         );
-    }, [labelPosition, isOutSideLabel, renderContent, renderIcon]);
+    }, [multiple, labelPosition, isOutSideLabel, renderContent, renderIcon]);
 
     const renderInput = useMemo(() => {
         return (

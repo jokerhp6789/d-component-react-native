@@ -263,6 +263,9 @@ class AwesomeList<T> extends Component<IAwesomeListProps<T>, any> {
      */
 
     onRefresh() {
+        if (this.state.refreshing) {
+            return;
+        }
         this.setState(
             {
                 refreshing: true,
