@@ -2,27 +2,45 @@ import React, {useMemo, useState} from 'react';
 import {LayoutAnimation, TouchableOpacity, View} from 'react-native';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Icon, {IIconProps} from '../icon/Icon';
-import Text from '../text/Text';
+import Text, {ITextProps} from '../text/Text';
 
 export interface ICollapseViewProps {
     className?: IStyleTransformerProps;
+    classNameContent?: IStyleTransformerProps;
+    classNameText?: IStyleTransformerProps;
     title?: string;
     children?: any;
     onPress?: any;
     defaultExpanding?: boolean;
     showIcon?: boolean;
     iconProps?: Partial<IIconProps>;
+    textProps?: Partial<ITextProps>;
+    customContent?: (() => React.ReactNode) | React.ReactNode;
 }
 
-const CollapseView: React.FC<ICollapseViewProps> = ({
-    className,
-    children = null,
-    title,
-    defaultExpanding = true,
-    showIcon = true,
-    iconProps = {},
-    onPress,
-}) => {
+export interface ICollapseViewMethods {
+    expand: () => void;
+}
+
+const CollapseView: React.ForwardRefRenderFunction<
+    ICollapseViewMethods,
+    ICollapseViewProps
+> = (
+    {
+        className,
+        classNameContent,
+        classNameText,
+        children = null,
+        title,
+        defaultExpanding = true,
+        showIcon = true,
+        iconProps = {},
+        textProps = {},
+        onPress,
+        customContent,
+    },
+    ref,
+) => {
     const [expanding, setExpanding] = useState(defaultExpanding);
     const iconView = useMemo(() => {
         if (!showIcon) {
@@ -48,34 +66,49 @@ const CollapseView: React.FC<ICollapseViewProps> = ({
         );
     }, [showIcon, expanding, iconProps]);
 
-    return (
-        <TouchableOpacity
-            onPress={onPress}
-            activeOpacity={0.9}
-            style={styleTransformer(`bg-light rounded-2  ${className}`)}>
-            <TouchableOpacity
-                disabled={!!onPress}
-                activeOpacity={0.85}
+    const content = useMemo(() => {
+        if (customContent) {
+            return typeof customContent === 'function'
+                ? customContent()
+                : customContent;
+        }
+
+        return (
+            <View
                 style={styleTransformer(
-                    `flex-center-y justify-between rounded-2 px-3 py-[10]`,
-                )}
-                onPress={() => {
-                    if (!children) {
-                        return;
-                    }
-                    setExpanding(!expanding);
-                    LayoutAnimation.configureNext(
-                        LayoutAnimation.Presets.easeInEaseOut,
-                    );
-                }}>
+                    `flex-center-y justify-between`,
+                    classNameContent,
+                )}>
                 {title ? (
                     <Text
-                        className="h5 font-weight-bold text-primary"
-                        colorDarkMode="light">
+                        {...textProps}
+                        className={`h5 font-weight-bold text-primary ${classNameText}`}>
                         {title}
                     </Text>
                 ) : null}
                 {iconView}
+            </View>
+        );
+    }, [iconView, title, classNameContent, textProps, customContent]);
+
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            activeOpacity={0.9}
+            style={styleTransformer(`bg-light  ${className}`)}>
+            <TouchableOpacity
+                disabled={!!onPress}
+                activeOpacity={0.9}
+                onPress={() => {
+                    if (!children) {
+                        return;
+                    }
+                    LayoutAnimation.configureNext(
+                        LayoutAnimation.Presets.easeInEaseOut,
+                    );
+                    setExpanding(!expanding);
+                }}>
+                {content}
             </TouchableOpacity>
             {expanding && children}
         </TouchableOpacity>
