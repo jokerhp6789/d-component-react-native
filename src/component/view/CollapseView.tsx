@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {forwardRef, useImperativeHandle, useMemo, useState} from 'react';
 import {LayoutAnimation, TouchableOpacity, View} from 'react-native';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import Icon, {IIconProps} from '../icon/Icon';
@@ -19,7 +19,7 @@ export interface ICollapseViewProps {
 }
 
 export interface ICollapseViewMethods {
-    expand: () => void;
+    toggle: () => void;
 }
 
 const CollapseView: React.ForwardRefRenderFunction<
@@ -65,7 +65,6 @@ const CollapseView: React.ForwardRefRenderFunction<
             </View>
         );
     }, [showIcon, expanding, iconProps]);
-
     const content = useMemo(() => {
         if (customContent) {
             return typeof customContent === 'function'
@@ -91,6 +90,12 @@ const CollapseView: React.ForwardRefRenderFunction<
         );
     }, [iconView, title, classNameContent, textProps, customContent]);
 
+    useImperativeHandle(ref, () => ({
+        toggle: () => {
+            setExpanding(!expanding);
+        },
+    }));
+
     return (
         <TouchableOpacity
             onPress={onPress}
@@ -115,4 +120,4 @@ const CollapseView: React.ForwardRefRenderFunction<
     );
 };
 
-export default CollapseView;
+export default forwardRef(CollapseView);
