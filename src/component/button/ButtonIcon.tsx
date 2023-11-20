@@ -16,7 +16,7 @@ const ButtonIcon: React.FC<IButtonIconProps> = ({
     iconSize = 20,
     iconProps = {},
     iconColor = 'primary',
-    size = 35,
+    size = 40,
     style,
     ...rest
 }) => {

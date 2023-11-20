@@ -163,7 +163,7 @@ const InputText: React.ForwardRefRenderFunction<
 ) => {
     const {light} = Colors;
     const {inputConfig, generalConfig} = Configs;
-    const {colorSchema} = useContext(StyleStateContext);
+    const {colorSchema, locale} = useContext(StyleStateContext);
     const inputRef = useRef<ElementRef<typeof RNTextInput>>(null);
 
     const [focusing, setFocusing] = useState(false);
@@ -230,17 +230,14 @@ const InputText: React.ForwardRefRenderFunction<
             classNameWrapper,
         ],
     );
-    const inputClass = useMemo(
-        () =>
-            styleTransformer(
-                'flex-1 h4 px-2',
-                {
-                    'py-2': Platform.OS === 'android',
-                },
-                classNameInput,
-            ),
-        [classNameInput],
+    const inputClass = styleTransformer(
+        'flex-1 h4 px-2',
+        {
+            'py-2': Platform.OS === 'android',
+        },
+        classNameInput,
     );
+
     const errorClass = useMemo(
         () =>
             styleTransformer(
@@ -388,6 +385,7 @@ const InputText: React.ForwardRefRenderFunction<
             />
         );
     }, [
+        locale,
         inputClass,
         isDarkMode,
         autoSwitchColor,
