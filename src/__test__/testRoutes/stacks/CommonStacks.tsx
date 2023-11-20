@@ -72,7 +72,10 @@ export function commonStacksCreator<T extends typeof HomeTabStack>(Stack: T) {
                 component={TestTabStepper}
             />
             <Stack.Screen name="testFormScreen" component={TestForm} />
-            <Stack.Screen name="testBottomSheetScreen" component={TestBottomSheet} />
+            <Stack.Screen
+                name="testBottomSheetScreen"
+                component={TestBottomSheet}
+            />
         </Stack.Group>
     );
 }

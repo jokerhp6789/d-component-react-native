@@ -10,7 +10,6 @@ Colors.loadColors({
     primary: '#E95504' as any,
     inputColorDark: 'yellow',
 });
-//@ts-ignore
 Sizes.loadSizes({buttonHeight: 40, inputHeight: 40});
 Fonts.loadFonts({
     ios: {

@@ -14,7 +14,7 @@ export class FontClass {
      * arguments:
      * fonts - map of keys and font family values e.g {iosFont: Poppins-Regular}
      */
-    loadFonts(fonts: {
+    public loadFonts(fonts: {
         [key: string]: string | number | TextStyle | {[key: string]: any};
     }) {
         const {baseFontSize, locale, ios, android, ...rest} = fonts || {};
@@ -66,7 +66,13 @@ export class FontClass {
         this.locale = locale;
     }
 
-    getFont({iosFont, androidFont}: {iosFont?: string; androidFont?: string}) {
+    private getFont({
+        iosFont,
+        androidFont,
+    }: {
+        iosFont?: string;
+        androidFont?: string;
+    }) {
         return Platform.select({
             ios: {
                 fontFamily: iosFont || this.iosFont,
@@ -77,7 +83,7 @@ export class FontClass {
         });
     }
 
-    getBoldFont({
+    private getBoldFont({
         iosBoldFont,
         androidBoldFont,
     }: {

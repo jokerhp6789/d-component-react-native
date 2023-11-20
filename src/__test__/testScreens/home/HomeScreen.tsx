@@ -16,14 +16,17 @@ const HomeScreen: React.FC<IHomeScreenProps> = ({navigation, route}) => {
     return (
         <Layout className="">
             <ScrollView>
-                <View style={styleTransformer('px-4 flex-wrap flex-row gap-3 mt-4')}>
+                <View
+                    style={styleTransformer(
+                        'px-4 flex-wrap flex-row gap-3 mt-4',
+                    )}>
                     {DATA_SOURCE.map(dataItem => {
                         const labelItem = getDataItemTitle(dataItem?.label);
                         return (
                             <Button
-                                onPress={() =>
-                                    navigation.navigate(dataItem?.action)
-                                }
+                                onPress={() => {
+                                    navigation.navigate(dataItem?.action);
+                                }}
                                 className=""
                                 height={100}
                                 style={{

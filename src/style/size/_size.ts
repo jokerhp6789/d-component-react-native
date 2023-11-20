@@ -3,10 +3,12 @@
 import _ from 'lodash';
 import DefaultSize, {AppSizeKeyType} from '../constant/AppSizes';
 
-type SizesRecord = Partial<Record<AppSizeKeyType, number>> & {
-    loadSizes: (props: {
-        [key in Partial<AppSizeKeyType>]: string | number;
-    }) => any;
+type TLoadSizeProps = Partial<{[key in AppSizeKeyType]: any}> & {
+    [key: string]: any;
+};
+
+type SizesRecord = Record<AppSizeKeyType, number> & {
+    loadSizes: (props: TLoadSizeProps) => any;
     [key: string]: any;
 };
 
@@ -22,14 +24,14 @@ export class AppSizeClass {
      * arguments:
      * sizes - map of keys and size values e.g {inputHeight: 50, buttonHeight: 30}
      */
-    loadSizes(sizes: {[key in Partial<AppSizeKeyType>]: string | number}) {
+    loadSizes(sizes: TLoadSizeProps) {
         _.forEach(sizes, (value, key) => {
             this[key] = value;
         });
     }
 }
 
-const Sizes: SizesRecord = new AppSizeClass();
+const Sizes: SizesRecord = new AppSizeClass() as any;
 Sizes.loadSizes(DefaultSize);
 
 export default Sizes;
