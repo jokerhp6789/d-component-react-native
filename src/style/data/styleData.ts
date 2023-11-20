@@ -9,6 +9,7 @@ import textStyle from '../text/_text';
 import backgroundStyle from '../theme/_background';
 import borderStyle from '../theme/_border';
 import shadowStyle from '../theme/_shadow';
+import {fontStyle} from '../font/_font';
 
 const style = {
     ...flexStyle,
@@ -21,6 +22,7 @@ const style = {
     ...positionStyle,
     ...imageStyle,
     ...shadowStyle,
+    ...fontStyle,
 };
 
 export const StyleMap = new Map(Object.entries(style));

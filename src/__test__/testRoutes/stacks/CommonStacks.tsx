@@ -20,6 +20,7 @@ import TestForm from '../../testForm/TestForm';
 import TestBottomSheet from '../../testBottomSheet/TestBottomSheet';
 import Text from '../../../component/text/Text';
 import {join} from 'lodash';
+import TestText from '../../testText/TestText';
 
 export const getDataItemTitle = (children: any) => {
     let result =
@@ -51,6 +52,7 @@ export function commonStacksCreator<T extends typeof HomeTabStack>(Stack: T) {
                 },
             }}>
             <Stack.Screen name="testStyleScreen" component={TestStyle} />
+            <Stack.Screen name="testTextScreen" component={TestText} />
             <Stack.Screen name="testInputScreen" component={TestInput} />
             <Stack.Screen name="testSelectScreen" component={TestSelect} />
             <Stack.Screen name="testButtonScreen" component={TestButton} />

@@ -16,6 +16,7 @@ import TestSelect from './testSelect/TestSelect';
 import TestStyle from './testStyle/TestStyle';
 import TestTabBar from './testTab/TestTabBar';
 import TestTabStepper from './testTab/TestTabStepper';
+import TestText from './testText/TestText';
 import TestView from './testView/TestView';
 
 const DATA_SOURCE: ITabViewProps['dataSource'] = [
@@ -24,6 +25,12 @@ const DATA_SOURCE: ITabViewProps['dataSource'] = [
         label: 'Style',
         action: 'testStyleScreen',
         component: <TestStyle />,
+    },
+    {
+        key: 'testText',
+        label: 'Text',
+        action: 'testTextScreen',
+        component: <TestText />,
     },
     {
         key: 'testInput',

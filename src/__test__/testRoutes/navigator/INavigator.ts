@@ -57,6 +57,7 @@ export type TSettingTabStacksParamList = {
 //Common Stacks
 export type TCommonStacksParamList = {
     testStyleScreen: undefined;
+    testTextScreen: undefined;
     testInputScreen: undefined;
     testSelectScreen: undefined;
     testButtonScreen: undefined;

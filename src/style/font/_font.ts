@@ -1,6 +1,30 @@
 import _ from 'lodash';
 import {Platform, TextStyle} from 'react-native';
 import DefaultFont, {AppFontKeyType} from '../constant/AppFonts';
+import {generateStyleValue} from '../modifier';
+
+const FONT_WEIGHT_VALUE = {
+    100: '100',
+    200: '200',
+    300: '300',
+    400: '400',
+    500: '500',
+    600: '600',
+    700: '700',
+    800: '800',
+    900: '900',
+    bold: 'bold',
+    normal: 'normal',
+};
+
+const fontWeightClass = generateStyleValue(
+    {['fontWeight']: 'fontWeight', 'font-weight': 'fontWeight'},
+    FONT_WEIGHT_VALUE,
+);
+
+export const fontStyle = {
+    ...fontWeightClass,
+};
 
 export class FontClass {
     [key: string]: any;

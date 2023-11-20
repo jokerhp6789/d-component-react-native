@@ -13,12 +13,12 @@ Colors.loadColors({
 Sizes.loadSizes({buttonHeight: 40, inputHeight: 40});
 Fonts.loadFonts({
     ios: {
-        normal: 'Prompt-Regular',
-        bold: 'Prompt-Bold',
+        normal: 'Poppins-Regular',
+        bold: 'Poppins-Bold',
     },
     android: {
-        normal: 'Prompt-Regular',
-        bold: 'Prompt-Bold',
+        normal: 'Poppins-Regular',
+        bold: 'Poppins-Bold',
     },
     baseFontSize: 12,
     label: {
@@ -27,16 +27,16 @@ Fonts.loadFonts({
     locale: {
         en: {
             ios: {
-                normal: 'Prompt-Regular',
-                bold: 'Prompt-Bold',
+                normal: 'Poppins-Regular',
+                bold: 'Poppins-Bold',
             },
             android: {
-                normal: 'Prompt-Regular',
-                bold: 'Prompt-Bold',
+                normal: 'Poppins-Regular',
+                bold: 'Poppins-Bold',
             },
             // default value
-            normal: 'Prompt-Regular',
-            bold: 'Prompt-Bold',
+            normal: 'Poppins-Regular',
+            bold: 'Poppins-Bold',
         },
         th: {
             ios: {

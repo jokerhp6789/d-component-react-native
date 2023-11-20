@@ -20,7 +20,7 @@ import TabView, {ITabViewProps} from '../component/tab/TabView';
 import View from '../component/view/View';
 import StyleStateContext from '../context/StyleContext';
 import DATA_SOURCE from './Source';
-import './configurationStyle';
+import './styleConfig';
 import Routes from './testRoutes/TestRoutes';
 import InitComponents from './InitComponents';
 
@@ -74,7 +74,7 @@ const App = (props: any) => {
     return (
         <SafeAreaProvider>
             <StyleStateContext.Provider
-                value={{locale: 'th', useFontToLocale: true, colorSchema}}>
+                value={{locale: 'en', useFontToLocale: true, colorSchema}}>
                 <BottomSheetModalProvider>
                     <NavigationContainer onReady={() => {}}>
                         {renderMainView()}
