@@ -19,12 +19,12 @@ export interface IAvatarProps extends Omit<IImageProps, 'source'> {
     variant?: 'rounded' | 'square' | 'circle';
     text?: string;
     color?: string;
-    letter?: string;
     classNameImage?: IStyleTransformerProps;
     classNameLetter?: IStyleTransformerProps;
     avatar?: IImageProps['source'] | string | null;
     styleImage?: IImageProps['style'];
     showBorder?: boolean;
+    showFullText?: boolean;
     borderColor?: ColorKeyType;
 }
 
@@ -36,7 +36,6 @@ const Avatar: React.FC<IAvatarProps> = ({
     classNameImage,
     classNameLetter,
     text,
-    letter,
     color = '#D8D8D8',
     borderColor = 'gray',
     resizeMode = 'cover',
@@ -44,6 +43,7 @@ const Avatar: React.FC<IAvatarProps> = ({
     style,
     styleImage,
     showBorder,
+    showFullText,
     ...rest
 }) => {
     const letterClass = styleTransformer(
@@ -88,8 +88,8 @@ const Avatar: React.FC<IAvatarProps> = ({
         return avatar;
     };
 
-    if (text || letter) {
-        const firstLetter = letter || (text || '').charAt(0);
+    if (text) {
+        const firstLetter = showFullText ? text : (text || '').charAt(0);
         content = <Text style={letterClass}>{firstLetter}</Text>;
     }
     if (avatar) {
