@@ -1,10 +1,12 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useRef, ElementRef} from 'react';
+import Button from '../../component/button/Button';
 import Image from '../../component/image/Image';
 import Divider from '../../component/items/Divider';
 import AwesomeList from '../../component/list/awesomeList/AwesomeList';
 import AwesomeListMode from '../../component/list/awesomeList/AwesomeListMode';
 import Text from '../../component/text/Text';
 import View from '../../component/view/View';
+import StringUtils from '../../utils/StringUtils';
 import images from '../testImage/Images';
 import Layout from '../testLayout/Layout';
 
@@ -34,22 +36,41 @@ const ListFooterComponent: React.FC<IListFooterComponentProps> = ({
 };
 
 const TestList: React.FC<ITestListProps> = ({id}) => {
-    const renderItem = useCallback(({item, index}: any) => {
-        return (
-            <View className="py-3">
-                <Text>123</Text>
-            </View>
-        );
-    }, []);
+    const listRef = useRef<ElementRef<typeof AwesomeList>>(null);
+
+    const renderItem = useCallback(
+        ({item, index}: any) => {
+            return (
+                <View className="py-3 flex-center-y">
+                    <Text className="flex-1">{item?.label}</Text>
+                    <Button
+                        onPress={() => {
+                            listRef.current &&
+                                listRef.current.moveItemToTop(item);
+                        }}>
+                        Move to top
+                    </Button>
+                </View>
+            );
+        },
+        [listRef],
+    );
 
     const renderList = () => {
         return (
             <AwesomeList
-                // useFlashList
+                useFlashList
+                ref={listRef}
                 showsVerticalScrollIndicator={false}
                 renderItem={renderItem}
                 ItemSeparatorComponent={() => <Divider color="green" />}
-                source={() => Promise.resolve(new Array(1000).fill(0))}
+                source={async () => {
+                    const data = await Promise.resolve(new Array(10).fill(0));
+                    return data.map(() => ({
+                        id: StringUtils.getUniqueID(),
+                        label: StringUtils.generateDummyText(undefined, 5),
+                    }));
+                }}
                 transformer={res => res}
                 renderFooterComponent={({loading, emptyMode}) => {
                     return <ListFooterComponent />;
@@ -67,7 +88,26 @@ const TestList: React.FC<ITestListProps> = ({id}) => {
         );
     };
 
-    return <Layout className="px-4">{renderList()}</Layout>;
+    return (
+        <Layout className="px-4">
+            <Button
+                onPress={() => {
+                    listRef.current &&
+                        listRef.current.pushData(
+                            [
+                                {
+                                    id: StringUtils.getUniqueID(),
+                                    label: `Item Added ${new Date()}`,
+                                },
+                            ],
+                            'start',
+                        );
+                }}>
+                Add Item
+            </Button>
+            {renderList()}
+        </Layout>
+    );
 };
 
 export default TestList;

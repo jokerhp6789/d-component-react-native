@@ -1,12 +1,12 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 const getValueFromStringKey = (object: any, keyString: string) => {
-    const keyList = keyString.split(".");
+    const keyList = keyString.split('.');
     if (keyList.length === 0) {
         return object[keyString];
     }
     let objectResult = object;
-    keyList.forEach((key) => {
+    keyList.forEach(key => {
         objectResult = objectResult?.[key];
     });
 
@@ -15,9 +15,9 @@ const getValueFromStringKey = (object: any, keyString: string) => {
 
 const setValueFromStringKey = (object: any, keyString: string, value: any) => {
     if (_.isEmpty(keyString)) {
-        return { ...object, ...value };
+        return {...object, ...value};
     }
-    const keyList = keyString.split(".");
+    const keyList = keyString.split('.');
     _.reverse(keyList);
     let objectResult: any = {};
 
@@ -29,16 +29,20 @@ const setValueFromStringKey = (object: any, keyString: string, value: any) => {
         if (index === 0) {
             objectResult[key] = value;
         } else {
-            objectResult = { [key]: objectResult };
+            objectResult = {[key]: objectResult};
         }
     });
 
-    return { ...object, ...objectResult };
+    return {...object, ...objectResult};
 };
 const mapFieldsLangsCTS = (dataClient: any = {}, KEYS_LANG = []) => {
     let dataResult = {};
     KEYS_LANG.forEach((fields: any) => {
-        dataResult = setValueFromStringKey(dataResult, fields.keyServer, dataClient[fields.keyClient]);
+        dataResult = setValueFromStringKey(
+            dataResult,
+            fields.keyServer,
+            dataClient[fields.keyClient],
+        );
     });
     return dataResult;
 };
@@ -46,7 +50,10 @@ const mapFieldsLangsCTS = (dataClient: any = {}, KEYS_LANG = []) => {
 const mapFieldsLangsSTC = (dataServer: any, KEYS_LANG = []) => {
     const dataResult: any = {};
     KEYS_LANG.forEach((fields: any) => {
-        dataResult[fields.keyClient] = getValueFromStringKey(dataServer, fields.keyServer);
+        dataResult[fields.keyClient] = getValueFromStringKey(
+            dataServer,
+            fields.keyServer,
+        );
     });
     return dataResult;
 };
@@ -56,7 +63,9 @@ const mapObjectToArray = (object: any) => {
         return [];
     }
     const arrayResult: any[] = [];
-    Object.keys(object).forEach((key) => arrayResult.push({ id: key, ...object[key] }));
+    Object.keys(object).forEach(key =>
+        arrayResult.push({id: key, ...object[key]}),
+    );
     return arrayResult;
 };
 
@@ -65,7 +74,7 @@ const mapArrayToObject = (array: any[], getKey = (item: any) => item.id) => {
         return {};
     }
     const objectResult: any = {};
-    array.forEach((arrayItem) => {
+    array.forEach(arrayItem => {
         const key = getKey(arrayItem);
         objectResult[key] = arrayItem;
     });
@@ -77,7 +86,7 @@ const findItemFromId = (list: any[] = [], id: string) => {
         return {};
     }
 
-    return _.filter(list, (pro) => pro.id === id)?.[0];
+    return _.filter(list, pro => pro.id === id)?.[0];
 };
 
 const removeItemFromId = (list: any[] = [], id: string) => {
@@ -85,7 +94,7 @@ const removeItemFromId = (list: any[] = [], id: string) => {
         return [];
     }
 
-    return _.filter(list, (pro) => pro.id !== id);
+    return _.filter(list, pro => pro.id !== id);
 };
 
 const sliceArrayToMui = (bigArray = [], numberOfItem = 10) => {
@@ -97,7 +106,7 @@ const sliceArrayToMui = (bigArray = [], numberOfItem = 10) => {
     return arrayOfArrays;
 };
 
-const arrayMove = (arr = [], oldIndex = 0, newIndex = 0) => {
+const arrayMove = (arr: any[] = [], oldIndex = 0, newIndex = 0) => {
     if (newIndex >= arr.length || newIndex < 0) {
         return arr;
     }
@@ -123,7 +132,7 @@ function combineAllArray(arr: any[]): any[] {
 
 function compareTwoStringArray(array1: string[], array2: string[]) {
     if (!array1 || !array2 || array1.length !== array2.length) return false;
-    return _.every(array1, (item) => _.includes(array2, item));
+    return _.every(array1, item => _.includes(array2, item));
 }
 
 /**
@@ -132,7 +141,7 @@ function compareTwoStringArray(array1: string[], array2: string[]) {
  * @param {small array} array2
  */
 function arrayIsContainArray(array1: string[], array2: string[]) {
-    return _.every(array2, (item) => _.includes(array1, item));
+    return _.every(array2, item => _.includes(array1, item));
 }
 
 const updateArrayById = (arrays = [], newItem: any) => {

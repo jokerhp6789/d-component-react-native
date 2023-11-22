@@ -28,12 +28,16 @@ import {isArray, isString} from './AwesomeListUtils';
 import EmptyView from './EmptyView';
 import PagingView from './PagingView';
 import Configs from '../../../style/config/_config';
+import ObjectUtils from '../../../utils/ObjectUtils';
 
 const DEFAULT_PAGE_SIZE = 20;
 
 export interface IPaginationProps {
-    pageIndex: number;
-    pageSize: number;
+    pageIndex?: number;
+    pageSize?: number;
+    after?: string;
+    before?: string;
+    [key: string]: any;
 }
 
 //@ts-ignore
@@ -74,6 +78,10 @@ export interface IAwesomeListProps<T>
 
     useFlashList?: boolean;
     flashListProps?: Partial<FlashListProps<any>>;
+    getPagingData?: (
+        prevPaging: IPaginationProps,
+        data: Array<any>,
+    ) => IPaginationProps;
 }
 
 export interface IAwesomeListState {
@@ -110,11 +118,10 @@ class AwesomeList<T> extends Component<
         emptyText: 'No result',
         filterEmptyText: 'No filter result',
         numColumns: 1,
-        pageSize: DEFAULT_PAGE_SIZE,
         hideFooterInEmptyErrorMode: true,
     };
 
-    DEFAULT_PAGING_DATA: {pageIndex: number; pageSize: any};
+    DEFAULT_PAGING_DATA: IPaginationProps;
 
     private _unmounted: boolean | undefined;
 
@@ -136,7 +143,10 @@ class AwesomeList<T> extends Component<
 
         this.DEFAULT_PAGING_DATA = {
             pageIndex: 1,
-            pageSize: props.pageSize,
+            pageSize:
+                props?.pageSize ||
+                Configs?.awesomeListConfig?.pageSize ||
+                DEFAULT_PAGE_SIZE,
         };
     }
 
@@ -152,10 +162,85 @@ class AwesomeList<T> extends Component<
         this._unmounted = true;
     }
 
+    public onRetry() {
+        this.setState({emptyMode: AwesomeListMode.PROGRESS}, () =>
+            this.start(),
+        );
+    }
+
     /**
-     * Logic
+     * actual refresh data list
+     * set data list is empty list,
+     * call start function to recall source function.
      */
-    isNoMoreData(newData: any) {
+    public refresh() {
+        this.noMoreData = false;
+        this.pagingData = null;
+        this.setState(
+            {
+                data: [],
+                sections: [],
+                emptyMode: AwesomeListMode.PROGRESS,
+                pagingMode: AwesomeListMode.HIDDEN,
+            },
+            () => this.start(),
+        );
+    }
+
+    public updateItem(updateId: string, value: any) {
+        if (this.state?.data?.length) {
+            const updated = this.state.data.map(i =>
+                i?.id === updateId ? {...i, ...(value || {})} : i,
+            );
+            this.setState({data: updated});
+        }
+    }
+
+    public removeItem(removeId: string) {
+        if (this.state?.data?.length) {
+            this.setState({
+                data: (this?.state?.data ?? []).filter(
+                    item => item?.id !== removeId,
+                ),
+            });
+        }
+    }
+
+    public moveItemToTop(item: any) {
+        return this.moveItemToIndex(item, 0);
+    }
+
+    public moveItemToIndex(item: any, newIndex: number) {
+        const foundIndex = _.findIndex(
+            this.state.data,
+            i => item?.id === i?.id,
+        );
+        if (foundIndex) {
+            const movedArr = ObjectUtils.arrayMove(
+                this.state.data,
+                foundIndex,
+                newIndex,
+            );
+            this.setState({data: movedArr});
+        }
+    }
+
+    public pushData(items: any[], position: 'start' | 'end' = 'end') {
+        if (position === 'end') {
+            this.setState({
+                data: (this?.state?.data ?? []).concat(items),
+            });
+        } else if (position === 'start') {
+            this.setState({
+                data: items.concat(this?.state?.data ?? []),
+            });
+        }
+    }
+
+    /**
+     * Helpers
+     */
+    private isNoMoreData(newData: any) {
         if (
             !newData ||
             !isArray(newData) ||
@@ -169,11 +254,27 @@ class AwesomeList<T> extends Component<
             : false;
     }
 
-    isSectionsList() {
+    private isSectionsList() {
         return this.props.isSectionList;
     }
 
-    /**CONTROL VIEW */
+    private getNextPagingData(newData: any[]): IPaginationProps {
+        if (this.props.getPagingData) {
+            return this.props.getPagingData(this.pagingData, newData);
+        }
+        if (Configs.awesomeListConfig?.getPagingData) {
+            return Configs.awesomeListConfig.getPagingData(
+                this.pagingData,
+                newData,
+            );
+        }
+        return {
+            ...this.pagingData,
+            pageIndex: this.pagingData.pageIndex + 1,
+        };
+    }
+
+    /**Controllers */
 
     /**
      * call API from source, and fill data to the list
@@ -183,7 +284,7 @@ class AwesomeList<T> extends Component<
      * if reponse is passed, fill data to the list, set empty mode is hidden
      */
 
-    start() {
+    private start() {
         if (this.noMoreData) return;
 
         const {source, transformer} = this.props;
@@ -196,11 +297,8 @@ class AwesomeList<T> extends Component<
 
         source(this.pagingData)
             .then((response: any) => {
-                this.pagingData = {
-                    ...this.pagingData,
-                    pageIndex: this.pagingData.pageIndex + 1,
-                };
                 const data = transformer && transformer(response);
+                this.pagingData = this.getNextPagingData(data);
                 let sections: Array<any> = [];
                 this.noMoreData = this.isNoMoreData(data);
 
@@ -261,19 +359,13 @@ class AwesomeList<T> extends Component<
             });
     }
 
-    onRetry() {
-        this.setState(
-            {emptyMode: AwesomeListMode.PROGRESS},
-            this.start() as any,
-        );
-    }
     /**
      * this function help list refresh when list is scrolled down.
      * enable refreshing in list data
      * action refresh
      */
 
-    onRefresh() {
+    private onRefresh() {
         if (
             this.state.refreshing ||
             this.state.emptyMode === AwesomeListMode.PROGRESS
@@ -290,26 +382,7 @@ class AwesomeList<T> extends Component<
         );
     }
 
-    /**
-     * actual refresh data list
-     * set data list is empty list,
-     * call start function to recall source function.
-     */
-    refresh() {
-        this.noMoreData = false;
-        this.pagingData = null;
-        this.setState(
-            {
-                data: [],
-                sections: [],
-                emptyMode: AwesomeListMode.PROGRESS,
-                pagingMode: AwesomeListMode.HIDDEN,
-            },
-            () => this.start(),
-        );
-    }
-
-    onEndReached() {
+    private onEndReached() {
         if (
             this.noMoreData ||
             !this?.props?.isPaging ||
@@ -325,7 +398,7 @@ class AwesomeList<T> extends Component<
     }
 
     /** Apply filter  to list*/
-    applyFilter(actionFilter: any) {
+    private applyFilter(actionFilter: any) {
         if (
             (!this.state.data || this.state.data.length === 0) &&
             !this.originData
@@ -344,7 +417,7 @@ class AwesomeList<T> extends Component<
      * should not be call in acestor component
      * @param {*} actionFilter
      */
-    calculateFilter(actionFilter: any) {
+    private calculateFilter(actionFilter: any) {
         const dataFilter = _.filter(this.originData, (item, index) => {
             return actionFilter(item, index);
         });
@@ -372,7 +445,7 @@ class AwesomeList<T> extends Component<
         }
     }
 
-    removeFilter() {
+    private removeFilter() {
         if (!this.originData) {
             return;
         }
@@ -395,7 +468,10 @@ class AwesomeList<T> extends Component<
         );
     }
 
-    renderSectionHeader = (props: any = {}) => {
+    /**
+     * Renders
+     */
+    private renderSectionHeader = (props: any = {}) => {
         const {renderSectionHeader} = this.props;
         if (renderSectionHeader) {
             return renderSectionHeader(props);
@@ -408,7 +484,7 @@ class AwesomeList<T> extends Component<
         );
     };
 
-    renderFooterList = () => {
+    private renderFooterList = () => {
         const {
             renderFooterComponent,
             hideFooterInEmptyMode,
@@ -446,7 +522,7 @@ class AwesomeList<T> extends Component<
         );
     };
 
-    renderList = () => {
+    private renderList = () => {
         const {
             listStyle,
             keyExtractor,

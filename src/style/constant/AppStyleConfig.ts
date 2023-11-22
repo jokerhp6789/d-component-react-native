@@ -7,6 +7,10 @@ import {ITextProps} from '../../component/text/Text';
 import {ThemeProps} from '../../interface/iTheme';
 
 export interface IGeneralStyleConfig extends ThemeProps {}
+export interface IAwesomeListConfig
+    extends Pick<IAwesomeListProps<any>, 'useFlashList' | 'getPagingData'> {
+    pageSize?: number;
+}
 
 export interface IDefaultStyleConfig {
     textConfig?: Pick<ITextProps, 'color' | 'colorDarkMode'>;
@@ -28,7 +32,7 @@ export interface IDefaultStyleConfig {
         | 'color'
     >;
     modalConfig?: Pick<IModalProps, 'theme'>;
-    awesomeListConfig?: Pick<IAwesomeListProps<any>, 'useFlashList'>;
+    awesomeListConfig?: IAwesomeListConfig;
     generalConfig?: IGeneralStyleConfig;
 }
 
