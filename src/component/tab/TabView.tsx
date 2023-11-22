@@ -27,7 +27,7 @@ import Colors from '../../style/color/_color';
 import {ColorKeyType} from '../../style/constant/AppColors';
 import {getColorValue} from '../../style/modifier';
 import {getStyleProps} from '../../style/style';
-import AwesomeList, {IAwesomeListProps} from '../list/awesomeList/AwesomeList';
+import AwesomeList, {IAwesomeListProps, IPaginationProps} from '../list/awesomeList/AwesomeList';
 import Text from '../text/Text';
 import View from '../view/View';
 import TabBarComponent from './TabBarComponent';
@@ -64,7 +64,7 @@ export interface ITabViewProps
         props: IRenderTabViewProps<ITabViewRoute>,
     ) => React.ReactNode;
     source?: (
-        props: {pageIndex: number; pageSize: number},
+        props: IPaginationProps,
         index: number,
     ) => any;
     transformer?: (res: any, index: number) => any;
