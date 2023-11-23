@@ -94,7 +94,7 @@ const TestList: React.FC<ITestListProps> = ({id}) => {
                     // position:"relative"
                 }}
                 flashListProps={{estimatedItemSize: 50}}
-                onUpdateSate={state => {
+                onStateUpdate={state => {
                     console.log(
                         '🚀 >>>>>> file: TestList.tsx:95 >>>>>> renderList >>>>>> state:',
                         state,

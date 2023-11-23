@@ -94,7 +94,7 @@ export interface IAwesomeListProps<T>
         data: Array<any>,
     ) => IPaginationProps;
 
-    onUpdateSate?: (state: IAwesomeListState) => void;
+    onStateUpdate?: (state: IAwesomeListState) => void;
 }
 
 export interface IAwesomeListState {
@@ -176,7 +176,7 @@ class AwesomeList<T> extends Component<
         prevState: Readonly<IAwesomeListState>,
         snapshot?: any,
     ): void {
-        this.props?.onUpdateSate && this.props?.onUpdateSate(this.state);
+        this.props?.onStateUpdate && this.props?.onStateUpdate(this.state);
     }
 
     componentWillUnmount() {
