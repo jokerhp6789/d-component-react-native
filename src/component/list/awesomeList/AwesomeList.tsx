@@ -263,7 +263,7 @@ class AwesomeList<T> extends Component<
             const isMoving = getCondition ? getCondition(i) : moveId === itemId;
             return isMoving;
         });
-        if (foundIndex) {
+        if (foundIndex !== -1) {
             if (updateBeforeMove && !!getValue) {
                 const updated = this.state.data.map((item, index) =>
                     index === foundIndex ? getValue(item) : item,
