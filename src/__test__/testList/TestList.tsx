@@ -46,7 +46,17 @@ const TestList: React.FC<ITestListProps> = ({id}) => {
                     <Button
                         onPress={() => {
                             listRef.current &&
-                                listRef.current.moveItemToTop(item);
+                                listRef.current.moveItemToTop(item?.id, {
+                                    updateBeforeMove: true,
+                                    getValue: item => ({
+                                        ...item,
+                                        label: `Item Updated ${new Date()}`,
+                                    }),
+                                });
+                            console.log(
+                                'AWESOME LIST STATE :',
+                                listRef.current?.state,
+                            );
                         }}>
                         Move to top
                     </Button>
@@ -84,6 +94,12 @@ const TestList: React.FC<ITestListProps> = ({id}) => {
                     // position:"relative"
                 }}
                 flashListProps={{estimatedItemSize: 50}}
+                onUpdateSate={state => {
+                    console.log(
+                        '🚀 >>>>>> file: TestList.tsx:95 >>>>>> renderList >>>>>> state:',
+                        state,
+                    );
+                }}
             />
         );
     };

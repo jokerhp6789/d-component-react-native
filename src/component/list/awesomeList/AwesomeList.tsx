@@ -40,6 +40,17 @@ export interface IPaginationProps {
     [key: string]: any;
 }
 
+export interface IAwesomeListMethodOptions {
+    getId?: (props: any) => any;
+    getValue?: (props: any) => any;
+    getCondition?: (props: any) => boolean;
+}
+
+export interface IAwesomeListMethodExtendOptions
+    extends IAwesomeListMethodOptions {
+    updateBeforeMove?: boolean;
+}
+
 //@ts-ignore
 export interface IAwesomeListProps<T>
     extends Omit<
@@ -82,6 +93,8 @@ export interface IAwesomeListProps<T>
         prevPaging: IPaginationProps,
         data: Array<any>,
     ) => IPaginationProps;
+
+    onUpdateSate?: (state: IAwesomeListState) => void;
 }
 
 export interface IAwesomeListState {
@@ -158,6 +171,14 @@ class AwesomeList<T> extends Component<
         this.start();
     }
 
+    componentDidUpdate(
+        prevProps: Readonly<IAwesomeListProps<T>>,
+        prevState: Readonly<IAwesomeListState>,
+        snapshot?: any,
+    ): void {
+        this.props?.onUpdateSate && this.props?.onUpdateSate(this.state);
+    }
+
     componentWillUnmount() {
         this._unmounted = true;
     }
@@ -187,41 +208,80 @@ class AwesomeList<T> extends Component<
         );
     }
 
-    public updateItem(updateId: string, value: any) {
+    public updateItem(
+        updateId: string | undefined,
+        value: any | undefined,
+        options?: IAwesomeListMethodOptions,
+    ) {
         if (this.state?.data?.length) {
-            const updated = this.state.data.map(i =>
-                i?.id === updateId ? {...i, ...(value || {})} : i,
-            );
+            const {getId, getValue, getCondition} = options || {};
+            const updated = this.state.data.map(i => {
+                const itemId = getId ? getId(i) : i?.id;
+                const isUpdating = getCondition
+                    ? getCondition(i)
+                    : itemId === updateId;
+                const valueToUpdate = getValue ? getValue(i) : value;
+                return isUpdating ? {...i, ...(valueToUpdate || {})} : i;
+            });
             this.setState({data: updated});
         }
     }
 
-    public removeItem(removeId: string) {
+    public removeItem(
+        removeId: string | undefined,
+        options?: IAwesomeListMethodOptions,
+    ) {
         if (this.state?.data?.length) {
+            const {getId, getValue, getCondition} = options || {};
             this.setState({
-                data: (this?.state?.data ?? []).filter(
-                    item => item?.id !== removeId,
-                ),
+                data: (this?.state?.data ?? []).filter(item => {
+                    const itemId = getId ? getId(item) : item?.id;
+                    const isRemoving = getCondition
+                        ? getCondition(item)
+                        : itemId !== removeId;
+                    return isRemoving;
+                }),
             });
         }
     }
 
-    public moveItemToTop(item: any) {
-        return this.moveItemToIndex(item, 0);
+    public moveItemToTop(
+        moveId: string | undefined,
+        options?: IAwesomeListMethodExtendOptions,
+    ) {
+        return this.moveItemToIndex(moveId, 0, options);
     }
 
-    public moveItemToIndex(item: any, newIndex: number) {
-        const foundIndex = _.findIndex(
-            this.state.data,
-            i => item?.id === i?.id,
-        );
+    public moveItemToIndex(
+        moveId: string | undefined,
+        newIndex: number,
+        options?: IAwesomeListMethodExtendOptions,
+    ) {
+        const {getId, getCondition, getValue, updateBeforeMove} = options || {};
+        const foundIndex = _.findIndex(this?.state?.data ?? [], i => {
+            const itemId = getId ? getId(i) : i?.id;
+            const isMoving = getCondition ? getCondition(i) : moveId === itemId;
+            return isMoving;
+        });
         if (foundIndex) {
-            const movedArr = ObjectUtils.arrayMove(
-                this.state.data,
-                foundIndex,
-                newIndex,
-            );
-            this.setState({data: movedArr});
+            if (updateBeforeMove && !!getValue) {
+                const updated = this.state.data.map((item, index) =>
+                    index === foundIndex ? getValue(item) : item,
+                );
+                const movedArr = ObjectUtils.arrayMove(
+                    updated,
+                    foundIndex,
+                    newIndex,
+                );
+                this.setState({data: movedArr});
+            } else {
+                const movedArr = ObjectUtils.arrayMove(
+                    this.state.data,
+                    foundIndex,
+                    newIndex,
+                );
+                this.setState({data: movedArr});
+            }
         }
     }
 
