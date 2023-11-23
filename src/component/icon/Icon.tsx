@@ -93,7 +93,7 @@ const Icon: React.FC<IIconProps> = ({
         size,
         ...rest,
     };
-    let icon = <IconMaterialIcons {...props} />;
+    let icon = null;
     switch (type) {
         case 'material-community':
             icon = <IconMaterialCommunityIcons {...props} />;
