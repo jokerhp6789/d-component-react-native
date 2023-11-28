@@ -1,70 +1,75 @@
-import ClassNames from "classnames";
-import React from "react";
-import { Dimensions, Modal } from "react-native";
+import ClassNames from 'classnames';
+import React, {useRef, ElementRef} from 'react';
+import {Dimensions, Modal, SafeAreaView} from 'react-native';
 import ImageViewer, {
-  ImageViewerPropsDefine,
-} from "react-native-image-zoom-viewer";
-import Icon from "../icon/Icon";
-import View from "../view/View";
+    ImageViewerPropsDefine,
+} from 'react-native-image-zoom-viewer';
+import Icon from '../icon/Icon';
+import View from '../view/View';
 
-const { width } = Dimensions.get("window");
+const {width} = Dimensions.get('window');
 export interface IImageViewerModalProps
-  extends Omit<ImageViewerPropsDefine, "imageUrls" | "onCancel"> {
-  open: boolean;
-  value: ImageViewerPropsDefine["imageUrls"];
-  onClose?: ImageViewerPropsDefine["onCancel"];
-  customFooter?: ((currentIndex: number) => Element) | Element;
-  leftFooterView?: ((currentIndex: number) => Element) | Element;
-  classNameFooter?: string;
+    extends Omit<ImageViewerPropsDefine, 'imageUrls' | 'onCancel'> {
+    open: boolean;
+    value: ImageViewerPropsDefine['imageUrls'];
+    onClose?: ImageViewerPropsDefine['onCancel'];
+    customFooter?: ((currentIndex: number) => Element) | Element;
+    leftFooterView?: ((currentIndex: number) => Element) | Element;
+    classNameFooter?: string;
 }
 
 const ImageViewerModal: React.FC<IImageViewerModalProps> = ({
-  open,
-  value,
-  onClose,
-  customFooter,
-  leftFooterView,
-  index = 0,
-  classNameFooter,
-  ...rest
+    open,
+    value,
+    onClose,
+    customFooter,
+    leftFooterView,
+    index = 0,
+    classNameFooter,
+    ...rest
 }) => {
-  const footerClass = ClassNames(
-    "flex-center-y justify-content-between bg-transparent height-[70] p-3",
-    classNameFooter
-  );
+    const viewerRef = useRef<ElementRef<typeof ImageViewer>>(null);
+    const footerClass = ClassNames(
+        'flex-center-y justify-content-between bg-transparent height-[70] p-3',
+        classNameFooter,
+    );
 
-  const renderFooter = (index: number) => {
-    if (customFooter) {
-      if (typeof customFooter === "function") {
-        return customFooter(index);
-      }
-      return customFooter;
-    }
-    const leftView = () => {
-      if (typeof leftFooterView === "function") {
-        return leftFooterView(index);
-      }
-      return leftFooterView;
+    const renderFooter = (index: number) => {
+        if (customFooter) {
+            if (typeof customFooter === 'function') {
+                return customFooter(index);
+            }
+            return customFooter;
+        }
+        const leftView = () => {
+            if (typeof leftFooterView === 'function') {
+                return leftFooterView(index);
+            }
+            return leftFooterView;
+        };
+        return (
+            <View className={footerClass} style={{width}}>
+                <View>{leftFooterView ? leftView() : null}</View>
+                <Icon name="cancel" onPress={onClose} size={30} color="light" />
+            </View>
+        );
     };
     return (
-      <View className={footerClass} style={{ width }}>
-        <View>{leftFooterView ? leftView() : null}</View>
-        <Icon name="cancel" onPress={onClose} size={30} color="light" />
-      </View>
+        <Modal visible={open} transparent>
+            <SafeAreaView style={{flex: 1, backgroundColor: 'black'}}>
+                <ImageViewer
+                    ref={viewerRef}
+                    useNativeDriver
+                    imageUrls={value}
+                    enableSwipeDown
+                    onCancel={onClose}
+                    renderFooter={renderFooter as any}
+                    index={index === -1 ? 0 : index}
+                    {...rest}
+                />
+            </SafeAreaView>
+        </Modal>
     );
-  };
-  return (
-    <Modal visible={open} transparent>
-      <ImageViewer
-        {...rest}
-        imageUrls={value}
-        enableSwipeDown
-        onCancel={onClose}
-        renderFooter={renderFooter as any}
-        index={index === -1 ? 0 : index}
-      />
-    </Modal>
-  );
 };
 
 export default ImageViewerModal;
