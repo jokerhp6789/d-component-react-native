@@ -11,9 +11,11 @@ import {
     THomeTabStacksParamList,
     TSettingTabStacksParamList,
     TTabStacksParamList,
+    TTestNativeTabStacksParamList,
 } from '../navigator/INavigator';
 import {commonStacksCreator} from './CommonStacks';
 import Icon from '../../../component/icon/Icon';
+import TestNative from '../../testNative/TestNative';
 
 export interface IMainStacksProps {
     [key: string]: any;
@@ -54,6 +56,10 @@ const TabStacks: React.FC<ITabStacksProps> = React.memo(({id}) => {
                 } as any
             }>
             <TabStackScreen name="homeTabStacks" component={HomeTabStacks} />
+            <TabStackScreen
+                name="nativeTabStacks"
+                component={NativeTabStacks}
+            />
             <TabStackScreen
                 name="settingTabStacks"
                 component={SettingTabStacks}
@@ -96,5 +102,19 @@ const SettingTabStacks: React.FC<IMainStacksProps> = React.memo(({id}) => {
                 component={SettingScreen}
             />
         </SettingTabStack.Navigator>
+    );
+});
+
+const NativeTabStack =
+    createNativeStackNavigator<TTestNativeTabStacksParamList>();
+const NativeTabStackScreen = NativeTabStack.Screen;
+const NativeTabStacks: React.FC<IMainStacksProps> = React.memo(({id}) => {
+    return (
+        <NativeTabStack.Navigator screenOptions={{...DEFAULT_HEADER}}>
+            <NativeTabStackScreen
+                name="testNativeScreen"
+                component={TestNative}
+            />
+        </NativeTabStack.Navigator>
     );
 });

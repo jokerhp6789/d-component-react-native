@@ -44,6 +44,11 @@ const MAIN_TABS = [
         iconSvg: <Icon name="home" type="ionicon" />,
     },
     {
+        key: 'nativeTabStacks',
+        tabBarLabel: 'native',
+        iconSvg: <Icon name="apple" type="font-awesome" />,
+    },
+    {
         key: 'settingTabStacks',
         tabBarLabel: 'setting',
         iconSvg: <Icon name="cog" type="font-awesome" />,

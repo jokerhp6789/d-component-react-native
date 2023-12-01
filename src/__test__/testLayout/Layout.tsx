@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     NativeSafeAreaViewProps,
+    SafeAreaView,
     useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import View from '../../component/view/View';
@@ -9,7 +10,6 @@ import {getColorValue} from '../../style/modifier';
 import {IStyleTransformerProps, styleTransformer} from '../../style/style';
 import {useDarkMode} from '../../hooks/useStyle';
 import {ThemeProps} from '../../interface/iTheme';
-
 export interface ILayoutProps
     extends Partial<NativeSafeAreaViewProps>,
         ThemeProps {
