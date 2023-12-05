@@ -2,7 +2,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import React from 'react';
 import {TDrawerStacksParamList} from '../navigator/INavigator';
 import {commonStacksCreator} from './CommonStacks';
-import TabStacks, {renderMenuIcon, TestNativeStackCommon} from './TabStacks';
+import TabStacks, {renderMenuIcon, testNativeStackCommon} from './TabStacks';
 import Icon from '../../../component/icon/Icon';
 import Header from '../../../component/header/Header';
 import {View} from 'react-native';
@@ -34,7 +34,7 @@ const DrawerStacks: React.FC<IDrawerStacksProps> = ({navigation}) => {
             }}>
             <DrawerScreen name="homeTab" component={TabStacks} />
             {commonStacksCreator<any>(DrawerStack)}
-            {TestNativeStackCommon()}
+            {testNativeStackCommon()}
         </DrawerStack.Navigator>
     );
 };

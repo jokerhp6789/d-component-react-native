@@ -6,4 +6,13 @@ function hexToRGB(hex: string, alpha: number = 1) {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-export default { hexToRGB };
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+export default {hexToRGB, getRandomColor};

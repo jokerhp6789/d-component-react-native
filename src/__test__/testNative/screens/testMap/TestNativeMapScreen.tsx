@@ -16,7 +16,7 @@ const TestNativeMapScreen: React.FC<ITestNativeMapScreenProps> = ({id}) => {
         longitudeDelta: 0.1,
     };
     return (
-        <Layout>
+        <Layout edges={['bottom']}>
             <NativeMapView
                 style={{flex: 1}}
                 zoomEnabled={false}
@@ -29,6 +29,8 @@ const TestNativeMapScreen: React.FC<ITestNativeMapScreenProps> = ({id}) => {
                 }}
             />
             <Button
+                className={'m-3'}
+                size="xxx-large"
                 onPress={() => {
                     // const node = findNodeHandle(TestNative as any);
                     // console.log(

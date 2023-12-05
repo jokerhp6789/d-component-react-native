@@ -124,12 +124,13 @@ const NativeTabStacks: React.FC<IMainStacksProps> = React.memo(({id}) => {
     );
 });
 
-export function TestNativeStackCommon() {
+export function testNativeStackCommon() {
     const navigation = useNavigation();
     return (
         <NativeTabStack.Group
             screenOptions={{
                 ...DEFAULT_HEADER,
+                animation: 'slide_from_left',
                 headerShown: true,
                 headerTitle: ({children}) => {
                     const result = getDataItemTitle(children);

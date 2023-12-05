@@ -5,7 +5,6 @@ import {
 import React from 'react';
 import {TMainStacksParamList} from '../navigator/INavigator';
 import DrawerStacks from './DrawerStacks';
-import {TestNativeStackCommon} from './TabStacks';
 
 export interface IMainStacksProps {
     [key: string]: any;
