@@ -14,9 +14,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-DComponentReactNative-DComponentReactNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-DComponentReactNative-DComponentReactNativeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		84B271452B19CE810025DDD2 /* RNTMapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B271442B19CE810025DDD2 /* RNTMapManager.m */; };
-		84B271492B19E1420025DDD2 /* RCTConvert+Mapkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B271482B19E1420025DDD2 /* RCTConvert+Mapkit.m */; };
-		84B2714E2B19F47C0025DDD2 /* RNTMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B2714D2B19F47C0025DDD2 /* RNTMapView.m */; };
+		848014C22B1EEE19005BCA25 /* RCTConvert+Mapkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014BC2B1EEE19005BCA25 /* RCTConvert+Mapkit.m */; };
+		848014C32B1EEE19005BCA25 /* RNTMapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014BE2B1EEE19005BCA25 /* RNTMapManager.m */; };
+		848014C42B1EEE19005BCA25 /* RNTMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014C12B1EEE19005BCA25 /* RNTMapView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,11 +45,11 @@
 		5B7EB9410499542E8C5724F5 /* Pods-DComponentReactNative-DComponentReactNativeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DComponentReactNative-DComponentReactNativeTests.debug.xcconfig"; path = "Target Support Files/Pods-DComponentReactNative-DComponentReactNativeTests/Pods-DComponentReactNative-DComponentReactNativeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-DComponentReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DComponentReactNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DComponentReactNative/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		84B271442B19CE810025DDD2 /* RNTMapManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTMapManager.m; sourceTree = "<group>"; };
-		84B271472B19E0A60025DDD2 /* RCTConvert+Mapkit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+Mapkit.h"; sourceTree = "<group>"; };
-		84B271482B19E1420025DDD2 /* RCTConvert+Mapkit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+Mapkit.m"; sourceTree = "<group>"; };
-		84B2714C2B19F3890025DDD2 /* RNTMapView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNTMapView.h; sourceTree = "<group>"; };
-		84B2714D2B19F47C0025DDD2 /* RNTMapView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNTMapView.m; sourceTree = "<group>"; };
+		848014BC2B1EEE19005BCA25 /* RCTConvert+Mapkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+Mapkit.m"; sourceTree = "<group>"; };
+		848014BD2B1EEE19005BCA25 /* RCTConvert+Mapkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+Mapkit.h"; sourceTree = "<group>"; };
+		848014BE2B1EEE19005BCA25 /* RNTMapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTMapManager.m; sourceTree = "<group>"; };
+		848014C02B1EEE19005BCA25 /* RNTMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTMapView.h; sourceTree = "<group>"; };
+		848014C12B1EEE19005BCA25 /* RNTMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTMapView.m; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-DComponentReactNative-DComponentReactNativeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DComponentReactNative-DComponentReactNativeTests.release.xcconfig"; path = "Target Support Files/Pods-DComponentReactNative-DComponentReactNativeTests/Pods-DComponentReactNative-DComponentReactNativeTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -146,40 +146,41 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		84B271432B19CE5E0025DDD2 /* libs */ = {
+		848014BA2B1EEE19005BCA25 /* map */ = {
 			isa = PBXGroup;
 			children = (
-				84B2714A2B19F2D30025DDD2 /* map */,
+				848014BB2B1EEE19005BCA25 /* converter */,
+				848014BE2B1EEE19005BCA25 /* RNTMapManager.m */,
+				848014BF2B1EEE19005BCA25 /* view */,
 			);
-			path = libs;
+			name = map;
+			path = ios/map;
 			sourceTree = "<group>";
 		};
-		84B271462B19E06A0025DDD2 /* converter */ = {
+		848014BB2B1EEE19005BCA25 /* converter */ = {
 			isa = PBXGroup;
 			children = (
-				84B271472B19E0A60025DDD2 /* RCTConvert+Mapkit.h */,
-				84B271482B19E1420025DDD2 /* RCTConvert+Mapkit.m */,
+				848014BC2B1EEE19005BCA25 /* RCTConvert+Mapkit.m */,
+				848014BD2B1EEE19005BCA25 /* RCTConvert+Mapkit.h */,
 			);
 			path = converter;
 			sourceTree = "<group>";
 		};
-		84B2714A2B19F2D30025DDD2 /* map */ = {
+		848014BF2B1EEE19005BCA25 /* view */ = {
 			isa = PBXGroup;
 			children = (
-				84B2714B2B19F3700025DDD2 /* view */,
-				84B271462B19E06A0025DDD2 /* converter */,
-				84B271442B19CE810025DDD2 /* RNTMapManager.m */,
-			);
-			path = map;
-			sourceTree = "<group>";
-		};
-		84B2714B2B19F3700025DDD2 /* view */ = {
-			isa = PBXGroup;
-			children = (
-				84B2714C2B19F3890025DDD2 /* RNTMapView.h */,
-				84B2714D2B19F47C0025DDD2 /* RNTMapView.m */,
+				848014C02B1EEE19005BCA25 /* RNTMapView.h */,
+				848014C12B1EEE19005BCA25 /* RNTMapView.m */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		84B271432B19CE5E0025DDD2 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				848014BA2B1EEE19005BCA25 /* map */,
+			);
+			path = libs;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -457,11 +458,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				848014C22B1EEE19005BCA25 /* RCTConvert+Mapkit.m in Sources */,
+				848014C42B1EEE19005BCA25 /* RNTMapView.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				84B2714E2B19F47C0025DDD2 /* RNTMapView.m in Sources */,
-				84B271492B19E1420025DDD2 /* RCTConvert+Mapkit.m in Sources */,
-				84B271452B19CE810025DDD2 /* RNTMapManager.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				848014C32B1EEE19005BCA25 /* RNTMapManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

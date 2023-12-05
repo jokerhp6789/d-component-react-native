@@ -39,6 +39,7 @@ const TestStyle: React.FC<ITestStyleProps> = ({id}) => {
                     className="my-3"
                     onPress={(e: any) => {
                         e.currentTarget.measure(
+                            //@ts-ignore
                             (x1, y1, width, height, px, py) => {
                                 switchTheme({
                                     switchThemeFunction: () => {

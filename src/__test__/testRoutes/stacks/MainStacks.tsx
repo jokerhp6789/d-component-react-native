@@ -5,6 +5,7 @@ import {
 import React from 'react';
 import {TMainStacksParamList} from '../navigator/INavigator';
 import DrawerStacks from './DrawerStacks';
+import {TestNativeStackCommon} from './TabStacks';
 
 export interface IMainStacksProps {
     [key: string]: any;
@@ -31,6 +32,7 @@ const MainStacks: React.FC<IMainStacksProps> = React.memo(({id}) => {
                 options={{headerShown: false}}
                 component={DrawerStacks}
             />
+          
         </MainStack.Navigator>
     );
 });

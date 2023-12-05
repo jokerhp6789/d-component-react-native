@@ -53,7 +53,7 @@ export type THomeTabStacksParamList = {
 //Tab Stacks - Test Native Tab
 export type TTestNativeTabStacksParamList = {
     testNativeScreen: undefined;
-};
+} & TTestNativeStacksParamList;
 
 //Tab Stacks - Setting Tab
 export type TSettingTabStacksParamList = {
@@ -81,6 +81,13 @@ export type TCommonStacksParamList = {
     testFormScreen: undefined;
     testBottomSheetScreen: undefined;
 };
+
+//Common Stacks
+export type TTestNativeStacksParamList = {
+    testNativeMap: undefined;
+    testNativeKeyboard: undefined;
+};
+
 export type TCommonStacksScreenProps<T extends keyof TCommonStacksParamList> =
     NativeStackScreenProps<TCommonStacksParamList, T>;
 

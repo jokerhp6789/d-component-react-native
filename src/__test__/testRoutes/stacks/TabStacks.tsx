@@ -13,9 +13,14 @@ import {
     TTabStacksParamList,
     TTestNativeTabStacksParamList,
 } from '../navigator/INavigator';
-import {commonStacksCreator} from './CommonStacks';
+import {commonStacksCreator, getDataItemTitle} from './CommonStacks';
 import Icon from '../../../component/icon/Icon';
-import TestNative from '../../testNative/TestNative';
+import TestNativeScreen from '../../testNative/TestNative';
+import TestNativeMapScreen from '../../testNative/screens/testMap/TestNativeMapScreen';
+import Text from '../../../component/text/Text';
+import TestNativeKeyboardScreen from '../../testNative/screens/testKeyboard/TestNativeKeyboardScreen';
+import ButtonIcon from '../../../component/button/ButtonIcon';
+import {useNavigation} from '@react-navigation/native';
 
 export interface IMainStacksProps {
     [key: string]: any;
@@ -113,8 +118,47 @@ const NativeTabStacks: React.FC<IMainStacksProps> = React.memo(({id}) => {
         <NativeTabStack.Navigator screenOptions={{...DEFAULT_HEADER}}>
             <NativeTabStackScreen
                 name="testNativeScreen"
-                component={TestNative}
+                component={TestNativeScreen}
             />
         </NativeTabStack.Navigator>
     );
 });
+
+export function TestNativeStackCommon() {
+    const navigation = useNavigation();
+    return (
+        <NativeTabStack.Group
+            screenOptions={{
+                ...DEFAULT_HEADER,
+                headerShown: true,
+                headerTitle: ({children}) => {
+                    const result = getDataItemTitle(children);
+                    return (
+                        <Text className="h3 font-weight-bold text-primary">
+                            {result}
+                        </Text>
+                    );
+                },
+                headerLeft: props => {
+                    return (
+                        <ButtonIcon
+                            iconSize={30}
+                            iconName="arrow-left"
+                            onPress={() => {
+                                navigation.goBack();
+                            }}
+                        />
+                    );
+                },
+            }}>
+            <NativeTabStackScreen
+                name="testNativeMap"
+                component={TestNativeMapScreen}
+            />
+            <NativeTabStackScreen
+                name="testNativeKeyboard"
+                component={TestNativeKeyboardScreen}
+            />
+        </NativeTabStack.Group>
+    );
+}

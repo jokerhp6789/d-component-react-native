@@ -37,7 +37,7 @@
   });
 }
 
-RCT_EXPORT_MODULE()
+RCT_EXPORT_MODULE(RNTMap)
 
 RCT_EXPORT_VIEW_PROPERTY(zoomEnabled, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(onRegionChange, RCTBubblingEventBlock)
