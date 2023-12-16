@@ -40,6 +40,7 @@ export type TDrawerStacksParamList = {
 export type TTabStacksParamList = {
     homeTabStacks: BottomTabScreenProps<THomeTabStacksParamList>;
     nativeTabStacks: BottomTabScreenProps<TTestNativeTabStacksParamList>;
+    animationTabStacks: BottomTabScreenProps<TTestNativeTabStacksParamList>;
     settingTabStacks: BottomTabScreenProps<TSettingTabStacksParamList>;
 };
 export type TTabStacksScreenProps<T extends keyof TTabStacksParamList> =
@@ -54,6 +55,11 @@ export type THomeTabStacksParamList = {
 export type TTestNativeTabStacksParamList = {
     testNativeScreen: undefined;
 } & TTestNativeStacksParamList;
+
+//Tab Stacks - Test Animation Tab
+export type TTestAnimationTabStacksParamList = {
+    testAnimationScreen: undefined;
+} & TTestAnimationStacksParamList;
 
 //Tab Stacks - Setting Tab
 export type TSettingTabStacksParamList = {
@@ -82,10 +88,15 @@ export type TCommonStacksParamList = {
     testBottomSheetScreen: undefined;
 };
 
-//Common Stacks
+//Test Native Stacks
 export type TTestNativeStacksParamList = {
     testNativeMap: undefined;
     testNativeKeyboard: undefined;
+};
+
+//Test Native Stacks
+export type TTestAnimationStacksParamList = {
+    testLayoutAnimationScreen: undefined;
 };
 
 export type TCommonStacksScreenProps<T extends keyof TCommonStacksParamList> =

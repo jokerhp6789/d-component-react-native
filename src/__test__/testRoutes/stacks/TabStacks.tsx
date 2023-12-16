@@ -11,6 +11,7 @@ import {
     THomeTabStacksParamList,
     TSettingTabStacksParamList,
     TTabStacksParamList,
+    TTestAnimationTabStacksParamList,
     TTestNativeTabStacksParamList,
 } from '../navigator/INavigator';
 import {commonStacksCreator, getDataItemTitle} from './CommonStacks';
@@ -21,6 +22,8 @@ import Text from '../../../component/text/Text';
 import TestNativeKeyboardScreen from '../../testNative/screens/testKeyboard/TestNativeKeyboardScreen';
 import ButtonIcon from '../../../component/button/ButtonIcon';
 import {useNavigation} from '@react-navigation/native';
+import TestAnimationScreen from '../../testAnimation/TestAnimationScreen';
+import TestLayoutAnimationScreen from '../../testAnimation/screens/TestLayoutAnimationScreen';
 
 export interface IMainStacksProps {
     [key: string]: any;
@@ -64,6 +67,10 @@ const TabStacks: React.FC<ITabStacksProps> = React.memo(({id}) => {
             <TabStackScreen
                 name="nativeTabStacks"
                 component={NativeTabStacks}
+            />
+            <TabStackScreen
+                name="animationTabStacks"
+                component={AnimationTabStacks}
             />
             <TabStackScreen
                 name="settingTabStacks"
@@ -161,5 +168,55 @@ export function testNativeStackCommon() {
                 component={TestNativeKeyboardScreen}
             />
         </NativeTabStack.Group>
+    );
+}
+
+const AnimationTabStack =
+    createNativeStackNavigator<TTestAnimationTabStacksParamList>();
+const AnimationTabStackScreen = AnimationTabStack.Screen;
+const AnimationTabStacks: React.FC<IMainStacksProps> = React.memo(({id}) => {
+    return (
+        <NativeTabStack.Navigator screenOptions={{...DEFAULT_HEADER}}>
+            <AnimationTabStackScreen
+                name="testAnimationScreen"
+                component={TestAnimationScreen}
+            />
+        </NativeTabStack.Navigator>
+    );
+});
+
+export function testAnimationStackCommon() {
+    const navigation = useNavigation();
+    return (
+        <AnimationTabStack.Group
+            screenOptions={{
+                ...DEFAULT_HEADER,
+                animation: 'slide_from_left',
+                headerShown: true,
+                headerTitle: ({children}) => {
+                    const result = getDataItemTitle(children);
+                    return (
+                        <Text className="h3 font-weight-bold text-primary">
+                            {result}
+                        </Text>
+                    );
+                },
+                headerLeft: props => {
+                    return (
+                        <ButtonIcon
+                            iconSize={30}
+                            iconName="arrow-left"
+                            onPress={() => {
+                                navigation.goBack();
+                            }}
+                        />
+                    );
+                },
+            }}>
+            <AnimationTabStackScreen
+                name="testLayoutAnimationScreen"
+                component={TestLayoutAnimationScreen}
+            />
+        </AnimationTabStack.Group>
     );
 }

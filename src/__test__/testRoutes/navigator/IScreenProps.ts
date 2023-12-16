@@ -11,6 +11,7 @@ import {
     TRootStacksParamList,
     TRootStacksScreenProps,
     TTabStacksParamList,
+    TTestAnimationTabStacksParamList,
     TTestNativeStacksParamList,
     TTestNativeTabStacksParamList,
 } from './INavigator';
@@ -27,6 +28,17 @@ export type THomeScreenProps = CompositeScreenProps<
 
 export type TTestNativeScreenProps = CompositeScreenProps<
     BottomTabScreenProps<TTestNativeTabStacksParamList, 'testNativeScreen'>,
+    CompositeScreenProps<
+        TRootStacksScreenProps<keyof TRootStacksParamList>,
+        TCommonStacksScreenProps<keyof TCommonStacksParamList>
+    >
+>;
+
+export type TTestAnimationScreenProps = CompositeScreenProps<
+    BottomTabScreenProps<
+        TTestAnimationTabStacksParamList,
+        'testAnimationScreen'
+    >,
     CompositeScreenProps<
         TRootStacksScreenProps<keyof TRootStacksParamList>,
         TCommonStacksScreenProps<keyof TCommonStacksParamList>
