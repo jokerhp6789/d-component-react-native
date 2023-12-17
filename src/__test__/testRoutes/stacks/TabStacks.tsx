@@ -24,6 +24,9 @@ import ButtonIcon from '../../../component/button/ButtonIcon';
 import {useNavigation} from '@react-navigation/native';
 import TestAnimationScreen from '../../testAnimation/TestAnimationScreen';
 import TestLayoutAnimationScreen from '../../testAnimation/screens/TestLayoutAnimationScreen';
+import TestShareTransactionScreen, {
+    TestShareTransactionDetailScreen,
+} from '../../testAnimation/screens/TestShareTransactionScreen';
 
 export interface IMainStacksProps {
     [key: string]: any;
@@ -217,6 +220,14 @@ export function testAnimationStackCommon() {
                 name="testLayoutAnimationScreen"
                 component={TestLayoutAnimationScreen}
             />
+            {/* <AnimationTabStackScreen
+                name="testShareTransactionScreen"
+                component={TestShareTransactionScreen}
+            />
+            <AnimationTabStackScreen
+                name="testShareTransactionDetailScreen"
+                component={TestShareTransactionDetailScreen}
+            /> */}
         </AnimationTabStack.Group>
     );
 }

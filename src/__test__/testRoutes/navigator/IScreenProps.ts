@@ -44,3 +44,25 @@ export type TTestAnimationScreenProps = CompositeScreenProps<
         TCommonStacksScreenProps<keyof TCommonStacksParamList>
     >
 >;
+
+export type TTestShareTransactionScreenProps = CompositeScreenProps<
+    BottomTabScreenProps<
+        TTestAnimationTabStacksParamList,
+        'testShareTransactionScreen'
+    >,
+    CompositeScreenProps<
+        TRootStacksScreenProps<keyof TRootStacksParamList>,
+        TCommonStacksScreenProps<keyof TCommonStacksParamList>
+    >
+>;
+
+export type TTestShareTransactionDetailScreenProps = CompositeScreenProps<
+    BottomTabScreenProps<
+        TTestAnimationTabStacksParamList,
+        'testShareTransactionDetailScreen'
+    >,
+    CompositeScreenProps<
+        TRootStacksScreenProps<keyof TRootStacksParamList>,
+        TCommonStacksScreenProps<keyof TCommonStacksParamList>
+    >
+>;

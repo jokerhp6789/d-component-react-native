@@ -1,12 +1,13 @@
 import React from 'react';
-import {View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Animated, {
-    LayoutAnimationAndConfig,
+    LayoutAnimationConfig,
     LayoutAnimation,
     LayoutAnimationFunction,
     PinwheelIn,
     PinwheelOut,
 } from 'react-native-reanimated';
+import Button from '../../../component/button/Button';
 
 import Text from '../../../component/text/Text';
 import Layout from '../../testLayout/Layout';
@@ -34,23 +35,23 @@ const TestLayoutAnimationScreen: React.FC<ITestLayoutAnimationScreenProps> = ({
                 )}
             </View> */}
 
-            {/* <View style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.buttonColumn}>
                     <Button
                         onPress={() => {
                             setOuter(!outer);
                         }}
-                        title={toggleString(outer) + ' outer'}
+                        label={toggleString(outer) + ' outer'}
                     />
                     <Button
                         disabled={!outer}
                         onPress={() => {
                             setInner(!inner);
                         }}
-                        title={toggleString(inner) + ' inner'}
+                        label={toggleString(inner) + ' inner'}
                     />
                 </View>
-                <LayoutAnimationFunction skipEntering>
+                <LayoutAnimationConfig skipEntering>
                     {outer && (
                         <Animated.View
                             entering={PinwheelIn}
@@ -67,10 +68,43 @@ const TestLayoutAnimationScreen: React.FC<ITestLayoutAnimationScreenProps> = ({
                             </LayoutAnimationConfig>
                         </Animated.View>
                     )}
-                </LayoutAnimationFunction>
-            </View> */}
+                </LayoutAnimationConfig>
+            </View>
         </Layout>
     );
 };
 
 export default TestLayoutAnimationScreen;
+
+function toggleString(value: any) {
+    return value ? 'Hide' : 'Show';
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        height: 220,
+    },
+    buttonColumn: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        height: 90,
+    },
+    outerBox: {
+        width: 150,
+        height: 150,
+        backgroundColor: '#b58df1',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
+        margin: 20,
+    },
+    box: {
+        width: 80,
+        height: 80,
+        backgroundColor: '#782aeb',
+    },
+});

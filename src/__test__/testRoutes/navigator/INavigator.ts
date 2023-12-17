@@ -97,6 +97,8 @@ export type TTestNativeStacksParamList = {
 //Test Native Stacks
 export type TTestAnimationStacksParamList = {
     testLayoutAnimationScreen: undefined;
+    testShareTransactionScreen: undefined;
+    testShareTransactionDetailScreen: undefined;
 };
 
 export type TCommonStacksScreenProps<T extends keyof TCommonStacksParamList> =
