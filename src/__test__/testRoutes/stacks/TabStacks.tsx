@@ -220,14 +220,14 @@ export function testAnimationStackCommon() {
                 name="testLayoutAnimationScreen"
                 component={TestLayoutAnimationScreen}
             />
-            {/* <AnimationTabStackScreen
+            <AnimationTabStackScreen
                 name="testShareTransactionScreen"
                 component={TestShareTransactionScreen}
             />
             <AnimationTabStackScreen
                 name="testShareTransactionDetailScreen"
                 component={TestShareTransactionDetailScreen}
-            /> */}
+            />
         </AnimationTabStack.Group>
     );
 }
