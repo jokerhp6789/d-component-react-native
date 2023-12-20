@@ -22,7 +22,7 @@ export enum CustomKeyboardType {
     EMOJI_KEYBOARD = 'EmojiKeyboard',
 }
 
-const CUSTOM_KEYBOARD_COLOR = '#FFFFFF';
+const CUSTOM_KEYBOARD_COLOR = '#ffffff';
 const TestNativeKeyboardScreen: React.FC<ITestNativeKeyboardScreenProps> = ({
     id,
 }) => {
@@ -32,10 +32,6 @@ const TestNativeKeyboardScreen: React.FC<ITestNativeKeyboardScreenProps> = ({
     }>({});
     const keyboardRef = useRef<ElementRef<typeof KeyboardAccessoryView>>(null);
     const kbInputRef = useRef<ElementRef<typeof InputText>>(null);
-    console.log(
-        '🚀 >>>>>> file: TestNativeKeyboardScreen.tsx:28 >>>>>> customKeyboard:',
-        customKeyboard,
-    );
 
     const onRequestShowKeyboard = (componentID: CustomKeyboardType) => {
         setCustomKeyboard({
@@ -92,7 +88,9 @@ const TestNativeKeyboardScreen: React.FC<ITestNativeKeyboardScreenProps> = ({
                     return `${item}_${index}`;
                 }}
                 ItemSeparatorComponent={Divider}
-                // automaticallyAdjustKeyboardInsets
+                automaticallyAdjustKeyboardInsets
+                // automaticallyAdjustContentInsets
+                keyboardDismissMode='interactive'
             />
             <KeyboardAccessoryView
                 renderContent={renderContent}

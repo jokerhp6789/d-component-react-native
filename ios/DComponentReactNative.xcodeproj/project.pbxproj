@@ -14,12 +14,18 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-DComponentReactNative-DComponentReactNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-DComponentReactNative-DComponentReactNativeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		848014D62B1EF0D2005BCA25 /* KeyboardTrackingViewTempManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014C82B1EF0D2005BCA25 /* KeyboardTrackingViewTempManager.m */; };
-		848014D72B1EF0D2005BCA25 /* ObservingInputAccessoryViewTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014C92B1EF0D2005BCA25 /* ObservingInputAccessoryViewTemp.m */; };
-		848014D82B1EF0D2005BCA25 /* UIResponder+FirstResponderTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014CC2B1EF0D2005BCA25 /* UIResponder+FirstResponderTemp.m */; };
-		848014D92B1EF0D2005BCA25 /* RCTConvert+Mapkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014D02B1EF0D2005BCA25 /* RCTConvert+Mapkit.m */; };
-		848014DA2B1EF0D2005BCA25 /* RNTMapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014D22B1EF0D2005BCA25 /* RNTMapManager.m */; };
-		848014DB2B1EF0D2005BCA25 /* RNTMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 848014D52B1EF0D2005BCA25 /* RNTMapView.m */; };
+		84114BB12B32E0E4005DC592 /* RCTConvert+Mapkit.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BA32B32E0E4005DC592 /* RCTConvert+Mapkit.m */; };
+		84114BB22B32E0E4005DC592 /* RNTMapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BA52B32E0E4005DC592 /* RNTMapManager.m */; };
+		84114BB32B32E0E4005DC592 /* RNTMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BA82B32E0E4005DC592 /* RNTMapView.m */; };
+		84114BB42B32E0E4005DC592 /* KeyboardTrackingViewTempManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BAB2B32E0E4005DC592 /* KeyboardTrackingViewTempManager.m */; };
+		84114BB52B32E0E4005DC592 /* ObservingInputAccessoryViewTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BAC2B32E0E4005DC592 /* ObservingInputAccessoryViewTemp.m */; };
+		84114BB62B32E0E4005DC592 /* UIResponder+FirstResponderTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BAF2B32E0E4005DC592 /* UIResponder+FirstResponderTemp.m */; };
+		84114BC72B32EFAE005DC592 /* RCTCustomKeyboardViewControllerTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BBA2B32EFAD005DC592 /* RCTCustomKeyboardViewControllerTemp.m */; };
+		84114BC82B32EFAE005DC592 /* RCTCustomInputControllerTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BBB2B32EFAD005DC592 /* RCTCustomInputControllerTemp.m */; };
+		84114BC92B32EFAE005DC592 /* LNInterpolable.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BBE2B32EFAD005DC592 /* LNInterpolable.m */; };
+		84114BCA2B32EFAE005DC592 /* LNAnimatorTemp.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BBF2B32EFAD005DC592 /* LNAnimatorTemp.m */; };
+		84114BCB2B32EFAE005DC592 /* NSValue+Interpolation.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84114BC02B32EFAD005DC592 /* NSValue+Interpolation.mm */; };
+		84114BCC2B32EFAE005DC592 /* Color+Interpolation.m in Sources */ = {isa = PBXBuildFile; fileRef = 84114BC52B32EFAD005DC592 /* Color+Interpolation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,17 +54,30 @@
 		5B7EB9410499542E8C5724F5 /* Pods-DComponentReactNative-DComponentReactNativeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DComponentReactNative-DComponentReactNativeTests.debug.xcconfig"; path = "Target Support Files/Pods-DComponentReactNative-DComponentReactNativeTests/Pods-DComponentReactNative-DComponentReactNativeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-DComponentReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-DComponentReactNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DComponentReactNative/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		848014C82B1EF0D2005BCA25 /* KeyboardTrackingViewTempManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardTrackingViewTempManager.m; sourceTree = "<group>"; };
-		848014C92B1EF0D2005BCA25 /* ObservingInputAccessoryViewTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservingInputAccessoryViewTemp.m; sourceTree = "<group>"; };
-		848014CA2B1EF0D2005BCA25 /* UIResponder+FirstResponderTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+FirstResponderTemp.h"; sourceTree = "<group>"; };
-		848014CB2B1EF0D2005BCA25 /* KeyboardTrackingViewTempManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardTrackingViewTempManager.h; sourceTree = "<group>"; };
-		848014CC2B1EF0D2005BCA25 /* UIResponder+FirstResponderTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+FirstResponderTemp.m"; sourceTree = "<group>"; };
-		848014CD2B1EF0D2005BCA25 /* ObservingInputAccessoryViewTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservingInputAccessoryViewTemp.h; sourceTree = "<group>"; };
-		848014D02B1EF0D2005BCA25 /* RCTConvert+Mapkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+Mapkit.m"; sourceTree = "<group>"; };
-		848014D12B1EF0D2005BCA25 /* RCTConvert+Mapkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+Mapkit.h"; sourceTree = "<group>"; };
-		848014D22B1EF0D2005BCA25 /* RNTMapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTMapManager.m; sourceTree = "<group>"; };
-		848014D42B1EF0D2005BCA25 /* RNTMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTMapView.h; sourceTree = "<group>"; };
-		848014D52B1EF0D2005BCA25 /* RNTMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTMapView.m; sourceTree = "<group>"; };
+		84114BA32B32E0E4005DC592 /* RCTConvert+Mapkit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+Mapkit.m"; sourceTree = "<group>"; };
+		84114BA42B32E0E4005DC592 /* RCTConvert+Mapkit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "RCTConvert+Mapkit.h"; sourceTree = "<group>"; };
+		84114BA52B32E0E4005DC592 /* RNTMapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTMapManager.m; sourceTree = "<group>"; };
+		84114BA72B32E0E4005DC592 /* RNTMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNTMapView.h; sourceTree = "<group>"; };
+		84114BA82B32E0E4005DC592 /* RNTMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNTMapView.m; sourceTree = "<group>"; };
+		84114BAB2B32E0E4005DC592 /* KeyboardTrackingViewTempManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardTrackingViewTempManager.m; sourceTree = "<group>"; };
+		84114BAC2B32E0E4005DC592 /* ObservingInputAccessoryViewTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObservingInputAccessoryViewTemp.m; sourceTree = "<group>"; };
+		84114BAD2B32E0E4005DC592 /* UIResponder+FirstResponderTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIResponder+FirstResponderTemp.h"; sourceTree = "<group>"; };
+		84114BAE2B32E0E4005DC592 /* KeyboardTrackingViewTempManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardTrackingViewTempManager.h; sourceTree = "<group>"; };
+		84114BAF2B32E0E4005DC592 /* UIResponder+FirstResponderTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIResponder+FirstResponderTemp.m"; sourceTree = "<group>"; };
+		84114BB02B32E0E4005DC592 /* ObservingInputAccessoryViewTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObservingInputAccessoryViewTemp.h; sourceTree = "<group>"; };
+		84114BB92B32EFAD005DC592 /* RCTCustomInputControllerTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTCustomInputControllerTemp.h; sourceTree = "<group>"; };
+		84114BBA2B32EFAD005DC592 /* RCTCustomKeyboardViewControllerTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTCustomKeyboardViewControllerTemp.m; sourceTree = "<group>"; };
+		84114BBB2B32EFAD005DC592 /* RCTCustomInputControllerTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTCustomInputControllerTemp.m; sourceTree = "<group>"; };
+		84114BBC2B32EFAD005DC592 /* RCTCustomKeyboardViewControllerTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTCustomKeyboardViewControllerTemp.h; sourceTree = "<group>"; };
+		84114BBE2B32EFAD005DC592 /* LNInterpolable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LNInterpolable.m; sourceTree = "<group>"; };
+		84114BBF2B32EFAD005DC592 /* LNAnimatorTemp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LNAnimatorTemp.m; sourceTree = "<group>"; };
+		84114BC02B32EFAD005DC592 /* NSValue+Interpolation.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSValue+Interpolation.mm"; sourceTree = "<group>"; };
+		84114BC12B32EFAD005DC592 /* NSValue+Interpolation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSValue+Interpolation.h"; sourceTree = "<group>"; };
+		84114BC22B32EFAD005DC592 /* Color+Interpolation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Color+Interpolation.h"; sourceTree = "<group>"; };
+		84114BC32B32EFAD005DC592 /* LNAnimatorTemp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LNAnimatorTemp.h; sourceTree = "<group>"; };
+		84114BC42B32EFAD005DC592 /* LNInterpolable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LNInterpolable.h; sourceTree = "<group>"; };
+		84114BC52B32EFAD005DC592 /* Color+Interpolation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Color+Interpolation.m"; sourceTree = "<group>"; };
+		84114BC62B32EFAD005DC592 /* LNInterpolation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LNInterpolation.h; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-DComponentReactNative-DComponentReactNativeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DComponentReactNative-DComponentReactNativeTests.release.xcconfig"; path = "Target Support Files/Pods-DComponentReactNative-DComponentReactNativeTests/Pods-DComponentReactNative-DComponentReactNativeTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -133,7 +152,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				848014C52B1EF0B6005BCA25 /* libs */,
+				84114BA02B32E0E4005DC592 /* libs-ios */,
 				13B07FAE1A68108700A75B9A /* DComponentReactNative */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* DComponentReactNativeTests */,
@@ -155,64 +174,100 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		848014C52B1EF0B6005BCA25 /* libs */ = {
+		84114BA02B32E0E4005DC592 /* libs-ios */ = {
 			isa = PBXGroup;
 			children = (
-				848014C62B1EF0D2005BCA25 /* keyboard */,
-				848014CE2B1EF0D2005BCA25 /* map */,
+				84114BA12B32E0E4005DC592 /* map */,
+				84114BA92B32E0E4005DC592 /* keyboard */,
 			);
-			path = libs;
+			name = "libs-ios";
+			path = "../libs/libs-ios";
 			sourceTree = "<group>";
 		};
-		848014C62B1EF0D2005BCA25 /* keyboard */ = {
+		84114BA12B32E0E4005DC592 /* map */ = {
 			isa = PBXGroup;
 			children = (
-				848014C72B1EF0D2005BCA25 /* keyboardtrackingview */,
+				84114BA22B32E0E4005DC592 /* converter */,
+				84114BA52B32E0E4005DC592 /* RNTMapManager.m */,
+				84114BA62B32E0E4005DC592 /* view */,
 			);
-			name = keyboard;
-			path = ../../libs/ios/keyboard;
+			path = map;
 			sourceTree = "<group>";
 		};
-		848014C72B1EF0D2005BCA25 /* keyboardtrackingview */ = {
+		84114BA22B32E0E4005DC592 /* converter */ = {
 			isa = PBXGroup;
 			children = (
-				848014C82B1EF0D2005BCA25 /* KeyboardTrackingViewTempManager.m */,
-				848014C92B1EF0D2005BCA25 /* ObservingInputAccessoryViewTemp.m */,
-				848014CA2B1EF0D2005BCA25 /* UIResponder+FirstResponderTemp.h */,
-				848014CB2B1EF0D2005BCA25 /* KeyboardTrackingViewTempManager.h */,
-				848014CC2B1EF0D2005BCA25 /* UIResponder+FirstResponderTemp.m */,
-				848014CD2B1EF0D2005BCA25 /* ObservingInputAccessoryViewTemp.h */,
-			);
-			path = keyboardtrackingview;
-			sourceTree = "<group>";
-		};
-		848014CE2B1EF0D2005BCA25 /* map */ = {
-			isa = PBXGroup;
-			children = (
-				848014CF2B1EF0D2005BCA25 /* converter */,
-				848014D22B1EF0D2005BCA25 /* RNTMapManager.m */,
-				848014D32B1EF0D2005BCA25 /* view */,
-			);
-			name = map;
-			path = ../../libs/ios/map;
-			sourceTree = "<group>";
-		};
-		848014CF2B1EF0D2005BCA25 /* converter */ = {
-			isa = PBXGroup;
-			children = (
-				848014D02B1EF0D2005BCA25 /* RCTConvert+Mapkit.m */,
-				848014D12B1EF0D2005BCA25 /* RCTConvert+Mapkit.h */,
+				84114BA32B32E0E4005DC592 /* RCTConvert+Mapkit.m */,
+				84114BA42B32E0E4005DC592 /* RCTConvert+Mapkit.h */,
 			);
 			path = converter;
 			sourceTree = "<group>";
 		};
-		848014D32B1EF0D2005BCA25 /* view */ = {
+		84114BA62B32E0E4005DC592 /* view */ = {
 			isa = PBXGroup;
 			children = (
-				848014D42B1EF0D2005BCA25 /* RNTMapView.h */,
-				848014D52B1EF0D2005BCA25 /* RNTMapView.m */,
+				84114BA72B32E0E4005DC592 /* RNTMapView.h */,
+				84114BA82B32E0E4005DC592 /* RNTMapView.m */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		84114BA92B32E0E4005DC592 /* keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				84114BB72B32EFAD005DC592 /* keyboardinput */,
+				84114BAA2B32E0E4005DC592 /* keyboardtrackingview */,
+			);
+			path = keyboard;
+			sourceTree = "<group>";
+		};
+		84114BAA2B32E0E4005DC592 /* keyboardtrackingview */ = {
+			isa = PBXGroup;
+			children = (
+				84114BAB2B32E0E4005DC592 /* KeyboardTrackingViewTempManager.m */,
+				84114BAC2B32E0E4005DC592 /* ObservingInputAccessoryViewTemp.m */,
+				84114BAD2B32E0E4005DC592 /* UIResponder+FirstResponderTemp.h */,
+				84114BAE2B32E0E4005DC592 /* KeyboardTrackingViewTempManager.h */,
+				84114BAF2B32E0E4005DC592 /* UIResponder+FirstResponderTemp.m */,
+				84114BB02B32E0E4005DC592 /* ObservingInputAccessoryViewTemp.h */,
+			);
+			path = keyboardtrackingview;
+			sourceTree = "<group>";
+		};
+		84114BB72B32EFAD005DC592 /* keyboardinput */ = {
+			isa = PBXGroup;
+			children = (
+				84114BB82B32EFAD005DC592 /* rctcustomInputcontroller */,
+				84114BBD2B32EFAD005DC592 /* lninterpolation */,
+			);
+			path = keyboardinput;
+			sourceTree = "<group>";
+		};
+		84114BB82B32EFAD005DC592 /* rctcustomInputcontroller */ = {
+			isa = PBXGroup;
+			children = (
+				84114BB92B32EFAD005DC592 /* RCTCustomInputControllerTemp.h */,
+				84114BBA2B32EFAD005DC592 /* RCTCustomKeyboardViewControllerTemp.m */,
+				84114BBB2B32EFAD005DC592 /* RCTCustomInputControllerTemp.m */,
+				84114BBC2B32EFAD005DC592 /* RCTCustomKeyboardViewControllerTemp.h */,
+			);
+			path = rctcustomInputcontroller;
+			sourceTree = "<group>";
+		};
+		84114BBD2B32EFAD005DC592 /* lninterpolation */ = {
+			isa = PBXGroup;
+			children = (
+				84114BBE2B32EFAD005DC592 /* LNInterpolable.m */,
+				84114BBF2B32EFAD005DC592 /* LNAnimatorTemp.m */,
+				84114BC02B32EFAD005DC592 /* NSValue+Interpolation.mm */,
+				84114BC12B32EFAD005DC592 /* NSValue+Interpolation.h */,
+				84114BC22B32EFAD005DC592 /* Color+Interpolation.h */,
+				84114BC32B32EFAD005DC592 /* LNAnimatorTemp.h */,
+				84114BC42B32EFAD005DC592 /* LNInterpolable.h */,
+				84114BC52B32EFAD005DC592 /* Color+Interpolation.m */,
+				84114BC62B32EFAD005DC592 /* LNInterpolation.h */,
+			);
+			path = lninterpolation;
 			sourceTree = "<group>";
 		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
@@ -490,14 +545,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				848014D72B1EF0D2005BCA25 /* ObservingInputAccessoryViewTemp.m in Sources */,
+				84114BB52B32E0E4005DC592 /* ObservingInputAccessoryViewTemp.m in Sources */,
+				84114BB12B32E0E4005DC592 /* RCTConvert+Mapkit.m in Sources */,
+				84114BCC2B32EFAE005DC592 /* Color+Interpolation.m in Sources */,
+				84114BCB2B32EFAE005DC592 /* NSValue+Interpolation.mm in Sources */,
+				84114BB32B32E0E4005DC592 /* RNTMapView.m in Sources */,
+				84114BC92B32EFAE005DC592 /* LNInterpolable.m in Sources */,
+				84114BC72B32EFAE005DC592 /* RCTCustomKeyboardViewControllerTemp.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
-				848014D62B1EF0D2005BCA25 /* KeyboardTrackingViewTempManager.m in Sources */,
-				848014DA2B1EF0D2005BCA25 /* RNTMapManager.m in Sources */,
-				848014DB2B1EF0D2005BCA25 /* RNTMapView.m in Sources */,
-				848014D92B1EF0D2005BCA25 /* RCTConvert+Mapkit.m in Sources */,
+				84114BB62B32E0E4005DC592 /* UIResponder+FirstResponderTemp.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				848014D82B1EF0D2005BCA25 /* UIResponder+FirstResponderTemp.m in Sources */,
+				84114BB42B32E0E4005DC592 /* KeyboardTrackingViewTempManager.m in Sources */,
+				84114BB22B32E0E4005DC592 /* RNTMapManager.m in Sources */,
+				84114BCA2B32EFAE005DC592 /* LNAnimatorTemp.m in Sources */,
+				84114BC82B32EFAE005DC592 /* RCTCustomInputControllerTemp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
