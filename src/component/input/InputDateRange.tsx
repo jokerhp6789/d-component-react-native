@@ -33,6 +33,7 @@ export interface IInputDateRangeProps
     value?: any[];
     onChange?: (
         props: IInputDateRangeProps['value'],
+        changeValue?: 'start' | 'end',
     ) => void | {skipAutoOpen?: boolean};
     startText?: string;
     endText?: string;
@@ -143,7 +144,7 @@ const InputDateRange: React.ForwardRefRenderFunction<
             ) {
                 clone[1] = undefined;
             }
-            const res = onChange && onChange(clone);
+            const res = onChange && onChange(clone, 'start');
             if (res?.skipAutoOpen) {
                 return;
             }
@@ -156,7 +157,7 @@ const InputDateRange: React.ForwardRefRenderFunction<
     const handleChangeEndTime = (end: any) => {
         const clone: any = [...(value || [])];
         clone[1] = end;
-        onChange && onChange(clone);
+        onChange && onChange(clone, 'end');
     };
 
     return (
