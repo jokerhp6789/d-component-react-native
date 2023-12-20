@@ -31,7 +31,9 @@ export interface IRangeDateCustomInputProps extends ICustomInputProps {
 export interface IInputDateRangeProps
     extends Omit<IInputDateProps, 'value' | 'onChange'> {
     value?: any[];
-    onChange?: (props: IInputDateRangeProps['value']) => any;
+    onChange?: (
+        props: IInputDateRangeProps['value'],
+    ) => void | {skipAutoOpen?: boolean};
     startText?: string;
     endText?: string;
     classNameContent?: IStyleTransformerProps;
@@ -141,7 +143,10 @@ const InputDateRange: React.ForwardRefRenderFunction<
             ) {
                 clone[1] = undefined;
             }
-            onChange && onChange(clone);
+            const res = onChange && onChange(clone);
+            if (res?.skipAutoOpen) {
+                return;
+            }
             endRef.current &&
                 endRef.current.open(getDateModalTypeFromMode(mode));
         },
